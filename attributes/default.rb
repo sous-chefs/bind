@@ -65,4 +65,4 @@ default['bind']['options'] = Array.new
 # bind.zonetype is used in the named.conf file for configured zones.
 default['bind']['zones'] = Array.new
 default['bind']['zonetype'] = "slave"
-default['bind']['zonesource'] = "databag" 
+default['bind']['zonesource'] = nil 

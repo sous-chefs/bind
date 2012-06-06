@@ -127,7 +127,7 @@ named `query2zone.rb`, for example.  Then include the API query
 by overriding the attribute `bind['zonesource']` set to the
 string `query`.
 
-Alternatively, you can just use an `override["bind"]["zones"]` in
+Alternatively, you can just use an `override['bind']['zones']` in
 a role or environment instead.  Or even a mix of both override
 attributes, and an API query to populate zones.
 
@@ -185,21 +185,14 @@ override_attributes "bind" => {
   "masters" => [ "192.0.2.5", "192.0.2.6" ],
   "ipv6_listen" => true,
   "zonetype" => "master",
-  "zonesource" => "ldap",
   "zones" => [
     "example.com",
     "example.org"
   ],
-  "ldap" => {
-    "server" => "example.com",
-    "binddn" => "cn=chef-ldap,ou=Service Accounts,dc=example,dc=com",
-    "bindpw" => "ServiceAccountPassword",
-    "domainzones" => "cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com"
-  },
   "options" => [
     "recursion no;",
     "allow-query { any; };",
-    "allow-transfer { external-private-interfaces; external-dns; };,
+    "allow-transfer { external-private-interfaces; external-dns; };",
     "allow-notify { external-private-interfaces; external-dns; localhost; };",
     "listen-on-v6 { any; };"
   ]
