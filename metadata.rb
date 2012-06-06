@@ -5,3 +5,6 @@ description      "Installs/Configures dns"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.0.4"
 name             "bind"
+%w{ redhat centos scientific amazon ubuntu debian }.each do |os|
+  supports os
+end
