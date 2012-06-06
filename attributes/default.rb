@@ -50,7 +50,7 @@ default['bind']['ipv6_listen'] = false
 
 # If this is a virtual machine, you need to use urandom as
 # any VM does not have a real CMOS clock for entropy.
-if node['virtualization']['role'] and node['virtualization']['role'] == "guest"
+if node.has_key?('virtualization') and node['virtualization']['role'] == "guest"
   default['bind']['rndc_keygen'] = "rndc-confgen -a -r /dev/urandom"
 else
   default['bind']['rndc_keygen'] = "rndc-confgen -a"

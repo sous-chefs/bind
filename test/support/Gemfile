@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
 gem "rake"
-gem "minitest"
+gem "chefspec"
 gem "chef", ">= 0.10.10"
 gem "foodcritic"
