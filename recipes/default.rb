@@ -82,6 +82,19 @@ file "/etc/rndc.key" do
   action :touch
 end
 
+# Include zones from external source if set.
+unless node['bind']['zonesource'].nil?
+  include_recipe "bind::#{node['bind']['zonesource']}2zone"
+else
+  Chef::Log.warn("No zonesource defined, assuming zone names are defined as override attributes.")
+end
+
+service "named" do
+  supports :reload => true, :status => true
+  action [ :enable, :start ]
+end
+
+# Render a template with all our global BIND options and ACLs
 template "#{node['bind']['sysconfdir']}/named.options" do
   owner "named"
   group "named"
@@ -89,13 +102,7 @@ template "#{node['bind']['sysconfdir']}/named.options" do
   variables(
     :bind_acls => node['bind']['acls']
   )
-end
-
-# Include zones from external source if set.
-unless node['bind']['zonesource'].nil?
-  include_recipe "bind::#{node['bind']['zonesource']}2zone"
-else
-  Chef::Log.warn("No zonesource defined, assuming zone names are defined as override attributes.")
+  notifies :reload, "service[named]"
 end
 
 # Render our template with role zones, or returned results from
@@ -107,8 +114,5 @@ template "/etc/named.conf" do
   variables(
     :zones => node['bind']['zones'] 
   )
-end
-
-service "named" do
-  action [ :enable, :start ]
+  notifies :reload, "service[named]"
 end

@@ -2,7 +2,6 @@
 # Cookbook Name:: bind 
 # Recipe:: ldap2zone 
 #
-# Copyright 2011, Gerald L. Hevener, Jr, M.S.
 # Copyright 2011, Eric G. Wolfe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +48,7 @@ unless ( node['bind']['ldap']['server'].nil? and node['bind']['ldap']['binddn'].
     ldap.search(
       :base => node['bind']['ldap']['domainzones'],
       :filter => node['bind']['ldap']['filter']) do |dnszone|
-      node['bind']['zones'] << dnszone['name'][0]
+      node['bind']['zones'] << dnszone['name'].first
     end
   else
     Chef::Log.error("LDAP Bind failed with #{node['bind']['ldap']['server']}")

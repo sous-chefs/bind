@@ -114,26 +114,46 @@ this data, just by setting a few attributes in a role.
 
 ## Usage
 
-  Set up a role for 
+### Notes on the zonesource recipes
+
+The databag2zone and ldap2zone is optional code to fetch DNS zones
+from a data bag, or Active Directory integrated domain controllers.
+If you have a proper IP address management (IPAM) solution, you
+could drop in your own code to query an API on your IPAM server.
+
+Any query should use the `<<` operator to push results on to the
+`bind['zones']` array.  Drop your query code in a recipe
+named `query2zone.rb`, for example.  Then include the API query
+by overriding the attribute `bind['zonesource']` set to the
+string `query`.
+
+Alternatively, you can just use an `override["bind"]["zones"]` in
+a role or environment instead.  Or even a mix of both override
+attributes, and an API query to populate zones.
+
+### Example role for internal recursing DNS
+
+An example role for an internal split-horizon BIND server for
+example.com, might look like so: 
 
 ```ruby
 name "internal_dns"
 description "Configure and install Bind to function as an internal DNS server."
 override_attributes "bind" => {
-  "masters" => [ "10.101.4.29", "10.101.4.30", "10.101.4.26" ],
+  "acl-role" => "internal-acl",
+  "masters" => [ "192.0.2.10", "192.0.2.11", "192.0.2.12" ],
   "ipv6_listen" => true,
   "zonetype" => "slave",
   "zonesource" => "ldap",
   "zones" => [
-    "som.marshall.edu",
-    "0.103.10.in-addr.arpa",
-    "wvrhepahec.org"
+    "example.com",
+    "example.org"
   ],
   "ldap" => {
-    "server" => "marshall.edu",
-    "binddn" => "cn=chef-snarf-svc,ou=Service Accounts,ou=Machine Room,dc=marshall,dc=edu",
-    "bindpw" => "MDUPmZrhm86btBqZQ2t4",
-    "domainzones" => "cn=MicrosoftDNS,dc=DomainDnsZones,dc=marshall,dc=edu"
+    "server" => "example.com",
+    "binddn" => "cn=chef-ldap,ou=Service Accounts,dc=example,dc=com",
+    "bindpw" => "ServiceAccountPassword",
+    "domainzones" => "cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com"
   },
   "options" => [
     "check-names slave ignore;",
@@ -141,21 +161,112 @@ override_attributes "bind" => {
     "provide-ixfr yes;",
     "recursive-clients 10000;",
     "request-ixfr yes;",
-    "allow-notify { mu-dc; mu-dns; mugc-dc; movc-dc; som-dc; };",
-    "allow-query { mu-lan; movc-fw; localhost; };",
-    "allow-query-cache { mu-lan; movc-fw; localhost; };",
-    "allow-recursion { mu-lan; movc-fw; localhost; };",
-    "allow-transfer { mu-dc; mu-dns; som-dc; movc-dc; mugc-dc; rti-dc; };",
+    "allow-notify { acl-dns-masters; acl-dns-slaves; };",
+    "allow-query { example-lan; localhost; };",
+    "allow-query-cache { example-lan; localhost; };",
+    "allow-recursion { example-lan; localhost; };",
+    "allow-transfer { acl-dns-masters; acl-dns-slaves; };",
     "allow-update-forwarding { any; };",
-    "sortlist { 10.101.4/22; };"
-  ],
-},
-"resolver" => {
-  "search" => "marshall.edu",
-  "nameservers" => [ "10.101.7.30","10.101.4.36","10.101.4.33"],
-  "is_dnsserver" => true
+  ]
 }
-run_list "recipe[bind]", "recipe[resolver]"
+run_list "recipe[bind]"
+```
+
+### Example role for authoritative only external DNS
+
+An example role for an external split-horizon authoritative only
+BIND server for example.com, might look like so:
+
+```ruby
+name "external_dns"
+description "Configure and install Bind to function as an external DNS server."
+override_attributes "bind" => {
+  "acl-role" => "external-acl",
+  "masters" => [ "192.0.2.5", "192.0.2.6" ],
+  "ipv6_listen" => true,
+  "zonetype" => "master",
+  "zonesource" => "ldap",
+  "zones" => [
+    "example.com",
+    "example.org"
+  ],
+  "ldap" => {
+    "server" => "example.com",
+    "binddn" => "cn=chef-ldap,ou=Service Accounts,dc=example,dc=com",
+    "bindpw" => "ServiceAccountPassword",
+    "domainzones" => "cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com"
+  },
+  "options" => [
+    "recursion no;",
+    "allow-query { any; };",
+    "allow-transfer { external-private-interfaces; external-dns; };,
+    "allow-notify { external-private-interfaces; external-dns; localhost; };",
+    "listen-on-v6 { any; };"
+  ]
+}
+run_list "recipe[bind]"
+```
+
+### Example BIND Access Controls from data bag
+
+In order to include an external ACL for the private interfaces
+of your external nameservers, you can create a data bag like so.
+
+  * data_bag name: bind
+    - id: ACL entry name
+    - role: search key for bind data_bag
+    - hosts: array of CIDR addresses, or IP addresses
+
+```json
+{
+  "id": "external-private-interfaces",
+  "role": "external-acl",
+  "hosts": [ "192.0.2.15", "192.0.2.16", "192.0.2.17" ]
+}
+```
+
+In order to include an internal ACL for the query addresses of
+your LAN, you might create a data bag like so.
+
+  * data_bag name: bind
+    - id: ACL entry name
+    - role: search key for bind data_bag
+    - hosts: array of CIDR addresses, or IP addresses
+
+```json
+{
+  "id": "example-lan",
+  "role": "internal-acl",
+  "hosts": [ "192.0.2.18", "192.0.2.19", "192.0.2.20" ]
+}
+```
+
+### Example to load zone names from data bag
+
+If you have a few number of zones, you can split these
+up into individual data bag objects if you prefer.
+
+  * data_bag name: bind
+    - zone: string representation of individual zone name.
+
+```json
+{
+  "id": "example",
+  "zone": "example.com"
+}
+```
+
+If you wish to group a number of zones together, you can
+use the following format to include a number of zones at once.
+
+  * data_bag name: bind
+    - zones: array representation of several zone names.
+
+```json
+{
+  "id": "example",
+  "zones": [ "example.com", "example.org" ]
+}
 ```
 
 ## License and Author
