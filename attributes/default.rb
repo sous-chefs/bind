@@ -17,6 +17,10 @@
 # limitations under the License.
 #
 
+default['bind']['packages'] = %w{ bind bind-utils bind-libs }
+default['bind']['vardir'] = "/var/named"
+default['bind']['sysconfdir'] = "/etc/named"
+
 # Set platform/version specific directories
 case node['platform']
   when "redhat","centos","scientific","amazon"
@@ -65,4 +69,4 @@ default['bind']['options'] = Array.new
 # bind.zonetype is used in the named.conf file for configured zones.
 default['bind']['zones'] = Array.new
 default['bind']['zonetype'] = "slave"
-default['bind']['zonesource'] = nil 
+default['bind']['zonesource'] = nil
