@@ -13,7 +13,7 @@ acl "<%= acl['id'] -%>" {
 masters default { <% node['bind']['masters'].each do |host| -%><%= host -%>; <% end -%> };
 
 options {
-  directory "/var/named";
+  directory "<%= node['bind']['vardir'] %>";
   dump-file "data/cache_dump.db";
   statistics-file "data/named_stats.txt";
   memstatistics-file "data/named_mem_stats.txt";
