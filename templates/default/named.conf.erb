@@ -11,8 +11,8 @@ zone "<%= zone %>" in {
   file "<%= node['bind']['zonetype'] %>/db.<%= zone %>";
   <% else %>
   file "slaves/db.<%= zone %>";
-  <% end %>
   masters { default; };  
+  <% end %>
 };
 
 <% end -%>
