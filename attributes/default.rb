@@ -23,7 +23,7 @@ default['bind']['sysconfdir'] = "/etc/named"
 
 # Set platform/version specific directories
 case node['platform']
-  when "redhat","centos","scientific","amazon"
+  when "redhat","centos","scientific","amazon","oracle"
     default['bind']['packages'] = %w{ bind bind-utils bind-libs }
     default['bind']['vardir'] = "/var/named"
     default['bind']['sysconfdir'] = "/etc/named"
