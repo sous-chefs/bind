@@ -1,51 +1,47 @@
-; <<>> DiG 9.5.0b2 <<>> +bufsize=1200 +norec NS . @a.root-servers.net
-;; global options:  printcmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 34420
-;; flags: qr aa; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 20
 
-;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 4096
+; <<>> DiG 9.8.1-P1 <<>> -t ns . @a.root-servers.net
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 27039
+;; flags: qr aa rd; QUERY: 1, ANSWER: 13, AUTHORITY: 0, ADDITIONAL: 14
+;; WARNING: recursion requested but not available
+
 ;; QUESTION SECTION:
-;.                              IN      NS
+;.				IN	NS
 
 ;; ANSWER SECTION:
-.                       518400  IN      NS      M.ROOT-SERVERS.NET.
-.                       518400  IN      NS      A.ROOT-SERVERS.NET.
-.                       518400  IN      NS      B.ROOT-SERVERS.NET.
-.                       518400  IN      NS      C.ROOT-SERVERS.NET.
-.                       518400  IN      NS      D.ROOT-SERVERS.NET.
-.                       518400  IN      NS      E.ROOT-SERVERS.NET.
-.                       518400  IN      NS      F.ROOT-SERVERS.NET.
-.                       518400  IN      NS      G.ROOT-SERVERS.NET.
-.                       518400  IN      NS      H.ROOT-SERVERS.NET.
-.                       518400  IN      NS      I.ROOT-SERVERS.NET.
-.                       518400  IN      NS      J.ROOT-SERVERS.NET.
-.                       518400  IN      NS      K.ROOT-SERVERS.NET.
-.                       518400  IN      NS      L.ROOT-SERVERS.NET.
+.			518400	IN	NS	d.root-servers.net.
+.			518400	IN	NS	e.root-servers.net.
+.			518400	IN	NS	i.root-servers.net.
+.			518400	IN	NS	c.root-servers.net.
+.			518400	IN	NS	m.root-servers.net.
+.			518400	IN	NS	a.root-servers.net.
+.			518400	IN	NS	g.root-servers.net.
+.			518400	IN	NS	h.root-servers.net.
+.			518400	IN	NS	l.root-servers.net.
+.			518400	IN	NS	k.root-servers.net.
+.			518400	IN	NS	f.root-servers.net.
+.			518400	IN	NS	j.root-servers.net.
+.			518400	IN	NS	b.root-servers.net.
 
 ;; ADDITIONAL SECTION:
-A.ROOT-SERVERS.NET.     3600000 IN      A       198.41.0.4
-A.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:503:ba3e::2:30
-B.ROOT-SERVERS.NET.     3600000 IN      A       192.228.79.201
-C.ROOT-SERVERS.NET.     3600000 IN      A       192.33.4.12
-D.ROOT-SERVERS.NET.     3600000 IN      A       128.8.10.90
-E.ROOT-SERVERS.NET.     3600000 IN      A       192.203.230.10
-F.ROOT-SERVERS.NET.     3600000 IN      A       192.5.5.241
-F.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:500:2f::f
-G.ROOT-SERVERS.NET.     3600000 IN      A       192.112.36.4
-H.ROOT-SERVERS.NET.     3600000 IN      A       128.63.2.53
-H.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:500:1::803f:235
-I.ROOT-SERVERS.NET.     3600000 IN      A       192.36.148.17
-J.ROOT-SERVERS.NET.     3600000 IN      A       192.58.128.30
-J.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:503:c27::2:30
-K.ROOT-SERVERS.NET.     3600000 IN      A       193.0.14.129
-K.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:7fd::1
-L.ROOT-SERVERS.NET.     3600000 IN      A       199.7.83.42
-M.ROOT-SERVERS.NET.     3600000 IN      A       202.12.27.33
-M.ROOT-SERVERS.NET.     3600000 IN      AAAA    2001:dc3::35
+a.root-servers.net.	3600000	IN	A	198.41.0.4
+a.root-servers.net.	3600000	IN	AAAA	2001:503:ba3e::2:30
+b.root-servers.net.	3600000	IN	A	192.228.79.201
+c.root-servers.net.	3600000	IN	A	192.33.4.12
+d.root-servers.net.	3600000	IN	A	128.8.10.90
+d.root-servers.net.	3600000	IN	AAAA	2001:500:2d::d
+e.root-servers.net.	3600000	IN	A	192.203.230.10
+f.root-servers.net.	3600000	IN	A	192.5.5.241
+f.root-servers.net.	3600000	IN	AAAA	2001:500:2f::f
+g.root-servers.net.	3600000	IN	A	192.112.36.4
+h.root-servers.net.	3600000	IN	A	128.63.2.53
+h.root-servers.net.	3600000	IN	AAAA	2001:500:1::803f:235
+i.root-servers.net.	3600000	IN	A	192.36.148.17
+i.root-servers.net.	3600000	IN	AAAA	2001:7fe::53
 
-;; Query time: 147 msec
+;; Query time: 40 msec
 ;; SERVER: 198.41.0.4#53(198.41.0.4)
-;; WHEN: Mon Feb 18 13:29:18 2008
-;; MSG SIZE  rcvd: 615
+;; WHEN: Mon Dec  3 14:05:30 2012
+;; MSG SIZE  rcvd: 512
+
