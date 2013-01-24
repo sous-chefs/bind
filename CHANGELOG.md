@@ -1,3 +1,7 @@
+## v0.0.7
+
+Update root nameserver D
+
 ## v0.0.6
 
 Move masters keyword to slave block
