@@ -16,4 +16,4 @@ task :foodcritic do
   end
 end
 
-task :default => [ 'test', 'foodcritic' ]
+task :default => [ 'foodcritic' ]
