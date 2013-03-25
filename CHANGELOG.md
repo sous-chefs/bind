@@ -1,3 +1,7 @@
+## v0.0.9
+
+ldap host incorrectly being scoped as node.default
+
 ## v0.0.8
 
 Change node scope to node.default for Chef 11

@@ -36,7 +36,7 @@ unless ( node['bind']['ldap']['server'].nil? and node['bind']['ldap']['binddn'].
   require 'net/ldap'
 
   ldap = Net::LDAP.new(
-    :host => node.default['bind']['ldap']['server'],
+    :host => node['bind']['ldap']['server'],
     :auth => {
       :method => :simple,
       :username => node['bind']['ldap']['binddn'],
