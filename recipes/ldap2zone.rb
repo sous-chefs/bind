@@ -36,7 +36,7 @@ unless ( node['bind']['ldap']['server'].nil? and node['bind']['ldap']['binddn'].
   require 'net/ldap'
 
   ldap = Net::LDAP.new(
-    :host => node['bind']['ldap']['server'],
+    :host => node.default['bind']['ldap']['server'],
     :auth => {
       :method => :simple,
       :username => node['bind']['ldap']['binddn'],
@@ -48,7 +48,7 @@ unless ( node['bind']['ldap']['server'].nil? and node['bind']['ldap']['binddn'].
     ldap.search(
       :base => node['bind']['ldap']['domainzones'],
       :filter => node['bind']['ldap']['filter']) do |dnszone|
-      node['bind']['zones'] << dnszone['name'].first
+      node.default['bind']['zones'] << dnszone['name'].first
     end
   else
     Chef::Log.error("LDAP Bind failed with #{node['bind']['ldap']['server']}")

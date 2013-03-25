@@ -23,13 +23,13 @@ else
 
   # Search for single zone string in bind data bag
   search(:bind, "zone:*") do |z|
-    node['bind']['zones'] << z['zone']
+    node.default['bind']['zones'] << z['zone']
   end
 
   # Search for zones arrays in bind data bag
   search(:bind, "zones:*") do |z_arr|
     z_arr['zones'].each do |zone|
-      node['bind']['zones'] << zone
+      node.default['bind']['zones'] << zone
     end
   end
 end

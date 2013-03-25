@@ -1,3 +1,7 @@
+## v0.0.8
+
+Change node scope to node.default for Chef 11
+
 ## v0.0.7
 
 Update root nameserver D

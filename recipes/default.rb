@@ -24,7 +24,7 @@ if Chef::Config['solo']
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   search(:bind, "role:#{node['bind']['acl-role']}") do |acl|
-    node['bind']['acls'] << acl
+    node.default['bind']['acls'] << acl
   end
 end
 
