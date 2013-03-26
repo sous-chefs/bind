@@ -67,6 +67,8 @@ default['bind']['options'] = Array.new
 
 # Set an override at the role, or environment level for the bind.zones array.
 # bind.zonetype is used in the named.conf file for configured zones.
-default['bind']['zones'] = Array.new
+default['bind']['zones']['attribute'] = Array.new
+default['bind']['zones']['ldap'] = Array.new
+default['bind']['zones']['databag'] = Array.new
 default['bind']['zonetype'] = "slave"
 default['bind']['zonesource'] = nil

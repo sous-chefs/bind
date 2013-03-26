@@ -1,3 +1,8 @@
+## v0.1.0
+
+* Add bind zones attributes for "role (attribute)",
+  "ldap", and "databag" sources.
+
 ## v0.0.9
 
 ldap host incorrectly being scoped as node.default

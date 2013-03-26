@@ -32,12 +32,19 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
     and then passed to named.options template.
   - Default is an empty array.
 
-* `bind['zones']`
-  - An array node attribute which zone names are pushed on to,
-    from an external source such as `data_bags` or even LDAP
-  - Defaults to an empty array.  See ldap2zone, or databag2zone
-    recipes, for examples on populating your named.conf template
-    from an external data source.
+* `bind['zones']['attribute']`
+  - An array attribute where zone names may be set from role
+    attributes.  The dynamic source attributes `bind['zones']['ldap']`
+    and `bind['zones']['databag']` will be combined with zone names set
+    via role attributes before the named.conf template is rendered.
+
+* `bind['zones']['ldap']`
+  - An array attribute where zone names may be set from an
+    ldap source.
+
+* `bind['zones']['databag']`
+  - An array attribute where zone names may be set from a
+    databag source.
 
 * `bind['zonetype']`
   - The zone type, master, or slave for configuring

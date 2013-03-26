@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+all_zones = Array.new
 
 # Read ACL objects from data bag.
 # These will be passed to the named.options template
@@ -89,6 +90,8 @@ else
   Chef::Log.warn("No zonesource defined, assuming zone names are defined as override attributes.")
 end
 
+all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
+
 service "named" do
   supports :reload => true, :status => true
   action [ :enable, :start ]
@@ -112,7 +115,7 @@ template "/etc/named.conf" do
   group "named"
   mode 0644
   variables(
-    :zones => node['bind']['zones'] 
+    :zones => all_zones.sort 
   )
   notifies :reload, "service[named]"
 end
