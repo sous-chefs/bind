@@ -115,7 +115,7 @@ template "/etc/named.conf" do
   group "named"
   mode 0644
   variables(
-    :zones => all_zones.sort 
+    :zones => all_zones.uniq.sort 
   )
   notifies :reload, "service[named]"
 end

@@ -1,3 +1,7 @@
+## v0.1.1
+
+* Pass zone array to template with `uniq` and `sort` 
+
 ## v0.1.0
 
 * Add bind zones attributes for "role (attribute)",
