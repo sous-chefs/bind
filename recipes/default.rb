@@ -73,10 +73,10 @@ end
 # Create rndc key file, if it does not exist
 execute "rndc-key" do
   command node['bind']['rndc_keygen']
-  not_if { File.exists?("/etc/rndc.key") }
+  not_if { File.exists?("#{node['bind']['sysconfdir']}/rndc.key") }
 end
 
-file "/etc/rndc.key" do
+file "#{node['bind']['sysconfdir']}/rndc.key" do
   owner node['bind']['user']
   group node['bind']['group']
   mode "0600"
@@ -110,7 +110,7 @@ end
 
 # Render our template with role zones, or returned results from
 # zonesource recipe
-template "/etc/named.conf" do
+template "#{node['bind']['sysconfdir']}/named.conf" do
   owner node['bind']['user']
   group node['bind']['group']
   mode 0644
