@@ -92,7 +92,7 @@ end
 
 all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
 
-service "named" do
+service node['bind']['service_name'] do
   supports :reload => true, :status => true
   action [ :enable, :start ]
 end
@@ -105,7 +105,7 @@ template "#{node['bind']['sysconfdir']}/named.options" do
   variables(
     :bind_acls => node['bind']['acls']
   )
-  notifies :reload, "service[named]"
+  notifies :reload, "service[#{node['bind']['service_name']}]"
 end
 
 # Render our template with role zones, or returned results from
@@ -117,5 +117,5 @@ template "/etc/named.conf" do
   variables(
     :zones => all_zones.uniq.sort 
   )
-  notifies :reload, "service[named]"
+  notifies :reload, "service[#{node['bind']['service_name']}]"
 end

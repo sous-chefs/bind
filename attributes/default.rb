@@ -20,11 +20,12 @@
 default['bind']['packages'] = %w{ bind bind-utils bind-libs }
 default['bind']['vardir'] = "/var/named"
 default['bind']['sysconfdir'] = "/etc/named"
+default['bind']['service_name'] = "named"
 
 # Allow usage with chef-solo-search, see https://github.com/edelight/chef-solo-search
 default['bind']['allow_solo_search'] = false
 
-# Set platform/version specific directories
+# Set platform/version specific directories and settings
 case node['platform']
   when "redhat","centos","scientific","amazon","oracle"
     default['bind']['packages'] = %w{ bind bind-utils bind-libs }
@@ -34,6 +35,7 @@ case node['platform']
     default['bind']['packages'] = %w{ bind9 bind9utils }
     default['bind']['sysconfdir'] = "/etc/bind"
     default['bind']['vardir'] = "/var/cache/bind"
+    default['bind']['service_name'] = "bind9"
 end
 
 # Will loop through these and pull them as cookbook_files
