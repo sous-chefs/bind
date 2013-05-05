@@ -36,8 +36,8 @@ end
 
 [ node['bind']['sysconfdir'], node['bind']['vardir'] ].each do |named_dir|
   directory named_dir do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode 0750
   end
 end
@@ -45,8 +45,8 @@ end
 # Create /var/named subdirectories
 %w[ data master slaves ].each do |subdir|
   directory "#{node['bind']['vardir']}/#{subdir}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0770"
     recursive true
   end
@@ -55,8 +55,8 @@ end
 # Copy /etc/named files into place.
 node['bind']['etc_cookbook_files'].each do |etc_file|
   cookbook_file "#{node['bind']['sysconfdir']}/#{etc_file}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0644"
   end
 end
@@ -64,8 +64,8 @@ end
 # Copy /var/named files in place
 node['bind']['var_cookbook_files'].each do |var_file|
   cookbook_file "#{node['bind']['vardir']}/#{var_file}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0644"
   end
 end
@@ -77,8 +77,8 @@ execute "rndc-key" do
 end
 
 file "/etc/rndc.key" do
-  owner "named"
-  group "named"
+  owner node['bind']['user']
+  group node['bind']['group']
   mode "0600"
   action :touch
 end
@@ -99,8 +99,8 @@ end
 
 # Render a template with all our global BIND options and ACLs
 template "#{node['bind']['sysconfdir']}/named.options" do
-  owner "named"
-  group "named"
+  owner node['bind']['user']
+  group node['bind']['group']
   mode  "0644"
   variables(
     :bind_acls => node['bind']['acls']
@@ -111,8 +111,8 @@ end
 # Render our template with role zones, or returned results from
 # zonesource recipe
 template "/etc/named.conf" do
-  owner "named"
-  group "named"
+  owner node['bind']['user']
+  group node['bind']['group']
   mode 0644
   variables(
     :zones => all_zones.uniq.sort 
