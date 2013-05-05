@@ -21,6 +21,9 @@ default['bind']['packages'] = %w{ bind bind-utils bind-libs }
 default['bind']['vardir'] = "/var/named"
 default['bind']['sysconfdir'] = "/etc/named"
 
+# Allow usage with chef-solo-search, see https://github.com/edelight/chef-solo-search
+default['bind']['allow_solo_search'] = false
+
 # Set platform/version specific directories
 case node['platform']
   when "redhat","centos","scientific","amazon","oracle"

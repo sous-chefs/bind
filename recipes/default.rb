@@ -21,7 +21,7 @@ all_zones = Array.new
 
 # Read ACL objects from data bag.
 # These will be passed to the named.options template
-if Chef::Config['solo']
+if Chef::Config['solo'] && !node['bind']['allow_solo_search']
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   search(:bind, "role:#{node['bind']['acl-role']}") do |acl|
