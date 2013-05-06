@@ -21,7 +21,7 @@ all_zones = Array.new
 
 # Read ACL objects from data bag.
 # These will be passed to the named.options template
-if Chef::Config['solo']
+if Chef::Config['solo'] && !node['bind']['allow_solo_search']
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
   search(:bind, "role:#{node['bind']['acl-role']}") do |acl|
@@ -36,8 +36,8 @@ end
 
 [ node['bind']['sysconfdir'], node['bind']['vardir'] ].each do |named_dir|
   directory named_dir do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode 0750
   end
 end
@@ -45,8 +45,8 @@ end
 # Create /var/named subdirectories
 %w[ data master slaves ].each do |subdir|
   directory "#{node['bind']['vardir']}/#{subdir}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0770"
     recursive true
   end
@@ -55,8 +55,8 @@ end
 # Copy /etc/named files into place.
 node['bind']['etc_cookbook_files'].each do |etc_file|
   cookbook_file "#{node['bind']['sysconfdir']}/#{etc_file}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0644"
   end
 end
@@ -64,8 +64,8 @@ end
 # Copy /var/named files in place
 node['bind']['var_cookbook_files'].each do |var_file|
   cookbook_file "#{node['bind']['vardir']}/#{var_file}" do
-    owner "named"
-    group "named"
+    owner node['bind']['user']
+    group node['bind']['group']
     mode "0644"
   end
 end
@@ -73,12 +73,12 @@ end
 # Create rndc key file, if it does not exist
 execute "rndc-key" do
   command node['bind']['rndc_keygen']
-  not_if { File.exists?("/etc/rndc.key") }
+  not_if { File.exists?("#{node['bind']['sysconfdir']}/rndc.key") }
 end
 
-file "/etc/rndc.key" do
-  owner "named"
-  group "named"
+file "#{node['bind']['sysconfdir']}/rndc.key" do
+  owner node['bind']['user']
+  group node['bind']['group']
   mode "0600"
   action :touch
 end
@@ -92,30 +92,30 @@ end
 
 all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
 
-service "named" do
+service node['bind']['service_name'] do
   supports :reload => true, :status => true
   action [ :enable, :start ]
 end
 
 # Render a template with all our global BIND options and ACLs
 template "#{node['bind']['sysconfdir']}/named.options" do
-  owner "named"
-  group "named"
+  owner node['bind']['user']
+  group node['bind']['group']
   mode  "0644"
   variables(
     :bind_acls => node['bind']['acls']
   )
-  notifies :reload, "service[named]"
+  notifies :reload, "service[#{node['bind']['service_name']}]"
 end
 
 # Render our template with role zones, or returned results from
 # zonesource recipe
-template "/etc/named.conf" do
-  owner "named"
-  group "named"
+template "#{node['bind']['sysconfdir']}/named.conf" do
+  owner node['bind']['user']
+  group node['bind']['group']
   mode 0644
   variables(
     :zones => all_zones.uniq.sort 
   )
-  notifies :reload, "service[named]"
+  notifies :reload, "service[#{node['bind']['service_name']}]"
 end
