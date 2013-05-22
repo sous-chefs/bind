@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-if Chef::Config['solo']
+if Chef::Config['solo'] && !node['bind']['allow_solo_search']
   Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
 else
 
