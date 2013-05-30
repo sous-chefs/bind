@@ -29,6 +29,11 @@ else
   end
 end
 
+case node['platform_family']
+when 'debian'
+  include_recipe "apt"
+end
+
 # Install required packages
 node['bind']['packages'].each do |bind_pkg|
   package bind_pkg
@@ -92,30 +97,30 @@ end
 
 all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
 
-service node['bind']['service_name'] do
-  supports :reload => true, :status => true
-  action [ :enable, :start ]
-end
-
 # Render a template with all our global BIND options and ACLs
-template "#{node['bind']['sysconfdir']}/named.options" do
+template node['bind']['options_file'] do
   owner node['bind']['user']
   group node['bind']['group']
   mode  "0644"
   variables(
     :bind_acls => node['bind']['acls']
   )
-  notifies :reload, "service[#{node['bind']['service_name']}]"
 end
 
 # Render our template with role zones, or returned results from
 # zonesource recipe
-template "#{node['bind']['sysconfdir']}/named.conf" do
+template node['bind']['conf_file'] do
   owner node['bind']['user']
   group node['bind']['group']
   mode 0644
   variables(
     :zones => all_zones.uniq.sort 
   )
-  notifies :reload, "service[#{node['bind']['service_name']}]"
+end
+
+service node['bind']['service_name'] do
+  supports :reload => true, :status => true
+  action [ :enable, :start ]
+  subscribes :reload, resources("template[#{node['bind']['options_file']}]",
+    "template[#{node['bind']['conf_file']}]")
 end

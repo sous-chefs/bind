@@ -20,6 +20,8 @@
 default['bind']['packages'] = %w{ bind bind-utils bind-libs }
 default['bind']['vardir'] = "/var/named"
 default['bind']['sysconfdir'] = "/etc/named"
+default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
+default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
 default['bind']['service_name'] = "named"
 default['bind']['user'] = "named"
 default['bind']['group'] = "named"
@@ -28,18 +30,17 @@ default['bind']['group'] = "named"
 default['bind']['allow_solo_search'] = false
 
 # Set platform/version specific directories and settings
-case node['platform']
-  when "redhat","centos","scientific","amazon","oracle"
-    default['bind']['packages'] = %w{ bind bind-utils bind-libs }
-    default['bind']['vardir'] = "/var/named"
-    default['bind']['sysconfdir'] = "/etc/named"
-  when "debian","ubuntu"
-    default['bind']['packages'] = %w{ bind9 bind9utils }
-    default['bind']['sysconfdir'] = "/etc/bind"
-    default['bind']['vardir'] = "/var/cache/bind"
-    default['bind']['service_name'] = "bind9"
-    default['bind']['user'] = "bind"
-    default['bind']['group'] = "bind"
+if node['platform_family'] == "rhel" and node['platform_version'].to_i == 5
+  default['bind']['conf_file'] = "/etc/named.conf"
+elsif node['platform_family'] == "debian"
+  default['bind']['packages'] = %w{ bind9 bind9utils }
+  default['bind']['sysconfdir'] = "/etc/bind"
+  default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
+  default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
+  default['bind']['vardir'] = "/var/cache/bind"
+  default['bind']['service_name'] = "bind9"
+  default['bind']['user'] = "bind"
+  default['bind']['group'] = "bind"
 end
 
 # Will loop through these and pull them as cookbook_files

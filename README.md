@@ -61,6 +61,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Free form options for named.conf template
   - Defaults to an empty array.
 
+* `bind['allow_solo_search']`
+  - Boolean true/false, enabling chef-solo search
+  - Defaults to false
+
 ### Attributes which should not require tuning
 
 * `bind['packages']`
@@ -69,6 +73,14 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 
 * `bind['sysconfdir']`
   - etc directory for named
+  - Platform specific defaults
+
+* `bind['conf_file']`
+  - Full path to named.conf
+  - Platform specific defaults
+
+* `bind['options_file']`
+  - Full path to named.options
   - Platform specific defaults
 
 * `bind['vardir']`
