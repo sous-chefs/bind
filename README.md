@@ -54,6 +54,14 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Free form options for named.conf template
   - Defaults to an empty array.
 
+* `bind['enable_log']`
+  - Boolean, toggle bind query logging
+  - Default to false
+
+* `bind['log_file']`
+  - Absolute path to bind log file, assuming directory exists
+  - Default to `/var/log/bind9/query.log`
+
 ### Attributes which should not require tuning
 
 * `bind['packages']`
@@ -83,6 +91,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 * `bind['rndc_keygen']`
   - command to generate rndc key
   - default depends on hardware/hypervisor platform
+
+* `bind['log_options']`
+  - Array listing all specific bind logging options
+  - default is empty
 
 ### ldap2zone recipe specific attributes
 
