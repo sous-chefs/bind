@@ -84,4 +84,4 @@ default['bind']['zonetype'] = "slave"
 default['bind']['zonesource'] = nil
 
 # This attribute is for setting statistocs-channels listening port.
-default['bind']['stats-port'] = 8080 
+default['bind']['stats_port'] = 8080 
