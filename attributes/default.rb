@@ -82,3 +82,6 @@ default['bind']['zones']['ldap'] = Array.new
 default['bind']['zones']['databag'] = Array.new
 default['bind']['zonetype'] = "slave"
 default['bind']['zonesource'] = nil
+
+# This attribute is for setting statistocs-channels listening port.
+default['bind']['stats-port'] = 8080 
