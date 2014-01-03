@@ -22,3 +22,7 @@ options {
   <%= option_line %>
   <% end -%>
 };
+
+statistics-channels {
+  inet * port <%= node['bind']['stats_port'] -%>;
+};
