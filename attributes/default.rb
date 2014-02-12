@@ -82,3 +82,8 @@ default['bind']['zones']['ldap'] = Array.new
 default['bind']['zones']['databag'] = Array.new
 default['bind']['zonetype'] = "slave"
 default['bind']['zonesource'] = nil
+
+# This attribute enable logging
+default['bind']['enable_log'] = false
+default['bind']['log_file'] = "/var/log/bind9/query.log"
+default['bind']['log_options'] = Array.new
