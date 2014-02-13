@@ -33,11 +33,6 @@ else
   end
 end
 
-case node['platform_family']
-when 'debian'
-  include_recipe "apt"
-end
-
 # Install required packages
 node['bind']['packages'].each do |bind_pkg|
   package bind_pkg
@@ -47,7 +42,7 @@ end
   directory named_dir do
     owner node['bind']['user']
     group node['bind']['group']
-    mode 0750
+    mode 00750
   end
 end
 
@@ -56,18 +51,16 @@ end
   directory "#{node['bind']['vardir']}/#{subdir}" do
     owner node['bind']['user']
     group node['bind']['group']
-    mode "0770"
+    mode 00770
     recursive true
   end
 end
 
-# Copy /etc/named files into place.
-node['bind']['etc_cookbook_files'].each do |etc_file|
-  cookbook_file "#{node['bind']['sysconfdir']}/#{etc_file}" do
-    owner node['bind']['user']
-    group node['bind']['group']
-    mode "0644"
-  end
+# Copy localhost (rf1912) zones into place 
+cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
+  owner node['bind']['user']
+  group node['bind']['group']
+  mode 00644
 end
 
 # Copy /var/named files in place
@@ -75,7 +68,7 @@ node['bind']['var_cookbook_files'].each do |var_file|
   cookbook_file "#{node['bind']['vardir']}/#{var_file}" do
     owner node['bind']['user']
     group node['bind']['group']
-    mode "0644"
+    mode 00644
   end
 end
 
@@ -88,7 +81,7 @@ end
 file "#{node['bind']['sysconfdir']}/rndc.key" do
   owner node['bind']['user']
   group node['bind']['group']
-  mode "0600"
+  mode 00600
   action :touch
 end
 
@@ -105,7 +98,7 @@ all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'
 template node['bind']['options_file'] do
   owner node['bind']['user']
   group node['bind']['group']
-  mode  "0644"
+  mode  00644
   variables(
     :bind_acls => node['bind']['acls']
   )
@@ -116,7 +109,7 @@ end
 template node['bind']['conf_file'] do
   owner node['bind']['user']
   group node['bind']['group']
-  mode 0644
+  mode 00644
   variables(
     :zones => all_zones.uniq.sort 
   )

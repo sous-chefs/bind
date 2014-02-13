@@ -37,6 +37,8 @@ logging {
 };
 <% end %>
 
+<% unless node['bind']['statistics-channel'] %> 
 statistics-channels {
-  inet * port <%= node['bind']['stats_port'] -%>;
+  inet * port <%= node['bind']['statistics-port'] -%>;
 };
+<% end %>

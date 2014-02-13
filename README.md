@@ -71,8 +71,17 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Default to false
 
 * `bind['log_file']`
-  - Absolute path to bind log file, assuming directory exists
+  - Absolute path to bind log file, assuming directory exists.  Again, this has no effect on syslog
+    configuration.
   - Default to `/var/log/bind9/query.log`
+
+* `bind['statistics-channel']
+  - Boolean to enable a statistics-channel on a TCP port.
+  - Default, platform-specific
+
+* `bind['statistics-port']
+  - Integer for statistics-channel TCP port.
+  - Default, 8080
 
 ### Attributes which should not require tuning
 
@@ -96,13 +105,11 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - var directory for named to write state data, such as zone files.
   - Platform specific defaults
 
-* `bind['etc_cookbook_files']`
-  - static cookbook files to drop off in sysconf directory
-  - Defaults to named.rfc1912.zones
-
-* `bind['etc_template_files']`
-  - template files to render from `data_bag` and/or roles
-  - Defaults to named.options
+* `bind['included_files']`
+  - Files to be included in named.conf, relative to sysconf (/etc/named, /etc/bind) directory.
+    You could, for example, drop off other static files or templates in your sysconf directory.
+    Then include them in your named.conf by overriding this attribute.
+  - Defaults to named.rfc1912.zones, and named.options
 
 * `bind['var_cookbook_files']`
   - static cookbook files to drop off in var directory

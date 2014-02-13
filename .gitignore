@@ -13,9 +13,11 @@ Gemfile.lock
 bin/*
 .bundle/*
 
-#exclude stoopid zone files here
-named.som
-named.rcbi
-named.rti.local
+# Kitchen
 .kitchen/
 .kitchen.local.yml
+
+# Build artifacts
+sloccount.sc
+checkstyle.xml
+.coverage

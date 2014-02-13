@@ -20,7 +20,7 @@
 default['bind']['packages'] = %w{ bind bind-utils bind-libs }
 default['bind']['vardir'] = "/var/named"
 default['bind']['sysconfdir'] = "/etc/named"
-default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
+default['bind']['conf_file'] = "/etc/named.conf"
 default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
 default['bind']['service_name'] = "named"
 default['bind']['user'] = "named"
@@ -30,9 +30,8 @@ default['bind']['group'] = "named"
 default['bind']['allow_solo_search'] = false
 
 # Set platform/version specific directories and settings
-if node['platform_family'] == "rhel" and node['platform_version'].to_i == 5
-  default['bind']['conf_file'] = "/etc/named.conf"
-elsif node['platform_family'] == "debian"
+case node['platform_family']
+when 'debian'
   default['bind']['packages'] = %w{ bind9 bind9utils }
   default['bind']['sysconfdir'] = "/etc/bind"
   default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
@@ -43,11 +42,8 @@ elsif node['platform_family'] == "debian"
   default['bind']['group'] = "bind"
 end
 
-# Will loop through these and pull them as cookbook_files
-default['bind']['etc_cookbook_files'] = %w{ named.rfc1912.zones }
-
-# These are template files.  No looping through them, but they need included in named.conf
-default['bind']['etc_template_files'] = %w{ named.options }
+# Files which should be included in named.conf
+default['bind']['included_files'] = %w[named.rfc1912.zones named.options]
 
 # These are var files referenced by our rfc1912 zone and root hints (named.ca) zone
 default['bind']['var_cookbook_files'] = %w{ named.empty named.ca named.loopback named.localhost }
@@ -88,5 +84,13 @@ default['bind']['enable_log'] = false
 default['bind']['log_file'] = "/var/log/bind9/query.log"
 default['bind']['log_options'] = Array.new
 
-# This attribute is for setting statistocs-channels listening port.
-default['bind']['stats_port'] = 8080 
+# These are for enabling statistics-channel on a TCP port.
+default['bind']['statistics-channel'] = true
+default['bind']['statistics-port'] = 8080
+
+case node['platform_family']
+when 'rhel'
+  if node['platform_version'].to_i <= 5
+    default['bind']['statistics-channel'] = false
+  end
+end
