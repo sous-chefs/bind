@@ -65,6 +65,15 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Boolean true/false, enabling chef-solo search
   - Defaults to false
 
+* `bind['enable_log']`
+  - Boolean, toggle bind query logging.  Note this applies only to a dedicated log, such as a query log.
+    i.e. bind may still log to the messages/kernel log if configured to do so with syslog.
+  - Default to false
+
+* `bind['log_file']`
+  - Absolute path to bind log file, assuming directory exists
+  - Default to `/var/log/bind9/query.log`
+
 ### Attributes which should not require tuning
 
 * `bind['packages']`
@@ -102,6 +111,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 * `bind['rndc_keygen']`
   - command to generate rndc key
   - default depends on hardware/hypervisor platform
+
+* `bind['log_options']`
+  - Array listing all specific bind logging options
+  - default is empty
 
 ### ldap2zone recipe specific attributes
 
