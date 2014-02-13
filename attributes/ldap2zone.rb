@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: bind 
-# Attributes:: ldap2zone 
+# Cookbook Name:: bind
+# Attributes:: ldap2zone
 #
-# Copyright 2011, Eric G. Wolfe 
+# Copyright 2011, Eric G. Wolfe
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 # limitations under the License.
 #
 
-# Specific variables for slurping zone names right out of Active Directory, or LDAP 
+# Specific variables for slurping zone names right out of Active Directory, or LDAP
 default['bind']['ldap']['binddn'] = nil
 default['bind']['ldap']['bindpw'] = nil
-default['bind']['ldap']['filter'] = "(&(!(name=RootDNSServers))(objectClass=dnsZone))"
-default['bind']['ldap']['server'] = nil 
-default['bind']['ldap']['domainzones'] = "cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com"
+default['bind']['ldap']['filter'] = '(&(!(name=RootDNSServers))(objectClass=dnsZone))'
+default['bind']['ldap']['server'] = nil
+default['bind']['ldap']['domainzones'] = 'cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com'

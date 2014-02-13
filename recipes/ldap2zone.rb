@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: bind 
-# Recipe:: ldap2zone 
+# Cookbook Name:: bind
+# Recipe:: ldap2zone
 #
 # Copyright 2011, Eric G. Wolfe
 #
@@ -27,31 +27,31 @@
 #
 # You can just use an override["bind"]["zones"] in a role or environment
 # instead.  Or even a mix of both override, and API query to populate zones.
-unless ( node['bind']['ldap']['server'].nil? and node['bind']['ldap']['binddn'].nil? and node['bind']['ldap']['bindpw'].nil? )
-  chef_gem "net-ldap" do
-    version "0.2.2"
+unless  node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].nil? && node['bind']['ldap']['bindpw'].nil?
+  chef_gem 'net-ldap' do
+    version '0.2.2'
     action :install
   end
 
   require 'net/ldap'
 
   ldap = Net::LDAP.new(
-    :host => node['bind']['ldap']['server'],
-    :auth => {
-      :method => :simple,
-      :username => node['bind']['ldap']['binddn'],
-      :password => node['bind']['ldap']['bindpw']
+    host: node['bind']['ldap']['server'],
+    auth: {
+      method: :simple,
+      username: node['bind']['ldap']['binddn'],
+      password: node['bind']['ldap']['bindpw']
     }
   )
 
   if ldap.bind
     ldap.search(
-      :base => node['bind']['ldap']['domainzones'],
-      :filter => node['bind']['ldap']['filter']) do |dnszone|
+      base: node['bind']['ldap']['domainzones'],
+      filter: node['bind']['ldap']['filter']) do |dnszone|
       node.default['bind']['zones']['ldap'] << dnszone['name'].first
     end
   else
     Chef::Log.error("LDAP Bind failed with #{node['bind']['ldap']['server']}")
-    raise
+    fail
   end
 end

@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: bind 
-# Recipe:: databag2zone 
+# Cookbook Name:: bind
+# Recipe:: databag2zone
 #
 # Copyright 2012, Eric G. Wolfe
 #
@@ -18,16 +18,16 @@
 #
 
 if Chef::Config['solo'] && !node['bind']['allow_solo_search']
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
 else
 
   # Search for single zone string in bind data bag
-  search(:bind, "zone:*") do |z|
+  search(:bind, 'zone:*') do |z|
     node.default['bind']['zones']['databag'] << z['zone']
   end
 
   # Search for zones arrays in bind data bag
-  search(:bind, "zones:*") do |z_arr|
+  search(:bind, 'zones:*') do |z_arr|
     z_arr['zones'].each do |zone|
       node.default['bind']['zones']['databag'] << zone
     end

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: bind 
+# Cookbook Name:: bind
 # Recipe:: default
 #
 # Copyright 2011, Gerald L. Hevener, Jr, M.S.
@@ -17,19 +17,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-all_zones = Array.new
+all_zones = []
 
 # Read ACL objects from data bag.
 # These will be passed to the named.options template
 if Chef::Config['solo'] && !node['bind']['allow_solo_search']
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
 else
-  begin 
+  begin
     search(:bind, "role:#{node['bind']['acl-role']}") do |acl|
       node.default['bind']['acls'] << acl
     end
   rescue
-    Chef::Log.warn("bind databag not found, assuming ACL is empty.")
+    Chef::Log.warn('bind databag not found, assuming ACL is empty.')
   end
 end
 
@@ -38,7 +38,7 @@ node['bind']['packages'].each do |bind_pkg|
   package bind_pkg
 end
 
-[ node['bind']['sysconfdir'], node['bind']['vardir'] ].each do |named_dir|
+[node['bind']['sysconfdir'], node['bind']['vardir']].each do |named_dir|
   directory named_dir do
     owner node['bind']['user']
     group node['bind']['group']
@@ -56,7 +56,7 @@ end
   end
 end
 
-# Copy localhost (rf1912) zones into place 
+# Copy localhost (rf1912) zones into place
 cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
   owner node['bind']['user']
   group node['bind']['group']
@@ -73,7 +73,7 @@ node['bind']['var_cookbook_files'].each do |var_file|
 end
 
 # Create rndc key file, if it does not exist
-execute "rndc-key" do
+execute 'rndc-key' do
   command node['bind']['rndc_keygen']
   not_if { File.exists?("#{node['bind']['sysconfdir']}/rndc.key") }
 end
@@ -86,10 +86,10 @@ file "#{node['bind']['sysconfdir']}/rndc.key" do
 end
 
 # Include zones from external source if set.
-unless node['bind']['zonesource'].nil?
+if !node['bind']['zonesource'].nil?
   include_recipe "bind::#{node['bind']['zonesource']}2zone"
 else
-  Chef::Log.warn("No zonesource defined, assuming zone names are defined as override attributes.")
+  Chef::Log.warn('No zonesource defined, assuming zone names are defined as override attributes.')
 end
 
 all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
@@ -100,7 +100,7 @@ template node['bind']['options_file'] do
   group node['bind']['group']
   mode  00644
   variables(
-    :bind_acls => node['bind']['acls']
+    bind_acls: node['bind']['acls']
   )
 end
 
@@ -111,13 +111,13 @@ template node['bind']['conf_file'] do
   group node['bind']['group']
   mode 00644
   variables(
-    :zones => all_zones.uniq.sort 
+    zones: all_zones.uniq.sort
   )
 end
 
 service node['bind']['service_name'] do
-  supports :reload => true, :status => true
-  action [ :enable, :start ]
+  supports reload: true, status: true
+  action [:enable, :start]
   subscribes :reload, resources("template[#{node['bind']['options_file']}]",
-    "template[#{node['bind']['conf_file']}]")
+                                "template[#{node['bind']['conf_file']}]")
 end
