@@ -87,3 +87,6 @@ default['bind']['zonesource'] = nil
 default['bind']['enable_log'] = false
 default['bind']['log_file'] = "/var/log/bind9/query.log"
 default['bind']['log_options'] = Array.new
+
+# This attribute is for setting statistocs-channels listening port.
+default['bind']['stats_port'] = 8080 

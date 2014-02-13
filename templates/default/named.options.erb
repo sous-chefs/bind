@@ -29,10 +29,14 @@ logging {
     file "<%= node['bind']['log_file'] %>" versions 2 size 1m;
     print-time yes;
     severity info;
-     <% node['bind']['log_options'].each do |option_line| -%>
+    <% node['bind']['log_options'].each do |option_line| -%>
     <%= option_line %>
     <% end -%>
   };
   category queries { b_query; };
 };
 <% end %>
+
+statistics-channels {
+  inet * port <%= node['bind']['stats_port'] -%>;
+};
