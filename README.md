@@ -123,6 +123,9 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Array listing all specific bind logging options
   - default is empty
 
+* `bind['rndc-key']`
+  - Location which rndc.key gets created by rndc-confgen
+
 ### ldap2zone recipe specific attributes
 
 We store our zone names on Active Directory, and use Ruby to pull

@@ -75,10 +75,10 @@ end
 # Create rndc key file, if it does not exist
 execute 'rndc-key' do
   command node['bind']['rndc_keygen']
-  not_if { File.exists?("#{node['bind']['sysconfdir']}/rndc.key") }
+  not_if { ::File.exists?(node['bind']['rndc-key']) }
 end
 
-file "#{node['bind']['sysconfdir']}/rndc.key" do
+file node['bind']['rndc-key'] do
   owner node['bind']['user']
   group node['bind']['group']
   mode 00600
@@ -119,5 +119,5 @@ service node['bind']['service_name'] do
   supports reload: true, status: true
   action [:enable, :start]
   subscribes :reload, resources("template[#{node['bind']['options_file']}]",
-                                "template[#{node['bind']['conf_file']}]")
+                                "template[#{node['bind']['conf_file']}]"), :delayed
 end

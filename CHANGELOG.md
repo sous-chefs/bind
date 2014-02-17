@@ -1,6 +1,12 @@
 bind changelog
 ==============
 
+v1.0.1
+------
+
+* Add delayed timing to service reload
+* Fix a minor issue with rndc.key on CentOS 6.x
+
 v1.0.0
 ------
 

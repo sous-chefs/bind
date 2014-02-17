@@ -25,6 +25,7 @@ default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
 default['bind']['service_name'] = 'named'
 default['bind']['user'] = 'named'
 default['bind']['group'] = 'named'
+default['bind']['rndc-key'] = '/etc/rndc.key'
 
 # Allow usage with chef-solo-search, see https://github.com/edelight/chef-solo-search
 default['bind']['allow_solo_search'] = false
@@ -40,6 +41,7 @@ when 'debian'
   default['bind']['service_name'] = 'bind9'
   default['bind']['user'] = 'bind'
   default['bind']['group'] = 'bind'
+  default['bind']['rndc-key'] = "#{node['bind']['sysconfdir']}/rndc.key"
 end
 
 # Files which should be included in named.conf

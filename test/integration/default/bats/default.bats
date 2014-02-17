@@ -5,7 +5,7 @@
 }
 
 @test 'rndc can reload the server' {
-  rndc reload
+  /usr/sbin/rndc reload
 }
 
 @test 'something is listening on udp or tcp 53' {
