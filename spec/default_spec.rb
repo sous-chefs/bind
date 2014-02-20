@@ -56,6 +56,7 @@ describe 'bind::default' do
     end
 
     it 'starts and enables service named' do
+      File.stub(:exists?).and_return(true)
       expect(chef_run).to start_service('named')
       expect(chef_run).to enable_service('named')
     end
@@ -124,6 +125,7 @@ describe 'bind::default' do
     end
 
     it 'starts and enables service bind9' do
+      File.stub(:exists?).and_return(true)
       expect(chef_run).to start_service('bind9')
       expect(chef_run).to enable_service('bind9')
     end
