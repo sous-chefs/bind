@@ -175,71 +175,67 @@ attributes, and an API query to populate zones.
 
 ### Example role for internal recursing DNS
 
-An example role for an internal split-horizon BIND server for
+An example wrapper cookbook for an internal split-horizon BIND server for
 example.com, might look like so: 
 
 ```ruby
-name "internal_dns"
-description "Configure and install Bind to function as an internal DNS server."
-override_attributes "bind" => {
-  "acl-role" => "internal-acl",
-  "masters" => [ "192.0.2.10", "192.0.2.11", "192.0.2.12" ],
-  "ipv6_listen" => true,
-  "zonetype" => "slave",
-  "zonesource" => "ldap",
-  "zones" => [
-    "example.com",
-    "example.org"
-  ],
-  "ldap" => {
-    "server" => "example.com",
-    "binddn" => "cn=chef-ldap,ou=Service Accounts,dc=example,dc=com",
-    "bindpw" => "ServiceAccountPassword",
-    "domainzones" => "cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com"
-  },
-  "options" => [
-    "check-names slave ignore;",
-    "multi-master yes;",
-    "provide-ixfr yes;",
-    "recursive-clients 10000;",
-    "request-ixfr yes;",
-    "allow-notify { acl-dns-masters; acl-dns-slaves; };",
-    "allow-query { example-lan; localhost; };",
-    "allow-query-cache { example-lan; localhost; };",
-    "allow-recursion { example-lan; localhost; };",
-    "allow-transfer { acl-dns-masters; acl-dns-slaves; };",
-    "allow-update-forwarding { any; };",
-  ]
+# Configure and install Bind to function as an internal DNS server."
+# attributes/default.rb
+include_attribute 'bind'
+default['bind']['acl-role'] = 'internal-acl'
+default['bind']['masters'] = %w(192.0.2.10 192.0.2.11 192.0.2.12)
+default['bind']['ipv6_listen'] = true
+default['bind']['zonetype'] = 'slave'
+default['bind']['zonesource'] = 'ldap'
+default['bind']['zones']['attribute'] = %w(example.com example.org)
+default['bind']['ldap'] = {
+  server: 'example.com',
+  binddn: 'cn=chef-ldap,ou=Service Accounts,dc=example,dc=com',
+  bindpw: 'ServiceAccountPassword',
+  domainzones: 'cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com'
 }
-run_list "recipe[bind]"
+default['bind']['options'] = [
+  'check-names slave ignore;',
+  'multi-master yes;',
+  'provide-ixfr yes;',
+  'recursive-clients 10000;',
+  'request-ixfr yes;',
+  'allow-notify { acl-dns-masters; acl-dns-slaves; };',
+  'allow-query { example-lan; localhost; };',
+  'allow-query-cache { example-lan; localhost; };',
+  'allow-recursion { example-lan; localhost; };',
+  'allow-transfer { acl-dns-masters; acl-dns-slaves; };',
+  'allow-update-forwarding { any; };',
+]
+
+# recipes/default.rb
+include_recipe 'bind'
 ```
 
 ### Example role for authoritative only external DNS
 
-An example role for an external split-horizon authoritative only
+An example wrapper cookbook for an external split-horizon authoritative only
 BIND server for example.com, might look like so:
 
 ```ruby
-name "external_dns"
-description "Configure and install Bind to function as an external DNS server."
-override_attributes "bind" => {
-  "acl-role" => "external-acl",
-  "masters" => [ "192.0.2.5", "192.0.2.6" ],
-  "ipv6_listen" => true,
-  "zonetype" => "master",
-  "zones" => [
-    "example.com",
-    "example.org"
-  ],
-  "options" => [
-    "recursion no;",
-    "allow-query { any; };",
-    "allow-transfer { external-private-interfaces; external-dns; };",
-    "allow-notify { external-private-interfaces; external-dns; localhost; };",
-    "listen-on-v6 { any; };"
-  ]
-}
-run_list "recipe[bind]"
+# Configure and install Bind to function as an external DNS server."
+# attributes/default.rb
+include_attribute 'bind'
+default['bind']['acl-role'] = 'external-acl'
+default['bind']['masters'] = %w(192.0.2.5 192.0.2.6)
+default['bind']['ipv6_listen'] = true
+default['bind']['zonetype'] = 'master'
+default['bind']['zones']['attribute'] = %w(example.com example.org) 
+default['bind']['options'] = [
+  'recursion no;',
+  'allow-query { any; };',
+  'allow-transfer { external-private-interfaces; external-dns; };',
+  'allow-notify { external-private-interfaces; external-dns; localhost; };',
+  'listen-on-v6 { any; };'
+]
+
+# recipes/default.rb
+include_recipe 'bind'
 ```
 
 ### Example BIND Access Controls from data bag

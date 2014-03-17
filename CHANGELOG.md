@@ -1,6 +1,16 @@
 bind changelog
 ==============
 
+v1.0.3
+------
+
+* Update documentation
+
+v1.0.2
+------
+
+* Stub file for service tests
+
 v1.0.1
 ------
 
