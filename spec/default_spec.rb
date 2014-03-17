@@ -6,7 +6,7 @@ describe 'bind::default' do
       ChefSpec::Runner.new.converge(described_recipe)
     end
 
-    %w[bind bind-utils bind-libs].each do |bind_package|
+    %w(bind bind-utils bind-libs).each do |bind_package|
       it "installs package #{bind_package}" do
         expect(chef_run).to install_package(bind_package)
       end
@@ -39,7 +39,7 @@ describe 'bind::default' do
       expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
     end
 
-    %w[named.empty named.loopback named.localhost named.ca].each do |var_file|
+    %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/named/#{var_file}" do
         expect(chef_run).to create_cookbook_file("/var/named/#{var_file}")
       end
@@ -49,7 +49,7 @@ describe 'bind::default' do
       expect(chef_run).to run_execute('rndc-confgen -a')
     end
 
-    %w[data slaves master].each do |subdir|
+    %w(data slaves master).each do |subdir|
       it "creates subdirectory /var/named/#{subdir}" do
         expect(chef_run).to create_directory("/var/named/#{subdir}")
       end
@@ -79,7 +79,7 @@ describe 'bind::default' do
       ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
     end
 
-    %w[bind9 bind9utils].each do |bind_package|
+    %w(bind9 bind9utils).each do |bind_package|
       it "installs package #{bind_package}" do
         expect(chef_run).to install_package(bind_package)
       end
@@ -112,13 +112,13 @@ describe 'bind::default' do
       expect(chef_run).to render_file('/etc/bind/named.conf').with_content(%r{include "/etc/bind/named.rfc1912.zones"})
     end
 
-    %w[named.empty named.loopback named.localhost named.ca].each do |var_file|
+    %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/cache/bind/#{var_file}" do
         expect(chef_run).to create_cookbook_file("/var/cache/bind/#{var_file}")
       end
     end
 
-    %w[data slaves master].each do |subdir|
+    %w(data slaves master).each do |subdir|
       it "creates subdirectory /var/cache/bind/#{subdir}" do
         expect(chef_run).to create_directory("/var/cache/bind/#{subdir}")
       end

@@ -47,7 +47,7 @@ end
 end
 
 # Create /var/named subdirectories
-%w[ data master slaves ].each do |subdir|
+%w(data master slaves).each do |subdir|
   directory "#{node['bind']['vardir']}/#{subdir}" do
     owner node['bind']['user']
     group node['bind']['group']

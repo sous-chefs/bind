@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-default['bind']['packages'] = %w{ bind bind-utils bind-libs }
+default['bind']['packages'] = %w(bind bind-utils bind-libs)
 default['bind']['vardir'] = '/var/named'
 default['bind']['sysconfdir'] = '/etc/named'
 default['bind']['conf_file'] = '/etc/named.conf'
@@ -33,7 +33,7 @@ default['bind']['allow_solo_search'] = false
 # Set platform/version specific directories and settings
 case node['platform_family']
 when 'debian'
-  default['bind']['packages'] = %w{ bind9 bind9utils }
+  default['bind']['packages'] = %w(bind9 bind9utils)
   default['bind']['sysconfdir'] = '/etc/bind'
   default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
   default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
@@ -45,10 +45,10 @@ when 'debian'
 end
 
 # Files which should be included in named.conf
-default['bind']['included_files'] = %w[named.rfc1912.zones named.options]
+default['bind']['included_files'] = %w(named.rfc1912.zones named.options)
 
 # These are var files referenced by our rfc1912 zone and root hints (named.ca) zone
-default['bind']['var_cookbook_files'] = %w{ named.empty named.ca named.loopback named.localhost }
+default['bind']['var_cookbook_files'] = %w(named.empty named.ca named.loopback named.localhost)
 
 # This an array of masters, or servers which you transfer from.
 default['bind']['masters'] = []
