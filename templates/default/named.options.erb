@@ -22,7 +22,6 @@ options {
   <% else -%>
   recursion no;
   <% end -%>
-  <% if node['bind']['ipv6_listen'] -%>listen-on-v6 { any; };<% end -%>
   allow-query {
     <% node['bind']['allow-query'].each do |acl| -%>
     <%= acl%>;
