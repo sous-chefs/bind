@@ -20,3 +20,6 @@ suites:
       zones:
         attribute: [ "example.com" ]
       options: [ "check-names slave ignore;", "multi-master yes;", "provide-ixfr yes;", "request-ixfr yes;" ]
+      server:
+        127.0.0.1:
+        - 'bogus no;'
