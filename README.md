@@ -83,6 +83,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - Integer for statistics-channel TCP port.
   - Default, 8080
 
+* `bind['server']
+  - Hash of server IPs, each with their own array of options for the "server" clause.
+  - Will not populate by default
+
 ### Attributes which should not require tuning
 
 * `bind['packages']`
@@ -297,6 +301,14 @@ use the following format to include a number of zones at once.
 {
   "id": "example",
   "zones": [ "example.com", "example.org" ]
+}
+```
+
+### Example of using the 'server' clause
+```ruby
+default['bind']['server'] = {
+  10.0.0.1: ['keys { my_tsig_key; };', 'bogus no;'],
+  10.0.0.2: ['bogus yes;']
 }
 ```
 
