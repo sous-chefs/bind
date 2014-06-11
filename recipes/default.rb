@@ -75,7 +75,7 @@ end
 # Create rndc key file, if it does not exist
 execute 'rndc-key' do
   command node['bind']['rndc_keygen']
-  not_if { ::File.exists?(node['bind']['rndc-key']) }
+  not_if { ::File.exist?(node['bind']['rndc-key']) }
 end
 
 file node['bind']['rndc-key'] do
@@ -98,7 +98,7 @@ all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'
 template node['bind']['options_file'] do
   owner node['bind']['user']
   group node['bind']['group']
-  mode  00644
+  mode 00644
   variables(
     bind_acls: node['bind']['acls']
   )
@@ -120,5 +120,5 @@ service node['bind']['service_name'] do
   action [:enable, :start]
   subscribes :reload, resources("template[#{node['bind']['options_file']}]",
                                 "template[#{node['bind']['conf_file']}]"), :delayed
-  only_if { ::File.exists?(node['bind']['options_file']) && ::File.exists?(node['bind']['conf_file']) }
+  only_if { ::File.exist?(node['bind']['options_file']) && ::File.exist?(node['bind']['conf_file']) }
 end
