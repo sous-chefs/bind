@@ -1,6 +1,13 @@
 bind changelog
 ==============
 
+v1.1.0
+------
+
+* Add named-checkconf sanity checking
+* Add thor/scmversion
+* Update specs
+
 v1.0.3
 ------
 

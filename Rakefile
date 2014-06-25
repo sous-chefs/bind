@@ -13,13 +13,7 @@ end
 # rubocop rake task
 desc 'Ruby style guide linter'
 task :rubocop do
-  sh 'rubocop'
-end
-
-# rubocop jenkins rake task
-desc 'Ruby style guide - checkformat output'
-task :rubocop_checkformat do
-  sh 'rubocop --require rubocop/formatter/checkstyle_formatter --format Rubocop::Formatter::CheckstyleFormatter > checkstyle.xml'
+  sh 'rubocop --fail-level E'
 end
 
 # test-kitchen task
@@ -38,7 +32,7 @@ task :deploy do
 end
 
 # default tasks are quick, commit tests
-task :default => ['foodcritic', 'rubocop', 'chefspec']
+task default: %w(foodcritic rubocop chefspec)
 
 # jenkins tasks format for metric tracking
-task :jenkins => ['foodcritic', 'rubocop_checkformat', 'chefspec'] 
+task jenkins: %w(foodcritic rubocop chefspec)
