@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
-    let(:chef_run) do
-      ChefSpec::Runner.new.converge(described_recipe)
-    end
+    let(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
+    let(:checkconf) { chef_run.execute('named-checkconf') }
 
     %w(bind bind-utils bind-libs).each do |bind_package|
       it "installs package #{bind_package}" do
@@ -55,10 +54,9 @@ describe 'bind::default' do
       end
     end
 
-    it 'starts and enables service named' do
-      File.stub(:exists?).and_return(true)
-      expect(chef_run).to start_service('named')
-      expect(chef_run).to enable_service('named')
+    it 'named-checkconf notifies bind service' do
+      expect(checkconf).to notify('service[bind]').to(:start).immediately
+      expect(checkconf).to notify('service[bind]').to(:enable).immediately
     end
   end
 
@@ -68,6 +66,7 @@ describe 'bind::default' do
         node.automatic['virtualization']['role'] = 'guest'
       end.converge(described_recipe)
     end
+    let(:checkconf) { chef_run.execute('named-checkconf') }
 
     it 'executes rndc-confgen -a -r /dev/urandom' do
       expect(chef_run).to run_execute('rndc-confgen -a -r /dev/urandom')
@@ -78,6 +77,7 @@ describe 'bind::default' do
     let(:chef_run) do
       ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
     end
+    let(:checkconf) { chef_run.execute('named-checkconf') }
 
     %w(bind9 bind9utils).each do |bind_package|
       it "installs package #{bind_package}" do
@@ -124,10 +124,9 @@ describe 'bind::default' do
       end
     end
 
-    it 'starts and enables service bind9' do
-      File.stub(:exists?).and_return(true)
-      expect(chef_run).to start_service('bind9')
-      expect(chef_run).to enable_service('bind9')
+    it 'named-checkconf notifies service[bind]' do
+      expect(checkconf).to notify('service[bind]').to(:start).immediately
+      expect(checkconf).to notify('service[bind]').to(:enable).immediately
     end
   end
 end

@@ -75,7 +75,7 @@ end
 # Create rndc key file, if it does not exist
 execute 'rndc-key' do
   command node['bind']['rndc_keygen']
-  not_if { ::File.exists?(node['bind']['rndc-key']) }
+  not_if { ::File.exist?(node['bind']['rndc-key']) }
 end
 
 file node['bind']['rndc-key'] do
@@ -98,7 +98,7 @@ all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'
 template node['bind']['options_file'] do
   owner node['bind']['user']
   group node['bind']['group']
-  mode  00644
+  mode 00644
   variables(
     bind_acls: node['bind']['acls']
   )
@@ -113,12 +113,34 @@ template node['bind']['conf_file'] do
   variables(
     zones: all_zones.uniq.sort
   )
+  notifies :run, 'execute[named-checkconf]', :immediately
+  notifies :run, 'execute[failsafe-checkconf]', :immediately
 end
 
-service node['bind']['service_name'] do
+# Run named-checkconf as a sanity check on configuration, and start service
+execute 'named-checkconf' do
+  command "/usr/sbin/named-checkconf -z #{node['bind']['conf_file']}"
+  action :nothing
+  notifies :enable, 'service[bind]', :immediately
+  notifies :start, 'service[bind]', :immediately
+  only_if { ::File.exist?('/usr/sbin/named-checkconf') }
+end
+
+# Start service if named-checkconf does not exist
+execute 'failsafe-checkconf' do
+  command 'true'
+  action :nothing
+  notifies :enable, 'service[bind]', :immediately
+  notifies :start, 'service[bind]', :immediately
+  not_if { ::File.exist?('/usr/sbin/named-checkconf') }
+end
+
+service 'bind' do
+  service_name node['bind']['service_name']
   supports reload: true, status: true
-  action [:enable, :start]
-  subscribes :reload, resources("template[#{node['bind']['options_file']}]",
-                                "template[#{node['bind']['conf_file']}]"), :delayed
-  only_if { ::File.exists?(node['bind']['options_file']) && ::File.exists?(node['bind']['conf_file']) }
+  action :nothing
+  subscribes :reload, resources("template[#{node['bind']['options_file']}]"), :delayed
+  subscribes :reload, resources('execute[named-checkconf]',
+                                'execute[failsafe-checkconf]'), :delayed
+  only_if { ::File.exist?(node['bind']['options_file']) && ::File.exist?(node['bind']['conf_file']) }
 end
