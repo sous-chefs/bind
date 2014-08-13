@@ -1,6 +1,11 @@
 bind changelog
 ==============
 
+v1.1.1
+------
+
+* Added array for domainzones attribute
+
 v1.1.0
 ------
 
