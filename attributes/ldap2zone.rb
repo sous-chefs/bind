@@ -22,4 +22,4 @@ default['bind']['ldap']['binddn'] = nil
 default['bind']['ldap']['bindpw'] = nil
 default['bind']['ldap']['filter'] = '(&(!(name=RootDNSServers))(objectClass=dnsZone))'
 default['bind']['ldap']['server'] = nil
-default['bind']['ldap']['domainzones'] = 'cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com'
+default['bind']['ldap']['domainzones'] = ['cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com']

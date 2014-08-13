@@ -45,10 +45,12 @@ unless  node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].ni
   )
 
   if ldap.bind
-    ldap.search(
-      base: node['bind']['ldap']['domainzones'],
-      filter: node['bind']['ldap']['filter']) do |dnszone|
-      node.default['bind']['zones']['ldap'] << dnszone['name'].first
+    node['bind']['ldap']['domainzones'].each do |zone|
+      ldap.search(
+        base: zone,
+        filter: node['bind']['ldap']['filter']) do |dnszone|
+        node.default['bind']['zones']['ldap'] << dnszone['name'].first
+      end
     end
   else
     Chef::Log.error("LDAP Bind failed with #{node['bind']['ldap']['server']}")
