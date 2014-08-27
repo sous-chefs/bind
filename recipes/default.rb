@@ -113,7 +113,7 @@ template node['bind']['conf_file'] do
   group node['bind']['group']
   mode 00644
   variables(
-    zones: all_zones.uniq.sort
+    zones: all_zones.uniq.sort,
     forwardzones: forwardzones
   )
 end

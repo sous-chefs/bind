@@ -27,7 +27,7 @@ zone "<%= zone %>" in {
 
 <% end -%>
 
-<% if @forwardzones.count > 0 do -%>
+<% if @forwardzones.count > 0 -%>
 <% @forwardzones.uniq.each do |forwardzone| -%>
 zone "<%= forwardzone %>" in {
   type forward;
