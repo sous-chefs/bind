@@ -27,6 +27,16 @@ zone "<%= zone %>" in {
 
 <% end -%>
 
+<% if @forwardzones.count > 0 do -%>
+<% @forwardzones.uniq.each do |forwardzone| -%>
+zone "<%= forwardzone %>" in {
+  type forward;
+  forwarders { <% node['bind']['forwarders'].each do |forwarder| %><%= forwarder %>; <% end %>};
+  forward only;
+};
+<% end -%>
+<% end -%>
+
 zone "." IN {
   type hint;
   file "named.ca";

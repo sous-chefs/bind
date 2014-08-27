@@ -46,6 +46,12 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - An array attribute where zone names may be set from a
     databag source.
 
+* `bind['forwardzones']`
+  - An array of zones to forward requests for.
+
+* `bind['forwarders']`
+  - An array of forwarders to use with the forwardzones.
+
 * `bind['zonetype']`
   - The zone type, master, or slave for configuring
     the  named.conf template.
