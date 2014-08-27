@@ -21,3 +21,7 @@ bin/*
 sloccount.sc
 checkstyle.xml
 .coverage
+
+Berksfile.lock.bak
+Thorfile
+Vagrantfile
