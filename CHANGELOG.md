@@ -1,6 +1,11 @@
 bind changelog
 ==============
 
+v1.1.3
+------
+
+* Added log_file_size attribute.
+
 v1.1.1
 ------
 
