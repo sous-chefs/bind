@@ -26,7 +26,7 @@ options {
 <% if node['bind']['enable_log'] %>
 logging {
   channel b_query {
-    file "<%= node['bind']['log_file'] %>" versions "<%= node['bind']['log_file_versions'] %>" size "<%= node['bind']['log_file_size'] %>";
+    file "<%= node['bind']['log_file'] %>" versions <%= node['bind']['log_file_versions'] %> size <%= node['bind']['log_file_size'] %>:
     print-time yes;
     severity info;
     <% node['bind']['log_options'].each do |option_line| -%>
