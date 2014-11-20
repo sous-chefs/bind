@@ -1,6 +1,13 @@
 bind changelog
 ==============
 
+v1.1.4
+------
+
+* restore previous default for querylog size and amount
+* correct quoting for log file rotation
+* minor rubocop corrections
+
 v1.1.3
 ------
 
