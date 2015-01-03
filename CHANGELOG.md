@@ -1,6 +1,13 @@
 bind changelog
 ==============
 
+v1.2.0
+------
+* Add server clause.
+  - See [documentation](http://www.zytrax.com/books/dns/ch7/server.html) for reference.
+* Add bind forwardzones attribute. 
+
+
 v1.1.4
 ------
 
