@@ -53,6 +53,15 @@ default['bind']['var_cookbook_files'] = %w(named.empty named.ca named.loopback n
 # This an array of masters, or servers which you transfer from.
 default['bind']['masters'] = []
 
+# This an array of forwarders, or servers which I will query upstream
+default['bind']['forwarders'] = []
+
+# Zones that should use the forwarders
+default['bind']['forwardzones'] = []
+
+# Set DNS BIND Server Clause options
+default['bind']['server'] = {}
+
 # Boolean to turn off/on IPV6 support
 default['bind']['ipv6_listen'] = false
 

@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 all_zones = []
+forwardzones = []
 
 # Read ACL objects from data bag.
 # These will be passed to the named.options template
@@ -93,6 +94,7 @@ else
 end
 
 all_zones = node['bind']['zones']['attribute'] + node['bind']['zones']['databag'] + node['bind']['zones']['ldap']
+forwardzones = node['bind']['forwardzones']
 
 # Render a template with all our global BIND options and ACLs
 template node['bind']['options_file'] do
@@ -111,7 +113,8 @@ template node['bind']['conf_file'] do
   group node['bind']['group']
   mode 00644
   variables(
-    zones: all_zones.uniq.sort
+    zones: all_zones.uniq.sort,
+    forwardzones: forwardzones
   )
   notifies :run, 'execute[named-checkconf]', :immediately
   notifies :run, 'execute[failsafe-checkconf]', :immediately

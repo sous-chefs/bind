@@ -46,6 +46,12 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - An array attribute where zone names may be set from a
     databag source.
 
+* `bind['forwardzones']`
+  - An array of zones to forward requests for.
+
+* `bind['forwarders']`
+  - An array of forwarders to use with the forwardzones.
+
 * `bind['zonetype']`
   - The zone type, master, or slave for configuring
     the  named.conf template.
@@ -82,6 +88,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 * `bind['statistics-port']
   - Integer for statistics-channel TCP port.
   - Default, 8080
+
+* `bind['server']
+  - Hash of server IPs, each with their own array of options for the "server" clause.
+  - Will not populate by default
 
 ### Attributes which should not require tuning
 
@@ -297,6 +307,14 @@ use the following format to include a number of zones at once.
 {
   "id": "example",
   "zones": [ "example.com", "example.org" ]
+}
+```
+
+### Example of using the 'server' clause
+```ruby
+default['bind']['server'] = {
+  10.0.0.1: ['keys { my_tsig_key; };', 'bogus no;'],
+  10.0.0.2: ['bogus yes;']
 }
 ```
 
