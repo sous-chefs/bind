@@ -28,10 +28,10 @@ zone "<%= zone %>" in {
 <% end -%>
 
 <% if @forwardzones.count > 0 -%>
-<% @forwardzones.uniq.each do |forwardzone| -%>
-zone "<%= forwardzone %>" in {
+<% @forwardzones.each do |zone, forwarders| -%>
+zone "<%= zone %>" in {
   type forward;
-  forwarders { <% node['bind']['forwarders'].each do |forwarder| %><%= forwarder %>; <% end %>};
+  forwarders { <% forwarders.each do |forwarder| %><%= forwarder %>; <% end %>};
   forward only;
 };
 <% end -%>
