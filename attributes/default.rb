@@ -53,7 +53,13 @@ default['bind']['var_cookbook_files'] = %w(named.empty named.ca named.loopback n
 # This an array of masters, or servers which you transfer from.
 default['bind']['masters'] = []
 
-# Zones that BIND server will forward requests for
+# Zones that BIND server will forward requests for. format is as follows:
+# 'zone' = {
+#   'forwarders' = [
+#     '10.0.0.1',
+#     '10.0.0.2'
+#   ]
+# }
 default['bind']['forwardzones'] = {}
 
 # Set DNS BIND Server Clause options
