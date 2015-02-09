@@ -2,7 +2,8 @@ bind changelog
 ==============
 
 v1.2.1
-* Add ability to define multiple forward zones, each with their own unique forwarders
+* Add ability to define multiple forward zones, each with their own unique list of forwarders.
+* Add explicit version in metadata.rb in support of berkshelf
 
 v1.2.0
 ------
