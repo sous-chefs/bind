@@ -1,6 +1,9 @@
 bind changelog
 ==============
 
+v1.2.1
+* Add ability to define multiple forward zones, each with their own unique forwarders
+
 v1.2.0
 ------
 * Add server clause.
