@@ -54,8 +54,8 @@ default['bind']['var_cookbook_files'] = %w(named.empty named.ca named.loopback n
 default['bind']['masters'] = []
 
 # Zones that BIND server will forward requests for. format is as follows:
-# 'zone' = {
-#   'forwarders' = [
+# 'zone1' => {
+#   'forwarders' => [
 #     '10.0.0.1',
 #     '10.0.0.2'
 #   ]
