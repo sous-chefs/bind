@@ -21,11 +21,15 @@ default['bind']['packages'] = %w(bind bind-utils bind-libs)
 default['bind']['vardir'] = '/var/named'
 default['bind']['sysconfdir'] = '/etc/named'
 default['bind']['conf_file'] = '/etc/named.conf'
+default['bind']['local_conf_file'] = '/etc/named.conf'
 default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
 default['bind']['service_name'] = 'named'
 default['bind']['user'] = 'named'
 default['bind']['group'] = 'named'
 default['bind']['rndc-key'] = '/etc/rndc.key'
+
+# Files which should be included in named.conf
+default['bind']['included_files'] = %w(named.rfc1912.zones named.options)
 
 # Allow usage with chef-solo-search, see https://github.com/edelight/chef-solo-search
 default['bind']['allow_solo_search'] = false
@@ -36,16 +40,16 @@ when 'debian'
   default['bind']['packages'] = %w(bind9 bind9utils)
   default['bind']['sysconfdir'] = '/etc/bind'
   default['bind']['conf_file'] = "#{node['bind']['sysconfdir']}/named.conf"
-  default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.options"
+  default['bind']['options_file'] = "#{node['bind']['sysconfdir']}/named.conf.options"
+  default['bind']['local_conf_file'] = "#{node['bind']['sysconfdir']}/named.conf.local"
   default['bind']['vardir'] = '/var/cache/bind'
   default['bind']['service_name'] = 'bind9'
   default['bind']['user'] = 'bind'
   default['bind']['group'] = 'bind'
   default['bind']['rndc-key'] = "#{node['bind']['sysconfdir']}/rndc.key"
+  # Files which should be included in named.conf
+  default['bind']['included_files'] = ''
 end
-
-# Files which should be included in named.conf
-default['bind']['included_files'] = %w(named.rfc1912.zones named.options)
 
 # These are var files referenced by our rfc1912 zone and root hints (named.ca) zone
 default['bind']['var_cookbook_files'] = %w(named.empty named.ca named.loopback named.localhost)
@@ -87,6 +91,8 @@ default['bind']['options'] = []
 default['bind']['zones']['attribute'] = []
 default['bind']['zones']['ldap'] = []
 default['bind']['zones']['databag'] = []
+default['bind']['zones']['email'] = 'hostmaster.example.net.'
+default['bind']['zones']['allow_update'] = false
 default['bind']['zonetype'] = 'slave'
 default['bind']['zonesource'] = nil
 
