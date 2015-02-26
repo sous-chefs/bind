@@ -3,10 +3,13 @@ driver:
   name: vagrant
 
 platforms:
+- name: debian-7.8
+  run_list:
+  - recipe[apt]
 - name: ubuntu-12.04
   run_list:
   - recipe[apt]
-- name: ubuntu-10.04
+- name: ubuntu-14.04
   run_list:
   - recipe[apt]
 - name: centos-6.5
@@ -17,9 +20,11 @@ suites:
   attributes:
     bind:
       masters: [ "127.0.0.1" ]
+      zonetype: 'master'
       zones:
         attribute: [ "example.com" ]
-      options: [ "check-names slave ignore;", "multi-master yes;", "provide-ixfr yes;", "request-ixfr yes;" ]
+        also_notify: [ "127.0.1.1", "127.1.1.1" ]
+      options: [ "check-names slave ignore;", "multi-master yes;", "provide-ixfr yes;", "request-ixfr yes;", "empty-zones-enable no;"]
       server:
         127.0.0.1:
         - 'bogus no;'
