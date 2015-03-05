@@ -103,10 +103,6 @@ describe 'bind::default' do
       expect(chef_run).to render_file('/etc/bind/named.conf.options')
     end
 
-    it 'renders file /etc/bind/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/bind/named.rfc1912.zones')
-    end
-
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/cache/bind/#{var_file}" do
         expect(chef_run).to create_cookbook_file("/var/cache/bind/#{var_file}")

@@ -58,10 +58,12 @@ end
 end
 
 # Copy localhost (rf1912) zones into place
-cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
-  owner node['bind']['user']
-  group node['bind']['group']
-  mode 00644
+unless platform_family?('debian')
+  cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
+    owner node['bind']['user']
+    group node['bind']['group']
+    mode 00644
+  end
 end
 
 # Copy /var/named files in place
