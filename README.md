@@ -46,6 +46,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - An array attribute where zone names may be set from a
     databag source.
 
+* `bind['zones']['email']`
+  - The email address which is written to the zone files. You have to use
+  a "." instead of an "@" and a leaving "." to define the email address.
+
 * `bind['forwardzones']`
   - An array of zones to forward requests for.
 
@@ -135,6 +139,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 
 * `bind['rndc-key']`
   - Location which rndc.key gets created by rndc-confgen
+
+* `bind['zones']['allow_update']`
+  - Boolean, allow dyndns for all zones
+  - Default is false
 
 ### ldap2zone recipe specific attributes
 
