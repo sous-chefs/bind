@@ -93,6 +93,7 @@ default['bind']['zones']['ldap'] = []
 default['bind']['zones']['databag'] = []
 default['bind']['zones']['email'] = 'hostmaster.example.net.'
 default['bind']['zones']['allow_update'] = false
+default['bind']['zones']['also_notify'] = []
 default['bind']['zonetype'] = 'slave'
 default['bind']['zonesource'] = nil
 

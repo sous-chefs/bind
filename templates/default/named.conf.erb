@@ -23,14 +23,21 @@ include "<%= node['bind']['rndc-key'] %>";
 <% @zones.uniq.each do |zone| -%>
 zone "<%= zone %>" in {
   type <%= node['bind']['zonetype'] %>;
-  <% if node['bind']['zonetype'] == "master" %> 
+  <% if node['bind']['zonetype'] == "master" %>
   file "<%= node['bind']['zonetype'] %>/db.<%= zone %>";
   <% if node['bind']['zones']['allow_update'] %>
   allow-update { key rndc-key; };
   <% end %>
+  <% unless node['bind']['zones']['also_notify'].empty? %>
+  also-notify {
+    <% node['bind']['zones']['also_notify'].each do |notify| -%>
+    <%= notify %>;
+    <% end -%>
+  };
+  <% end %>
   <% else %>
   file "slaves/db.<%= zone %>";
-  masters { default; };  
+  masters { default; };
   <% end %>
 };
 
