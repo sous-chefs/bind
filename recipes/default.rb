@@ -121,7 +121,7 @@ end
 if node['bind']['zonetype'] == 'master'
   all_zones.sort.uniq.each do |zone|
     template "#{node['bind']['vardir']}/master/db.#{zone}" do
-      source 'example.org.erb'
+      source 'example.com.erb'
       owner node['bind']['user']
       group node['bind']['group']
       mode 00644

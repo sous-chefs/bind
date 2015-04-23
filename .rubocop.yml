@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - .kitchen/**
+
 Encoding:
   Enabled: False
 LineLength:
