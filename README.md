@@ -46,11 +46,12 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
   - An array attribute where zone names may be set from a
     databag source.
 
-* `bind['forwardzones']`
-  - An array of zones to forward requests for.
+* `bind['zones']['email']`
+  - The email address which is written to the zone files. You have to use
+  a "." instead of an "@" and a leaving "." to define the email address.
 
-* `bind['forwarders']`
-  - An array of forwarders to use with the forwardzones.
+* `bind['forwardzones']`
+  - A hash of zones to forward requests for.
 
 * `bind['zonetype']`
   - The zone type, master, or slave for configuring
@@ -136,6 +137,10 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 * `bind['rndc-key']`
   - Location which rndc.key gets created by rndc-confgen
 
+* `bind['zones']['allow_update']`
+  - Boolean, allow dyndns for all zones
+  - Default is false
+
 ### ldap2zone recipe specific attributes
 
 We store our zone names on Active Directory, and use Ruby to pull
@@ -186,7 +191,7 @@ attributes, and an API query to populate zones.
 ### Example role for internal recursing DNS
 
 An example wrapper cookbook for an internal split-horizon BIND server for
-example.com, might look like so: 
+example.com, might look like so:
 
 ```ruby
 # Configure and install Bind to function as an internal DNS server."
@@ -235,7 +240,7 @@ default['bind']['acl-role'] = 'external-acl'
 default['bind']['masters'] = %w(192.0.2.5 192.0.2.6)
 default['bind']['ipv6_listen'] = true
 default['bind']['zonetype'] = 'master'
-default['bind']['zones']['attribute'] = %w(example.com example.org) 
+default['bind']['zones']['attribute'] = %w(example.com example.org)
 default['bind']['options'] = [
   'recursion no;',
   'allow-query { any; };',
@@ -315,6 +320,20 @@ use the following format to include a number of zones at once.
 default['bind']['server'] = {
   10.0.0.1: ['keys { my_tsig_key; };', 'bogus no;'],
   10.0.0.2: ['bogus yes;']
+}
+```
+
+### Example of usuing forwardzones
+```ruby
+default['bind']['forwardzones'] = {
+  'forwardzone1' => [
+    '10.0.0.1',
+    '10.0.0.2'
+  ],
+  'forwardzone2' => [
+    '10.0.0.3',
+    '10.0.0.4'
+  ]
 }
 ```
 
