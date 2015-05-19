@@ -73,9 +73,9 @@ describe 'bind::default' do
     end
   end
 
-  context 'on Ubuntu 13.04' do
+  context 'on Ubuntu 14.04' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
+      ChefSpec::Runner.new(platform: 'ubuntu', version: 14.04).converge(described_recipe)
     end
     let(:checkconf) { chef_run.execute('named-checkconf') }
 
@@ -100,16 +100,7 @@ describe 'bind::default' do
     end
 
     it 'renders file /etc/bind/named.options' do
-      expect(chef_run).to render_file('/etc/bind/named.options')
-    end
-
-    it 'renders file /etc/bind/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/bind/named.rfc1912.zones')
-    end
-
-    it 'renders file /etc/bind/named.conf with included files' do
-      expect(chef_run).to render_file('/etc/bind/named.conf').with_content(%r{include "/etc/bind/named.options"})
-      expect(chef_run).to render_file('/etc/bind/named.conf').with_content(%r{include "/etc/bind/named.rfc1912.zones"})
+      expect(chef_run).to render_file('/etc/bind/named.conf.options')
     end
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|

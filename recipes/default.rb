@@ -58,10 +58,12 @@ end
 end
 
 # Copy localhost (rf1912) zones into place
-cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
-  owner node['bind']['user']
-  group node['bind']['group']
-  mode 00644
+unless platform_family?('debian')
+  cookbook_file "#{node['bind']['sysconfdir']}/named.rfc1912.zones" do
+    owner node['bind']['user']
+    group node['bind']['group']
+    mode 00644
+  end
 end
 
 # Copy /var/named files in place
@@ -71,6 +73,14 @@ node['bind']['var_cookbook_files'].each do |var_file|
     group node['bind']['group']
     mode 00644
   end
+end
+
+# Create bind9 default file
+template node['bind']['defaultfile'] do
+  source 'bind9.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
 end
 
 # Create rndc key file, if it does not exist
@@ -98,6 +108,7 @@ forwardzones = node['bind']['forwardzones']
 
 # Render a template with all our global BIND options and ACLs
 template node['bind']['options_file'] do
+  source 'named.options.erb'
   owner node['bind']['user']
   group node['bind']['group']
   mode 00644
@@ -106,9 +117,26 @@ template node['bind']['options_file'] do
   )
 end
 
+# Create zone files if the server is a master server
+if node['bind']['zonetype'] == 'master'
+  all_zones.sort.uniq.each do |zone|
+    template "#{node['bind']['vardir']}/master/db.#{zone}" do
+      source 'example.org.erb'
+      owner node['bind']['user']
+      group node['bind']['group']
+      mode 00644
+      variables(
+        zone: zone
+      )
+      action :create_if_missing
+    end
+  end
+end
+
 # Render our template with role zones, or returned results from
 # zonesource recipe
-template node['bind']['conf_file'] do
+template node['bind']['local_conf_file'] do
+  source 'named.conf.erb'
   owner node['bind']['user']
   group node['bind']['group']
   mode 00644
@@ -145,5 +173,5 @@ service 'bind' do
   subscribes :reload, resources("template[#{node['bind']['options_file']}]"), :delayed
   subscribes :reload, resources('execute[named-checkconf]',
                                 'execute[failsafe-checkconf]'), :delayed
-  only_if { ::File.exist?(node['bind']['options_file']) && ::File.exist?(node['bind']['conf_file']) }
+  only_if { ::File.exist?(node['bind']['options_file']) && ::File.exist?(node['bind']['local_conf_file']) }
 end
