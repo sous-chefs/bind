@@ -21,4 +21,6 @@ bin/*
 sloccount.sc
 checkstyle.xml
 .coverage
-VERSION
+
+.idea
+*.iml
