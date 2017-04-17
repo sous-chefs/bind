@@ -67,11 +67,11 @@ default['bind']['ipv6_listen'] = false
 
 # If this is a virtual machine, you need to use urandom as
 # any VM does not have a real CMOS clock for entropy.
-if node.key?('virtualization') && node['virtualization']['role'] == 'guest'
-  default['bind']['rndc_keygen'] = 'rndc-confgen -a -r /dev/urandom'
-else
-  default['bind']['rndc_keygen'] = 'rndc-confgen -a'
-end
+default['bind']['rndc_keygen'] = if node.key?('virtualization') && node['virtualization']['role'] == 'guest'
+                                   'rndc-confgen -a -r /dev/urandom'
+                                 else
+                                   'rndc-confgen -a'
+                                 end
 
 # These two attributes are used to load named ACLs from data bags.
 # The search key is the "acl-role", and defaults to internal-acl
