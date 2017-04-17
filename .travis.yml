@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.2
+  - 2.4.1
 install: bundle install --without integration
 script: bundle exec rake
 
