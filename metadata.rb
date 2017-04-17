@@ -9,8 +9,10 @@ maintainer_email 'djb@ragnarok.net'
 license 'Apache 2.0'
 
 supports 'ubuntu'
-supports 'rhel'
+supports 'redhat'
+supports 'centos'
 supports 'debian'
 
 issues_url 'https://github.com/joyofhex/cookbook-bind/issues'
 source_url 'https://github.com/joyofhex/cookbook-bind'
+chef_version '>= 12.0' if respond_to?(:chef_version)
