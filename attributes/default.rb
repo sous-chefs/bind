@@ -98,10 +98,6 @@ default['bind']['log_file'] = '/var/log/bind9/query.log'
 default['bind']['log_options'] = []
 
 # These are for enabling statistics-channel on a TCP port.
-default['bind']['statistics-channel'] = true
+default['bind']['statistics-channel'] = false
 default['bind']['statistics-port'] = 8080
-
-case node['platform_family']
-when 'rhel'
-  default['bind']['statistics-channel'] if node['platform_version'].to_i <= 5
-end
+default['bind']['statistics-address'] = '127.0.0.1'

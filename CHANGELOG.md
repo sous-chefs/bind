@@ -1,6 +1,10 @@
 bind changelog
 ==============
 
+v1.3.0
+------
+* Change default for statistics channel to be false, and add an attribute to set the bind address.
+
 v1.2.0
 ------
 * Add server clause.

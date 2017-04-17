@@ -83,11 +83,15 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
 
 * `bind['statistics-channel']
   - Boolean to enable a statistics-channel on a TCP port.
-  - Default, platform-specific
+  - Default, false
 
 * `bind['statistics-port']
   - Integer for statistics-channel TCP port.
   - Default, 8080
+
+* `bind['statistics-address']
+  - IP Address for listening port
+  - Default, 127.0.0.1.
 
 * `bind['server']
   - Hash of server IPs, each with their own array of options for the "server" clause.
