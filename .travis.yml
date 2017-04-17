@@ -3,3 +3,5 @@ rvm:
   - 2.2
 install: bundle install --without integration
 script: bundle exec rake
+
+sudo: false
