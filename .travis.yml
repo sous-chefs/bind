@@ -1,7 +1,25 @@
-language: ruby
-rvm:
-  - 2.4.1
-install: bundle install --without integration
-script: bundle exec rake
-
+# Use Travis's container based infrastructure
 sudo: false
+dist: trusty
+
+addons:
+  apt:
+    sources:
+      - chef-stable-trusty
+    packages:
+      - chefdk
+
+install: echo "skip bundle install"
+
+branches:
+  only:
+    - master
+
+before_script:
+  - eval "$(/opt/chefdk/bin/chef shell-init bash)"
+
+script:
+  - /opt/chefdk/embedded/bin/chef --version
+  - /opt/chefdk/embedded/bin/cookstyle --version
+  - /opt/chefdk/embedded/bin/foodcritic --version
+  - /opt/chefdk/bin/chef exec rake
