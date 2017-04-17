@@ -3,13 +3,15 @@ driver:
   name: vagrant
 
 platforms:
-- name: ubuntu-12.04
+- name: ubuntu-16.04
   run_list:
   - recipe[apt]
-- name: ubuntu-10.04
+- name: ubuntu-14.04
   run_list:
   - recipe[apt]
-- name: centos-6.5
+- name: debian-8.7
+- name: centos-6.8
+- name: centos-7.3
 
 suites:
 - name: default
