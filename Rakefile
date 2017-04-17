@@ -12,8 +12,8 @@ end
 
 # rubocop rake task
 desc 'Ruby style guide linter'
-task :rubocop do
-  sh 'rubocop --fail-level E'
+task :cookstyle do
+  sh 'cookstyle'
 end
 
 # test-kitchen task
@@ -32,7 +32,7 @@ task :deploy do
 end
 
 # default tasks are quick, commit tests
-task default: %w(foodcritic rubocop chefspec)
+task default: %w(foodcritic cookstyle chefspec)
 
 # jenkins tasks format for metric tracking
-task jenkins: %w(foodcritic rubocop chefspec)
+task jenkins: %w(foodcritic cookstyle chefspec)
