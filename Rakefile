@@ -12,16 +12,8 @@ end
 
 # rubocop rake task
 desc 'Ruby style guide linter'
-task :rubocop do
-  sh 'rubocop --fail-level E'
-end
-
-# test-kitchen task
-begin
-  require 'kitchen/rake_tasks'
-  Kitchen::RakeTasks.new
-rescue LoadError
-  puts '>>>>> Kitchen gem not loaded, omitting tasks' unless ENV['CI']
+task :cookstyle do
+  sh 'cookstyle'
 end
 
 # Deploy task
@@ -32,7 +24,7 @@ task :deploy do
 end
 
 # default tasks are quick, commit tests
-task default: %w(foodcritic rubocop chefspec)
+task default: %w(foodcritic cookstyle chefspec)
 
 # jenkins tasks format for metric tracking
-task jenkins: %w(foodcritic rubocop chefspec)
+task jenkins: %w(foodcritic cookstyle chefspec)

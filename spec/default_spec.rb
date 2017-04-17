@@ -2,7 +2,10 @@ require 'spec_helper'
 
 describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
-    let(:chef_run) { ChefSpec::Runner.new.converge(described_recipe) }
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.8')
+                            .converge(described_recipe)
+    end
     let(:checkconf) { chef_run.execute('named-checkconf') }
 
     %w(bind bind-utils bind-libs).each do |bind_package|
@@ -62,7 +65,7 @@ describe 'bind::default' do
 
   context 'on virtual guest for any platform' do
     let(:chef_run) do
-      ChefSpec::Runner.new do |node|
+      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.8') do |node|
         node.automatic['virtualization']['role'] = 'guest'
       end.converge(described_recipe)
     end
@@ -73,9 +76,9 @@ describe 'bind::default' do
     end
   end
 
-  context 'on Ubuntu 13.04' do
+  context 'on Ubuntu 16.04' do
     let(:chef_run) do
-      ChefSpec::Runner.new(platform: 'ubuntu', version: 13.04).converge(described_recipe)
+      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04').converge(described_recipe)
     end
     let(:checkconf) { chef_run.execute('named-checkconf') }
 

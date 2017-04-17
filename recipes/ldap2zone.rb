@@ -27,7 +27,7 @@
 #
 # You can just use an override["bind"]["zones"] in a role or environment
 # instead.  Or even a mix of both override, and API query to populate zones.
-unless  node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].nil? && node['bind']['ldap']['bindpw'].nil?
+unless node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].nil? && node['bind']['ldap']['bindpw'].nil?
   chef_gem 'net-ldap' do
     version '0.2.2'
     action :install
@@ -40,7 +40,7 @@ unless  node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].ni
     auth: {
       method: :simple,
       username: node['bind']['ldap']['binddn'],
-      password: node['bind']['ldap']['bindpw']
+      password: node['bind']['ldap']['bindpw'],
     }
   )
 
@@ -54,6 +54,6 @@ unless  node['bind']['ldap']['server'].nil? && node['bind']['ldap']['binddn'].ni
     end
   else
     Chef::Log.error("LDAP Bind failed with #{node['bind']['ldap']['server']}")
-    fail
+    raise
   end
 end

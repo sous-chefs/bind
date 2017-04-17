@@ -1,6 +1,0 @@
-Encoding:
-  Enabled: False
-LineLength:
-  Max: 200
-Style/RescueModifier:
-  Enabled: false
