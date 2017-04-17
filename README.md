@@ -32,6 +32,22 @@ The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
     and then passed to named.options template.
   - Default is an empty array.
 
+* `bind['allow-query']`
+  - Array of ACL names to allow queries.
+  - Defaults to localhost and local networks.
+
+* `bind['allow-query-cache']`
+  - Array of ACL names to allow answers from cache.
+  - Defaults to value of 'allow-query' option.
+
+* `bind['allow-recursion']`
+  - Array of ACL names to allow recursive queries.
+  - Defaults to value of 'allow-query' option.
+
+* `bind['recursion']`
+  - Explicitly set recursion posibility. Boolean.
+  - Defaults to true
+
 * `bind['zones']['attribute']`
   - An array attribute where zone names may be set from role
     attributes.  The dynamic source attributes `bind['zones']['ldap']`

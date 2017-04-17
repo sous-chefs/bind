@@ -17,6 +17,30 @@ options {
   dump-file "data/cache_dump.db";
   statistics-file "data/named_stats.txt";
   memstatistics-file "data/named_mem_stats.txt";
+  <% if node['bind']['recursion'] -%>
+  recursion yes;
+  <% else -%>
+  recursion no;
+  <% end -%>
+  allow-query {
+    <% node['bind']['allow-query'].each do |acl| -%>
+    <%= acl%>;
+    <% end -%>
+  };
+  <% if node['bind']['allow-query-cache'] != nil -%>
+  allow-query-cache {
+    <% node['bind']['allow-query-cache'].each do |acl| -%>
+    <%= acl%>;
+    <% end -%>
+  };
+  <% end -%>
+  <% if node['bind']['allow-recursion'] != nil %>
+  allow-recursion {
+    <% node['bind']['allow-recursion'].each do |acl| -%>
+    <%= acl%>;
+    <% end -%>
+  };
+  <% end -%>
   <% if node['bind']['ipv6_listen'] -%>listen-on-v6 { any; };<% end -%>
   <% node['bind']['options'].each do |option_line| -%>
   <%= option_line %>
