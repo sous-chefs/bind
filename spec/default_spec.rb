@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
-    let(:chef_run) {
+    let(:chef_run) do
       ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.8')
-        .converge(described_recipe)
-    }
+                            .converge(described_recipe)
+    end
     let(:checkconf) { chef_run.execute('named-checkconf') }
 
     %w(bind bind-utils bind-libs).each do |bind_package|
