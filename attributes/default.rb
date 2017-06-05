@@ -78,6 +78,15 @@ default['bind']['rndc_keygen'] = if node.key?('virtualization') && node['virtual
 default['bind']['acl-role'] = 'internal-acl'
 default['bind']['acls'] = []
 
+# These attributes are for setting allow-* options. Each is a list of ACLs defined in data_bag.
+# If allow-query is not redefined, only requests from localhost and local networks will be served.
+default['bind']['allow-query'] = [ :localhost, :localnets ]
+default['bind']['allow-query-cache'] = nil
+default['bind']['allow-recursion'] = nil
+
+# Enable/disable recursion in options block. Enabled by default.
+default['bind']['recursion'] = true
+
 # This attribute is for setting site-specific Global option lines
 # to be included in the template.
 default['bind']['options'] = []
