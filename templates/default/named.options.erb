@@ -10,8 +10,6 @@ acl "<%= acl['id'] -%>" {
 
 <% end -%>
 
-masters default { <% node['bind']['masters'].each do |host| -%><%= host -%>; <% end -%> };
-
 options {
   directory "<%= node['bind']['vardir'] %>";
   dump-file "data/cache_dump.db";

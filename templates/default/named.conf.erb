@@ -14,27 +14,28 @@ server <%= server_ip %> {
 <% } -%>
 <% end -%>
 
-<% @zones.uniq.each do |zone| -%>
-zone "<%= zone %>" in {
-  type <%= node['bind']['zonetype'] %>;
-  <% if node['bind']['zonetype'] == "master" %> 
-  file "<%= node['bind']['zonetype'] %>/db.<%= zone %>";
-  <% else %>
-  file "slaves/db.<%= zone %>";
-  masters { default; };  
-  <% end %>
+<% @primary_zones.each do |zone| -%>
+zone "<%= zone.name %>" in {
+  type master;
+  file "primary/db.<%= zone.name %>";
+};
+
+<% end -%>
+<% @secondary_zones.each do |zone| -%>
+zone "<%= zone.name %>" in {
+  type slave;
+  file "secondary/db.<%= zone.name %>";
+  masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
 };
 
 <% end -%>
 
-<% if @forwardzones.count > 0 -%>
-<% @forwardzones.uniq.each do |forwardzone| -%>
-zone "<%= forwardzone %>" in {
+<% @forward_zones.each do |zone| -%>
+zone "<%= zone.name %>" in {
   type forward;
-  forwarders { <% node['bind']['forwarders'].each do |forwarder| %><%= forwarder %>; <% end %>};
+  forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
   forward only;
 };
-<% end -%>
 <% end -%>
 
 zone "." IN {
