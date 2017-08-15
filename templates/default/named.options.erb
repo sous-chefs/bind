@@ -11,23 +11,23 @@ acl "<%= acl['id'] -%>" {
 <% end -%>
 
 options {
-  directory "<%= node['bind']['vardir'] %>";
+  directory "<%= @vardir %>";
   dump-file "data/cache_dump.db";
   statistics-file "data/named_stats.txt";
   memstatistics-file "data/named_mem_stats.txt";
-  <% if node['bind']['ipv6_listen'] -%>listen-on-v6 { any; };<% end -%>
-  <% node['bind']['options'].each do |option_line| -%>
+  <% if @ipv6_listen -%>listen-on-v6 { any; };<% end -%>
+  <% @options.each do |option_line| -%>
   <%= option_line %>
   <% end -%>
 };
 
-<% if node['bind']['enable_log'] %>
+<% if @query_log %>
 logging {
   channel b_query {
-    file "<%= node['bind']['log_file'] %>" versions <%= node['bind']['log_file_versions'] %> size <%= node['bind']['log_file_size'] %>;
+    file "<%= @query_log %>" versions <%= @query_log_versions %> size <%= @query_log_max_size %>;
     print-time yes;
     severity info;
-    <% node['bind']['log_options'].each do |option_line| -%>
+    <% @query_log_options.each do |option_line| -%>
     <%= option_line %>
     <% end -%>
   };
@@ -35,8 +35,8 @@ logging {
 };
 <% end %>
 
-<% if node['bind']['statistics-channel'] %>
+<% if @statistics_channel %>
 statistics-channels {
-  inet <%= node['bind']['statistics-address'] %> port <%= node['bind']['statistics-port'] -%>;
+  inet <%= @statistics_channel[:address] %> port <%= @statistics_channel[:port] -%>;
 };
 <% end %>

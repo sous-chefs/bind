@@ -1,6 +1,15 @@
 property :options_file, String, default: lazy { default_property_for(:options_file) }
 property :conf_file, String, default: lazy { default_property_for(:conf_file) }
 property :bind_service, String, default: 'default'
+property :ipv6_listen, [true, false], default: true
+property :options, Array, default: []
+
+property :query_log, String
+property :query_log_versions, [String, Integer], default: 2
+property :query_log_max_size, String, default: '1m'
+property :query_log_options, Array, default: []
+
+property :statistics_channel, Hash
 
 include BindCookbook::Helpers
 
@@ -32,19 +41,20 @@ action :create do
     creates default_property_for(:rndc_key_file)
   end
 
-  file '/etc/rndc.key' do
-    owner bind_service.run_user
-    group bind_service.run_group
-    mode 0o0600
-    action :create_if_missing
-  end
-
   template new_resource.options_file do
     owner bind_service.run_user
     group bind_service.run_group
     mode 0o644
     variables(
-      bind_acls: []
+      vardir: bind_service.vardir,
+      bind_acls: [],
+      ipv6_listen: new_resource.ipv6_listen,
+      options: new_resource.options,
+      query_log: new_resource.query_log,
+      query_log_versions: new_resource.query_log_versions,
+      query_log_max_size: new_resource.query_log_max_size,
+      query_log_options: new_resource.query_log_options,
+      statistics_channel: new_resource.statistics_channel,
     )
     cookbook 'bind'
   end
@@ -57,7 +67,7 @@ action :create do
       variables(
         primary_zones: [],
         secondary_zones: [],
-        forward_zones: []
+        forward_zones: [],
       )
       action :nothing
       delayed_action :create
