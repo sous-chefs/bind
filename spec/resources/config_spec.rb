@@ -49,7 +49,6 @@ describe 'creating a basic configuration' do
         expect(content).to_not include('type slave;')
       }
     end
-
   end
 end
 
@@ -93,5 +92,4 @@ describe 'overridden defaults' do
   it 'creates the main config file' do
     expect(chef_run).to render_file('/etc/bind/bind.conf')
   end
-
 end

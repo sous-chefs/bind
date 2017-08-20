@@ -21,7 +21,7 @@ action :create do
   # Assume records with no owner field are those belonging to the zone.
   # Split them out so that we can render them at the top of the zone.
   records, zone_records = new_resource.records.partition do |r|
-    r.key?(:owner) && !r[:owner].nil? && !r[:owner].length.zero?
+    r.key?(:owner) && !r[:owner].nil? && !r[:owner].empty?
   end
 
   soa = {

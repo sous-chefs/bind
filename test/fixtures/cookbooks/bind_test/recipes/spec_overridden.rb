@@ -15,6 +15,6 @@ bind_config 'default' do
   query_log 'query.log'
   options [
     'notify no',
-    'recursion yes'
+    'recursion yes',
   ]
 end

@@ -9,9 +9,9 @@ bind_primary_zone_template 'empty.example.com'
 # This example has all the different possibilities overridden and tested.
 bind_primary_zone_template 'custom.example.com' do
   soa serial: 100, mname: 'ns1.example.com.',
-    rname: 'hostmaster.example.com.',
-    refresh: '1d', retry: '1h', expire: '4w',
-    minimum: 10
+      rname: 'hostmaster.example.com.',
+      refresh: '1d', retry: '1h', expire: '4w',
+      minimum: 10
 
   default_ttl 200
 
@@ -20,6 +20,6 @@ bind_primary_zone_template 'custom.example.com' do
     { type: 'NS', rdata: 'ns2.example.com.' },
     { type: 'MX', rdata: '10 mx1.example.com.' },
     { type: 'MX', rdata: '20 mx1.example.com.' },
-    { owner: 'www', type: 'A', ttl: 20, rdata: '10.5.0.1' }
+    { owner: 'www', type: 'A', ttl: 20, rdata: '10.5.0.1' },
   ]
 end

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: ['bind_config', 'bind_primary_zone_template']
+      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone_template)
     ).converge('bind_test::spec_primary_zone_template')
   end
 
@@ -14,7 +14,7 @@ describe 'adding primary zones' do
 
     it 'will populate basic zone data' do
       expect(chef_run).to render_file('/var/named/primary/db.empty.example.com').with_content { |content|
-        expect(content).to match /^@\s+IN\s+SOA\s+localhost\.\s+hostmaster\.localhost\.\s+\(/
+        expect(content).to match(/^@\s+IN\s+SOA\s+localhost\.\s+hostmaster\.localhost\.\s+\(/)
       }
     end
 
@@ -33,11 +33,11 @@ describe 'adding primary zones' do
 
     it 'will populate basic zone data' do
       expect(chef_run).to render_file('/var/named/primary/db.custom.example.com').with_content { |content|
-        expect(content).to match /^@\s+IN\s+SOA\s+ns1\.example\.com\.\s+hostmaster\.example\.com\.\s+\(/
-        expect(content).to match /^\s+IN\s+NS\s+ns1\.example\.com\.$/
+        expect(content).to match(/^@\s+IN\s+SOA\s+ns1\.example\.com\.\s+hostmaster\.example\.com\.\s+\(/)
+        expect(content).to match(/^\s+IN\s+NS\s+ns1\.example\.com\.$/)
         expect(content).to include '$TTL 200'
         expect(content).to include '100 ; Serial'
-        expect(content).to match /^www\s+20\s+IN\s+A\s+10.5.0.1$/
+        expect(content).to match(/^www\s+20\s+IN\s+A\s+10.5.0.1$/)
       }
     end
 
