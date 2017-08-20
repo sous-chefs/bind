@@ -12,13 +12,13 @@ module BindCookbook
       {
         sysconfdir: '/etc/bind',
         vardir: '/var/cache/bind',
-        packages: ['bind9', 'bind9utils'],
+        packages: %w(bind9 bind9utils),
         run_user: 'bind',
         run_group: 'bind',
         options_file: '/etc/bind/named.options',
         conf_file: '/etc/bind/named.conf',
         service_name: 'bind9',
-        rndc_key_file: '/etc/bind/rndc.key'
+        rndc_key_file: '/etc/bind/rndc.key',
       }[property_name]
     end
 
@@ -34,7 +34,7 @@ module BindCookbook
         run_user_id: 25,
         run_group_id: 25,
         service_name: 'named',
-        rndc_key_file: '/etc/rndc.key'
+        rndc_key_file: '/etc/rndc.key',
       }[property_name]
     end
   end

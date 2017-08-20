@@ -1,0 +1,39 @@
+; This zone file is managed by Chef
+$TTL <%= @default_ttl %>
+
+<% if @soa %>
+<%= "%-20s %-5s %-2s %-10s" % [
+  '@',
+  @soa.fetch(:ttl, ''),
+  'IN',
+  'SOA'
+] %> <%= @soa[:mname] %> <%= @soa[:rname] %> (
+                                         <%= @soa[:serial] %> ; Serial Number
+                                         <%= @soa[:refresh] %> ; Refresh
+                                         <%= @soa[:retry] %> ; Retry
+                                         <%= @soa[:expire] %> ; Expire
+                                         <%= @soa[:minimum] %> ; Minimum (NXDOMAIN Caching period)
+                                )
+<% end %>
+
+<% @zone_records.each do |record| %>
+<%= "%-20s %-5s %-2s %-10s %-s" % [
+  '',
+  record.fetch(:ttl, ''),
+  record.fetch(:class, 'IN'),
+  record[:type],
+  record[:rdata]
+]
+%>
+<% end %>
+
+<% @records.each do |record| %>
+<%= "%-20s %-5s %-2s %-10s %-s" % [
+  record[:owner],
+  record.fetch(:ttl, ''),
+  record.fetch(:class, 'IN'),
+  record[:type],
+  record[:rdata]
+]
+%>
+<% end %> 
