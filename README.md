@@ -2,7 +2,7 @@
 
 ## Description
 
-A cookbook to manage bind DNS servers, and zones.
+A cookbook to manage bind DNS servers and zones.
 
 ## Requirements
 
@@ -226,6 +226,59 @@ default['bind']['options'] = [
 include_recipe 'bind'
 ```
 
+Resource style:
+
+```ruby
+bind_service 'default'
+
+bind_config 'default' do
+  ipv6_listen true
+  options [
+    'check-names slave ignore;',
+    'multi-master yes;',
+    'provide-ixfr yes;',
+    'recursive-clients 10000;',
+    'request-ixfr yes;',
+    'allow-notify { acl-dns-masters; acl-dns-slaves; };',
+    'allow-query { example-lan; localhost; };',
+    'allow-query-cache { example-lan; localhost; };',
+    'allow-recursion { example-lan; localhost; };',
+    'allow-transfer { acl-dns-masters; acl-dns-slaves; };',
+    'allow-update-forwarding { any; };',
+  ]
+end
+
+bind_acl 'acl-dns-masters' do
+  entries [
+    '! 10.1.1.1',
+    '10/8'
+  ]
+end
+
+bind_acl 'acl-dns-slaves' do
+  entries [
+    'acl-dns-masters'
+  ]
+end
+
+bind_acl 'example-lan' do
+  entries [
+    '10.2/16',
+    '10.3.2/24',
+    '10.4.3.2'
+  ]
+end
+
+bind_secondary_zone 'example.com' do
+  primaries %w(192.0.2.10 192.0.2.11 192.0.2.12)
+end
+
+bind_secondary_zone 'example.org' do
+  primaries %w(192.0.2.10 192.0.2.11 192.0.2.12)
+end
+
+```
+
 ### Example role for authoritative only external DNS
 
 An example wrapper cookbook for an external split-horizon authoritative only
@@ -250,6 +303,36 @@ default['bind']['options'] = [
 
 # recipes/default.rb
 include_recipe 'bind'
+```
+
+Resource style:
+
+```ruby
+bind_service 'default'
+
+bind_config 'default' do
+  ipv6_listen true
+  options [
+    'recursion no;',
+    'allow-query { any; };',
+    'allow-transfer { external-private-interfaces; external-dns; };',
+    'allow-notify { external-private-interfaces; external-dns; localhost; };',
+    'listen-on-v6 { any; };'
+  ]
+end
+
+bind_acl 'external-private-interfaces' do
+  entries [
+  ]
+end
+
+bind_acl 'external-dns' do
+  entries [
+  ]
+end
+
+bind_primary_zone 'example.com'
+bind_primary_zone 'example.org'
 ```
 
 ### Example BIND Access Controls from data bag
@@ -325,6 +408,7 @@ default['bind']['server'] = {
 ## License and Author
 
 Copyright: 2011 Eric G. Wolfe
+Copyright: 2017 David Bruce
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
