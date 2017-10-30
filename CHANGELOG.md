@@ -1,6 +1,10 @@
 bind changelog
 ==============
 
+v2.0.0
+------
+* Migrate to using custom resources
+
 v1.3.0
 ------
 * Change default for statistics channel to be false, and add an attribute to set the bind address.
