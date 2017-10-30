@@ -58,6 +58,9 @@ action :create do
         query_log_options: new_resource.query_log_options,
         statistics_channel: new_resource.statistics_channel
       )
+      action :nothing
+      delayed_action :create
+      notifies :restart, 'bind_service[default]', :immediately
       cookbook 'bind'
       source 'named.options.erb'
     end
