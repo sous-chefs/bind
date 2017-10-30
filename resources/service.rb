@@ -10,21 +10,6 @@ property :service_name, String, default: lazy { default_property_for(:service_na
 include BindCookbook::Helpers
 
 action :create do
-  group new_resource.run_group do
-    gid new_resource.run_group_id unless new_resource.run_group_id.nil?
-    system true
-    action :create
-  end
-
-  user new_resource.run_user do
-    comment 'Named'
-    uid new_resource.run_user_id unless new_resource.run_user_id.nil?
-    group new_resource.run_group
-    home new_resource.vardir
-    system true
-    action :create
-  end
-
   packages = if new_resource.package_name.is_a?(String)
                [new_resource.package_name]
              else
