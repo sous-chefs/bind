@@ -14,7 +14,7 @@ describe 'key stanza' do
 
     it 'render the server stanza containing the option' do
       expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
-        expect(content).to match(/secret "this_iss_a_secret_key";/)
+        expect(content).to match(/secret "this_is_a_secret_key";/)
         expect(content).to match(/algorithm hmac-sha256;/)
       }
     end
