@@ -77,7 +77,8 @@ action :create do
         primary_zones: [],
         secondary_zones: [],
         forward_zones: [],
-        servers: []
+        servers: [],
+        keys: []
       )
       action :nothing
       delayed_action :create

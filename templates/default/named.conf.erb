@@ -12,6 +12,13 @@ server <%= server.name %> {
 };
 <% end -%>
 
+<% @keys.each do |key| %>
+key "<%= key.name %>" {
+  algorithm <%= key.algorithm %>;
+  secret "<%= key.secret %>";
+};
+<% end %>
+
 <% @primary_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type master;
