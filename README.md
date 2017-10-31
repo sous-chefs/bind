@@ -2,7 +2,49 @@
 
 ## Description
 
-A cookbook to manage BIND servers and zones.
+A chef cookbook to manage BIND servers and zones.
+
+## Contents
+
+<!-- vim-markdown-toc GFM -->
+
+* [Requirements](#requirements)
+* [Attributes](#attributes)
+* [Usage](#usage)
+  * [Internal recursive nameserver](#internal-recursive-nameserver)
+  * [Authoritative primary nameserver](#authoritative-primary-nameserver)
+  * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+* [Available Custom Resources](#available-custom-resources)
+  * [`bind\_service`](#bind_service)
+    * [Example](#example)
+    * [Properties](#properties)
+  * [`bind\_config`](#bind_config)
+    * [Examples](#examples)
+    * [Properties](#properties-1)
+  * [`bind\_primary\_zone`](#bind_primary_zone)
+    * [Examples](#examples-1)
+    * [Properties](#properties-2)
+  * [`bind\_primary\_zone\_template`](#bind_primary_zone_template)
+    * [Examples](#examples-2)
+    * [Properties](#properties-3)
+  * [`bind\_secondary\_zone`](#bind_secondary_zone)
+    * [Examples](#examples-3)
+    * [Properties](#properties-4)
+  * [`bind\_forwarder`](#bind_forwarder)
+    * [Examples](#examples-4)
+    * [Properties](#properties-5)
+  * [`bind\_acl`](#bind_acl)
+    * [Examples](#examples-5)
+    * [Properties](#properties-6)
+  * [`bind\_key`](#bind_key)
+    * [Properties](#properties-7)
+  * [`bind\_server`](#bind_server)
+    * [Examples](#examples-6)
+    * [Properties](#properties-8)
+* [Specifying per server options](#specifying-per-server-options)
+* [License and Author](#license-and-author)
+
+<!-- vim-markdown-toc -->
 
 ## Requirements
 
@@ -195,6 +237,262 @@ bind_secondary_zone 'example.org' do
 end
 ```
 
+## Available Custom Resources
+
+### `bind\_service`
+
+The `bind\_service` resource installs the pre-requisites for the service to run.
+
+The `:create` action installs packages and creates appropriate configuration
+directories. It does not attempt to create a working configuration.
+
+The `:start` action ensures that the name server will be started at the end of
+the chef run and will be started automatically on boot.
+
+The `:restart` wil immediately restart the name server.
+
+#### Example
+
+```ruby
+bind_service 'default' do
+  action [:create, :start]
+end
+```
+
+#### Properties
+
+The following properties are supported:
+
+* `sysconfdir` - The system configuration directory where the named config will be located. The default is platform specific. Usually `/etc/named` or `/etc/bind`
+* `vardir` - The location for zone files and other data. The default is platform specific, usually `/var/named` or `/var/cache/bind`.
+* `package_name` - The package, or array of packages, needed to install the nameserver. Default is platform specific, usually includes bind and associated utility packages.
+* `run_user` - The user that the name server will run as. Defaults to `named`.
+* `run_group` - The groups that the name server will run as. Defaults to `named`.
+* `service_name` - The name of the service installed by the system packages. Defaults to a platform specific value.
+
+### `bind\_config`
+
+The `bind\_config` resource creates the configuration files for the name server.
+
+The only available action is `:create` which will create the default
+configuration files (including RFC1912 zones), configure an rndc key, and
+set any query logging parameters required.
+
+#### Examples
+
+```ruby
+bind_config 'default'
+
+bind_config 'default' do
+  ipv6_listen false
+
+  options [
+    'recursion no',
+    'allow-transfer { external-dns; }'
+  ]
+end
+
+bind_config 'default' do
+  statistics_channel address: 127.0.0.1, port: 8090
+
+  query_log '/var/log/named/query.log'
+  query_log_versions 5
+  query_log_max_size '10m'
+  query_log_options [
+    'print-time yes'
+  ]
+end
+```
+
+#### Properties
+
+* `conf_file` - The desired full path to the main configuration file. Platform specific default.
+* `options_file` - The desired full path to the configuration file containing options. Platform specific default.
+* `ipv6_listen` - Enables listening on IPv6 instances. Can be true or false. Defaults to true.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+* `query_log` - If provided will turn on general query logging. Should be the path to the desired log file. Default is empty and thus disabled. This will likely move to a separate resource in the future.
+* `query_log_max_size` - Maximum size of query log before rotation. Defaults to '1m'.
+* `query_log_versions` - Number of rotated query logs to keep on the system. Defaults to 2.
+* `query_log_options` - Array of additional query log options. Defaults to empty array.
+* `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
+
+### `bind\_primary\_zone`
+
+The `bind\_primary\_zone` resource will copy a zone file from your current
+cookbook into the correct directory and add the zone as a master zone to your
+BIND configuration. The file should be named for the zone you wish to configure.
+For example to configure `example.com` the file should be in
+`files/default/example.com`
+
+#### Examples
+
+```ruby
+bind_primary_zone 'example.com'
+```
+
+#### Properties
+
+Currently there are no supported properties.
+
+### `bind\_primary\_zone\_template`
+
+The `bind\_primary\_zone\_template` resource will create a zone file from a
+template and list of desired resources.
+
+#### Examples
+
+```ruby
+bind_primary_zone_template 'example.com' do
+  soa serial: 100, minimum: 3600
+  records [
+    { type: 'NS', rdata: 'ns1.example.com.' },
+    { owner: 'ns1', type: 'A', rdata: '10.0.1.1' }
+  ]
+end
+```
+
+#### Properties
+
+* `soa` - Hash of SOA entries. Available keys are:
+  - `:serial` - The serial number of the zone. Defaults to '1'. If this zone 
+  has secondary servers configured then you will need to manually manage this
+  and update when the record set changes.
+  - `:mname` - Domain name of the primary name server serving this zone. Defaults to 'localhost.'
+  - `:rname` - The email address of the "Responsible Person" for this zone with the @-sign replaced by a `.`. Defaults to `hostmaster.localhost.`
+  - `:refresh` - The period that a secondary name server will wait between checking if the zone file has been updated on the master. Defaults to '1w'.
+  - `:retry` - The period that a secondary name server will attempt to retry checking a zone file if the initial attempt fails. Defaults to '15m'.
+  - `:expire` - The length of time that a zone will be considered invalid if the primary name server is unavailable. Defaults to '52w'.
+  - `:minimum` - The length of time that a name server will cache a negative (NXDOMAIN) result. Defaults to 30 seconds.
+* `default_ttl` - The default time to live for any records which do not have an explicitly configured TTL.
+* `records` - An array of hashes describing each desired record. Possible keys are:
+  - `:owner` - The name to be looked up.
+  - `:type` - The record type; examples include: 'NS', 'MX', 'A', 'AAAA'.
+  - `:ttl` - A non-default TTL. If not present will use the default TTL of the zone.
+  - `:rdata` - The value of the record. Freeform string that depends on the type for structure.
+* `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
+* `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
+
+### `bind\_secondary\_zone`
+
+The `bind\_secondary\_zone` resource will configure a zone to be pulled from a
+primary name server.
+
+#### Examples
+
+```ruby
+bind_secondary_zone 'example.com' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+end
+```
+
+#### Properties
+
+* `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
+
+### `bind\_forwarder`
+
+The `bind\_forwarder` resource will configure a forwarding only zone.
+
+#### Examples
+
+```ruby
+bind_forwarder 'example.com` do
+  forwarders [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+end
+```
+
+#### Properties
+
+* `forwarders` - An array of IP addresses to which requests for this zone will
+  be forwarded to.
+
+
+### `bind\_acl`
+
+The `bind\_acl` resource allows you to create a named ACL list within the
+BIND configuration.
+
+#### Examples
+
+```ruby
+bind_acl 'google-dns-servers' do
+  entries [
+    '8.8.8.8',
+    '8.8.4.4'
+  ]
+end
+
+bind_acl 'internal-dns' do
+  entries [
+    '! 10.1.1.1',
+    '10/8'
+  ]
+end
+
+bind_acl 'tsig_key' do
+  entries [
+    'key "internal-key"',
+  ]
+end
+```
+#### Properties
+
+* `entries` - An array of strings representing each acl entry.
+
+Each entry should be a valid BIND address match list. This means it can be:
+
+- an IP address
+- an IP prefix
+- a key id
+- the name of a different address march list from another acl statement
+- a nested address match list enclosed in braces
+
+Predefined ACLs (from BIND itself) which do not need additional configuration are: any, none, localhost, and localnets.
+
+### `bind\_key`
+
+The `bind\_key` resource adds a shared secret key (for either TSIG or
+the command channel) to the configuration.
+
+```ruby
+bind_key 'dns-update-key' do
+  algorithm 'hmac-sha256'
+  secret 'this_is_the_secret_key'
+end
+```
+
+#### Properties
+
+* `algorithm` - The algorithm that the secret key was generated from.
+* `secret` - The secret key
+
+### `bind\_server`
+
+The `bind\_server` resource allows specific options to be configured for a
+particular upstream name server.
+
+#### Examples
+
+```ruby
+bind_server '10.1.1.1' do
+  options [
+    'bogus yes'
+  ]
+end
+```
+
+#### Properties
+
+* `options` - An array of options which will be rendered into the configuration.
+
+
+
 ## Specifying per server options
 
 To add the `server` stanza to the configuration use the `bind\_server` resource.
@@ -222,8 +520,8 @@ server 10.0.1.1 {
 
 ## License and Author
 
-Copyright: 2011 Eric G. Wolfe
-Copyright: 2017 David Bruce
+- Copyright: 2011 Eric G. Wolfe
+- Copyright: 2017 David Bruce
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -27,7 +27,7 @@ logging {
     print-time yes;
     severity info;
     <% @query_log_options.each do |option_line| -%>
-    <%= option_line %>
+    <%= option_line %>;
     <% end -%>
   };
   category queries { b_query; };
