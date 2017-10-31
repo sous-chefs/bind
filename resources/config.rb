@@ -18,6 +18,8 @@ action :create do
     find_resource!(:bind_service, new_resource.bind_service)
   end
 
+  additional_config_files = ['named.rfc1912.zones', 'named.options']
+
   cookbook_file "#{bind_service.sysconfdir}/named.rfc1912.zones" do
     owner bind_service.run_user
     group bind_service.run_group
@@ -70,6 +72,8 @@ action :create do
       group bind_service.run_group
       mode 0o644
       variables(
+        additional_config_files: additional_config_files,
+        sysconfdir: bind_service.sysconfdir,
         primary_zones: [],
         secondary_zones: [],
         forward_zones: []
