@@ -3,8 +3,6 @@ property :vardir, String, default: lazy { default_property_for(:vardir) }
 property :package_name, [String, Array], default: lazy { default_property_for(:packages) }
 property :run_user, String, default: lazy { default_property_for(:run_user) }
 property :run_group, String, default: lazy { default_property_for(:run_group) }
-property :run_user_id, [NilClass, Integer], default: lazy { default_property_for(:run_user_id) }
-property :run_group_id, [NilClass, Integer], default: lazy { default_property_for(:run_group_id) }
 property :service_name, String, default: lazy { default_property_for(:service_name) }
 
 include BindCookbook::Helpers

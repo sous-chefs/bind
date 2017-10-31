@@ -31,8 +31,6 @@ module BindCookbook
         run_group: 'named',
         options_file: '/etc/named/named.options',
         conf_file: '/etc/named.conf',
-        run_user_id: 25,
-        run_group_id: 25,
         service_name: 'named',
         rndc_key_file: '/etc/rndc.key',
       }[property_name]
