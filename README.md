@@ -15,33 +15,32 @@ A chef cookbook to manage BIND servers and zones.
   * [Authoritative primary nameserver](#authoritative-primary-nameserver)
   * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
 * [Available Custom Resources](#available-custom-resources)
-  * [`bind\_service`](#bind_service)
+  * [`bind_service`](#bind_service)
     * [Example](#example)
     * [Properties](#properties)
-  * [`bind\_config`](#bind_config)
+  * [`bind_config`](#bind_config)
     * [Examples](#examples)
     * [Properties](#properties-1)
-  * [`bind\_primary\_zone`](#bind_primary_zone)
+  * [`bind_primary_zone`](#bind_primary_zone)
     * [Examples](#examples-1)
     * [Properties](#properties-2)
-  * [`bind\_primary\_zone\_template`](#bind_primary_zone_template)
+  * [`bind_primary_zone_template`](#bind_primary_zone_template)
     * [Examples](#examples-2)
     * [Properties](#properties-3)
-  * [`bind\_secondary\_zone`](#bind_secondary_zone)
+  * [`bind_secondary_zone`](#bind_secondary_zone)
     * [Examples](#examples-3)
     * [Properties](#properties-4)
-  * [`bind\_forwarder`](#bind_forwarder)
+  * [`bind_forwarder`](#bind_forwarder)
     * [Examples](#examples-4)
     * [Properties](#properties-5)
-  * [`bind\_acl`](#bind_acl)
+  * [`bind_acl`](#bind_acl)
     * [Examples](#examples-5)
     * [Properties](#properties-6)
-  * [`bind\_key`](#bind_key)
+  * [`bind_key`](#bind_key)
     * [Properties](#properties-7)
-  * [`bind\_server`](#bind_server)
+  * [`bind_server`](#bind_server)
     * [Examples](#examples-6)
     * [Properties](#properties-8)
-* [Specifying per server options](#specifying-per-server-options)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
@@ -118,8 +117,8 @@ end
 There are two ways to create primary zone files with this cookbook. The first
 is by providing a complete zone file that is placed in the correct directory
 (and is added to the nameserver configuration by using the
-`bind\_primary\_zone` resource). The second way is by using the
-`bind\_primary\_zone\_template` resource. To use this you need to provide
+`bind_primary_zone` resource). The second way is by using the
+`bind_primary_zone_template` resource. To use this you need to provide
 an array of hashes containing the records you want to be added to the zone file.
 
 The following example has both options shown. In a wrapper cookbook add the code below with appropriate modifications.
@@ -239,9 +238,9 @@ end
 
 ## Available Custom Resources
 
-### `bind\_service`
+### `bind_service`
 
-The `bind\_service` resource installs the pre-requisites for the service to run.
+The `bind_service` resource installs the pre-requisites for the service to run.
 
 The `:create` action installs packages and creates appropriate configuration
 directories. It does not attempt to create a working configuration.
@@ -270,9 +269,9 @@ The following properties are supported:
 * `run_group` - The groups that the name server will run as. Defaults to `named`.
 * `service_name` - The name of the service installed by the system packages. Defaults to a platform specific value.
 
-### `bind\_config`
+### `bind_config`
 
-The `bind\_config` resource creates the configuration files for the name server.
+The `bind_config` resource creates the configuration files for the name server.
 
 The only available action is `:create` which will create the default
 configuration files (including RFC1912 zones), configure an rndc key, and
@@ -316,9 +315,9 @@ end
 * `query_log_options` - Array of additional query log options. Defaults to empty array.
 * `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
 
-### `bind\_primary\_zone`
+### `bind_primary_zone`
 
-The `bind\_primary\_zone` resource will copy a zone file from your current
+The `bind_primary_zone` resource will copy a zone file from your current
 cookbook into the correct directory and add the zone as a master zone to your
 BIND configuration. The file should be named for the zone you wish to configure.
 For example to configure `example.com` the file should be in
@@ -334,9 +333,9 @@ bind_primary_zone 'example.com'
 
 Currently there are no supported properties.
 
-### `bind\_primary\_zone\_template`
+### `bind_primary_zone_template`
 
-The `bind\_primary\_zone\_template` resource will create a zone file from a
+The `bind_primary_zone_template` resource will create a zone file from a
 template and list of desired resources.
 
 #### Examples
@@ -372,9 +371,9 @@ end
 * `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
 * `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
 
-### `bind\_secondary\_zone`
+### `bind_secondary_zone`
 
-The `bind\_secondary\_zone` resource will configure a zone to be pulled from a
+The `bind_secondary_zone` resource will configure a zone to be pulled from a
 primary name server.
 
 #### Examples
@@ -392,9 +391,9 @@ end
 
 * `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
 
-### `bind\_forwarder`
+### `bind_forwarder`
 
-The `bind\_forwarder` resource will configure a forwarding only zone.
+The `bind_forwarder` resource will configure a forwarding only zone.
 
 #### Examples
 
@@ -413,9 +412,9 @@ end
   be forwarded to.
 
 
-### `bind\_acl`
+### `bind_acl`
 
-The `bind\_acl` resource allows you to create a named ACL list within the
+The `bind_acl` resource allows you to create a named ACL list within the
 BIND configuration.
 
 #### Examples
@@ -455,9 +454,9 @@ Each entry should be a valid BIND address match list. This means it can be:
 
 Predefined ACLs (from BIND itself) which do not need additional configuration are: any, none, localhost, and localnets.
 
-### `bind\_key`
+### `bind_key`
 
-The `bind\_key` resource adds a shared secret key (for either TSIG or
+The `bind_key` resource adds a shared secret key (for either TSIG or
 the command channel) to the configuration.
 
 ```ruby
@@ -472,9 +471,9 @@ end
 * `algorithm` - The algorithm that the secret key was generated from.
 * `secret` - The secret key
 
-### `bind\_server`
+### `bind_server`
 
-The `bind\_server` resource allows specific options to be configured for a
+The `bind_server` resource allows specific options to be configured for a
 particular upstream name server.
 
 #### Examples
@@ -491,32 +490,6 @@ end
 
 * `options` - An array of options which will be rendered into the configuration.
 
-
-
-## Specifying per server options
-
-To add the `server` stanza to the configuration use the `bind\_server` resource.
-
-At the moment it only takes an array of options which are placed directly into
-the configuration:
-
-```ruby
-bind_server '10.0.1.1' do
-  options [
-    'bogus yes',
-    'edns no'
-  ]
-end
-```
-
-This will output the following into the named configuration:
-
-```
-server 10.0.1.1 {
-  bogus yes;
-  edns no;
-};
-```
 
 ## License and Author
 
