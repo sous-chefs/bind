@@ -195,6 +195,31 @@ bind_secondary_zone 'example.org' do
 end
 ```
 
+## Specifying per server options
+
+To add the `server` stanza to the configuration use the `bind\_server` resource.
+
+At the moment it only takes an array of options which are placed directly into
+the configuration:
+
+```ruby
+bind_server '10.0.1.1' do
+  options [
+    'bogus yes',
+    'edns no'
+  ]
+end
+```
+
+This will output the following into the named configuration:
+
+```
+server 10.0.1.1 {
+  bogus yes;
+  edns no;
+};
+```
+
 ## License and Author
 
 Copyright: 2011 Eric G. Wolfe

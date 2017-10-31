@@ -27,7 +27,7 @@ The following table describes where each parameter is now configurable.
 | `bind['statistics-channel']` | Replaced with `statistics_channel` on the `bind\_config` resource |
 | `bind['statistics-port']` | Replaced with `statistics_channel` on the `bind\_config` resource |
 | `bind['statistics-address']` | Replaced with `statistics_channel` on the `bind\_config` resource |
-| `bind['server']` | To be implemented. |
+| `bind['server']` | Replaced with the `bind\_server` resource |
 | `bind['packages']` | Replaced by the `package\_name` property on the `bind\_service` resource. |
 | `bind['sysconfdir']` | Replaced by the `sysconfdir` property on the `bind\_service` resource. |
 | `bind['conf_file']` | Removed for now. |

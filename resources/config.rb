@@ -76,7 +76,8 @@ action :create do
         sysconfdir: bind_service.sysconfdir,
         primary_zones: [],
         secondary_zones: [],
-        forward_zones: []
+        forward_zones: [],
+        servers: []
       )
       action :nothing
       delayed_action :create
