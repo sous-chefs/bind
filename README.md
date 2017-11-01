@@ -342,7 +342,7 @@ end
 
 #### Properties
 
-* `options` - An array of zone options. Defaults to an empty array.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 
 ### `bind_primary_zone_template`
 
@@ -412,7 +412,7 @@ end
 #### Properties
 
 * `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
-* `options` - An optional array of options to be added directly to the zone configuration. Default is empty.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 
 ### `bind_forwarder`
 
@@ -518,7 +518,7 @@ end
 
 #### Properties
 
-* `options` - An array of options which will be rendered into the configuration.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 
 
 ## License and Author
