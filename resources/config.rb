@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 property :options_file, String, default: lazy { default_property_for(:options_file) }
 property :conf_file, String, default: lazy { default_property_for(:conf_file) }
 property :bind_service, String, default: 'default'

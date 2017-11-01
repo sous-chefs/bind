@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ServerOptions = Struct.new(:name, :options)
 
 property :options, Array, default: []

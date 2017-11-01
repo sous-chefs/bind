@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 property :sysconfdir, String, default: lazy { default_property_for(:sysconfdir) }
 property :vardir, String, default: lazy { default_property_for(:vardir) }
 property :package_name, [String, Array], default: lazy { default_property_for(:packages) }

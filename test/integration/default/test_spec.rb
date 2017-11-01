@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 describe port(53) do
   it { should be_listening }
   its('processes') { should include 'named' }

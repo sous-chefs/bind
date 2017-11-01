@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'adding forward only zones' do
@@ -22,7 +23,6 @@ describe 'adding forward only zones' do
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
       expect(content).to include stanza
     }
-
   end
 
   it 'will render zone forwarder with all options specified' do

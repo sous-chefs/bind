@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook Name:: bind
 # Recipe:: default
@@ -26,13 +27,12 @@ bind_config 'default' do
   options [
     'allow-query { trusted-nets; }',
     'recursion yes',
-    'allow-recursion { trusted-nets; }'
+    'allow-recursion { trusted-nets; }',
   ]
 end
 
 bind_acl 'trusted-nets' do
-  entries [
-    'localhost',
-    'localnets'
-  ]
+  entries %w(
+    localhost
+    localnets)
 end

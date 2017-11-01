@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 PrimaryZone = Struct.new(:name, :options)
 
 property :bind_config, String, default: 'default'

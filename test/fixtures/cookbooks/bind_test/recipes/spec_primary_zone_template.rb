@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 bind_service 'default' do
   action [:create, :start]
 end
@@ -6,7 +7,7 @@ bind_config 'default'
 
 bind_primary_zone_template 'empty.example.com' do
   options [
-    'check-names warn'
+    'check-names warn',
   ]
 end
 

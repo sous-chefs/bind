@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 SecondaryZone = Struct.new(:name, :primaries, :options)
 
 property :bind_config, String, default: 'default'

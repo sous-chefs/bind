@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ForwardZone = Struct.new(:name, :forwarders, :forward)
 
 property :bind_config, String, default: 'default'

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ACL = Struct.new(:name, :entries)
 
 property :bind_config, String, default: 'default'
