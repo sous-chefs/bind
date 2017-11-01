@@ -24,6 +24,19 @@ describe 'adding primary zones' do
         expect(content).to include 'file "primary/db.empty.example.com";'
       }
     end
+
+    it 'can add options to a zone' do
+      stanza = <<~EOF
+        zone "empty.example.com" IN {
+          type master;
+          file "primary/db.empty.example.com";
+          check-names warn;
+        };
+      EOF
+      expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+        expect(content).to include stanza
+      }
+    end
   end
 
   context 'zone with custom data' do

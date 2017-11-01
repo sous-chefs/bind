@@ -4,7 +4,11 @@ end
 
 bind_config 'default'
 
-bind_primary_zone_template 'empty.example.com'
+bind_primary_zone_template 'empty.example.com' do
+  options [
+    'check-names warn'
+  ]
+end
 
 # This example has all the different possibilities overridden and tested.
 bind_primary_zone_template 'custom.example.com' do
