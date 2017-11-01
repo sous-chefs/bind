@@ -332,11 +332,17 @@ For example to configure `example.com` the file should be in
 
 ```ruby
 bind_primary_zone 'example.com'
+
+bind_primary_zone 'example.org' do
+  options [
+    'allow-transfer { none; }'
+  ]
+end
 ```
 
 #### Properties
 
-Currently there are no supported properties.
+* `options` - An array of zone options. Defaults to an empty array.
 
 ### `bind_primary_zone_template`
 

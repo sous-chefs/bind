@@ -23,6 +23,9 @@ key "<%= key.name %>" {
 zone "<%= zone.name %>" IN {
   type master;
   file "primary/db.<%= zone.name %>";
+  <% zone.options.each do |option| -%>
+  <%= option %>;
+  <% end -%>
 };
 
 <% end -%>
