@@ -56,6 +56,15 @@ you'll need a wrapper cookbook that has the resources listed.
 
 A default recipe is provided. It only provides a basic recursive name server.
 
+Supported Operating Systems:
+
+- CentOS/RHEL 6.9
+- CentOS/RHEL 7.3
+- Debian 8.9
+- Debian 9.2
+- Ubuntu 14.04
+- Ubuntu 16.04
+
 ## Attributes
 
 Most attributes have been removed in favour of custom resources.
