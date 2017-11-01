@@ -1,7 +1,7 @@
 SecondaryZone = Struct.new(:name, :primaries, :options)
 
 property :bind_config, String, default: 'default'
-property :primaries, Array
+property :primaries, Array, required: true
 property :options, Array, default: []
 
 action :create do

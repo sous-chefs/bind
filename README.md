@@ -396,11 +396,23 @@ bind_secondary_zone 'example.com' do
     '10.2.2.2'
   ]
 end
+
+bind_secondary_zone 'example.org' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+
+  options [
+    'zone-statistics full'
+  ]
+end
 ```
 
 #### Properties
 
 * `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
+* `options` - An optional array of options to be added directly to the zone configuration. Default is empty.
 
 ### `bind_forwarder`
 

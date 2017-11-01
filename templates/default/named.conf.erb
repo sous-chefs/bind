@@ -34,6 +34,9 @@ zone "<%= zone.name %>" IN {
   type slave;
   file "secondary/db.<%= zone.name %>";
   masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
+  <% zone.options.each do |option| -%>
+  <%= option %>;
+  <% end -%>
 };
 
 <% end -%>
