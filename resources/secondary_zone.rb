@@ -1,7 +1,8 @@
-SecondaryZone = Struct.new(:name, :primaries)
+SecondaryZone = Struct.new(:name, :primaries, :options)
 
 property :bind_config, String, default: 'default'
 property :primaries, Array
+property :options, Array, default: []
 
 action :create do
   bind_config = with_run_context :root do
@@ -13,6 +14,6 @@ action :create do
   end
 
   bind_config_template.variables[:secondary_zones] << SecondaryZone.new(
-    new_resource.name, new_resource.primaries
+    new_resource.name, new_resource.primaries, new_resource.options
   )
 end

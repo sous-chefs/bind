@@ -1,7 +1,9 @@
-ForwardZone = Struct.new(:name, :forwarders)
+ForwardZone = Struct.new(:name, :forwarders, :forward, :delegation_only)
 
 property :bind_config, String, default: 'default'
-property :forwarders, Array
+property :forwarders, Array, default: []
+property :forward, String, default: 'only', equal_to: %w(only first)
+property :delegation_only, [true, false], default: false
 
 action :create do
   bind_config = with_run_context :root do
@@ -13,6 +15,7 @@ action :create do
   end
 
   bind_config_template.variables[:forward_zones] << ForwardZone.new(
-    new_resource.name, new_resource.forwarders
+    new_resource.name, new_resource.forwarders, new_resource.forward,
+    new_resource.delegation_only
   )
 end

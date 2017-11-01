@@ -37,15 +37,15 @@ zone "<%= zone.name %>" IN {
 };
 
 <% end -%>
-
 <% @forward_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type forward;
   forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
-  forward only;
+  forward <%= zone.forward %>;
+  delegation-only <%= zone.delegation_only %>;
 };
-<% end -%>
 
+<% end -%>
 zone "." IN {
   type hint;
   file "named.ca";
