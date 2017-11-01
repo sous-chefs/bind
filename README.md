@@ -51,6 +51,11 @@ This release migrates to using custom resources. Thus we require a more recent
 version of chef (12.16 or above). To continue using this cookbook on older
 versions please stick with the 1.x versions.
 
+This cookbook now follows the library pattern. To use the cookbook effectively
+you'll need a wrapper cookbook that has the resources listed.
+
+A default recipe is provided. It only provides a basic recursive name server.
+
 ## Attributes
 
 Most attributes have been removed in favour of custom resources.
