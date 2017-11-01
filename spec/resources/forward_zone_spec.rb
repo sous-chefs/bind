@@ -17,7 +17,6 @@ describe 'adding forward only zones' do
         type forward;
         forwarders {  };
         forward only;
-        delegation-only false;
       };
     EOF
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
@@ -32,7 +31,6 @@ describe 'adding forward only zones' do
         type forward;
         forwarders { 10.2.1.1; 10.3.2.2; };
         forward first;
-        delegation-only true;
       };
     EOF
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|

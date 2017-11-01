@@ -13,5 +13,4 @@ bind_forward_zone 'example.org' do
   ]
 
   forward 'first'
-  delegation_only true
 end

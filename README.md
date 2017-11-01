@@ -431,7 +431,6 @@ end
 bind_forwarder 'example.org' do
   forward 'first'
   forwarders ['10.0.1.1', '10.2.1.1']
-  delegation_only false
 end
 ```
 
@@ -441,7 +440,6 @@ end
   be forwarded to. Defaults to an empty list. (Which if set will disable
   forwarding for this zone if globally configured).
 * `forward` - Set to 'first' if you wish to try a regular lookup if forwaridng fails. 'only' will cause the query to fail if forwarding fails. Default is 'only'.
-* `delegation_only` - Set if this zone should be treated as a delegation only type zone. Valid values true and false. Defaults to false.
 
 
 ### `bind_acl`

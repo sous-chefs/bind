@@ -45,7 +45,6 @@ zone "<%= zone.name %>" IN {
   type forward;
   forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
   forward <%= zone.forward %>;
-  delegation-only <%= zone.delegation_only %>;
 };
 
 <% end -%>
