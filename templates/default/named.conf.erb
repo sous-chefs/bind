@@ -4,21 +4,21 @@
 include "<%= "#{@sysconfdir}/#{file}" %>";
 <% end -%>
 
-<% @servers.each do |server| %>
+<% @servers.each do |server| -%>
 server <%= server.name %> {
   <% server.options.each do |option| -%>
   <%= option %>;
 <% end -%>
 };
-<% end -%>
 
-<% @keys.each do |key| %>
+<% end -%>
+<% @keys.each do |key| -%>
 key "<%= key.name %>" {
   algorithm <%= key.algorithm %>;
   secret "<%= key.secret %>";
 };
-<% end %>
 
+<% end %>
 <% @primary_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type master;
