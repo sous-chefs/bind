@@ -19,6 +19,7 @@ action :create do
     group bind_service.run_group
     mode 0o440
     action :create
+    notifies :restart, "bind_service[#{bind_service.name}]", :delayed
   end
 
   bind_config_template = with_run_context :root do
