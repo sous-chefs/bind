@@ -1,330 +1,539 @@
-# Bind [![Build Status](https://secure.travis-ci.org/joyofhex/cookbook-bind.png?branch=master)](http://travis-ci.org/joyofhex/cookbook-bind)
+# BIND [![Build Status](https://secure.travis-ci.org/joyofhex/cookbook-bind.png?branch=master)](http://travis-ci.org/joyofhex/cookbook-bind)
 
 ## Description
 
-A cookbook to manage bind DNS servers, and zones.
+A chef cookbook to manage BIND servers and zones.
+
+## Contents
+
+<!-- vim-markdown-toc GFM -->
+
+* [Requirements](#requirements)
+* [Attributes](#attributes)
+* [Usage](#usage)
+  * [Internal recursive nameserver](#internal-recursive-nameserver)
+  * [Authoritative primary nameserver](#authoritative-primary-nameserver)
+  * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+* [Available Custom Resources](#available-custom-resources)
+  * [`bind_service`](#bind_service)
+    * [Example](#example)
+    * [Properties](#properties)
+  * [`bind_config`](#bind_config)
+    * [Examples](#examples)
+    * [Properties](#properties-1)
+  * [`bind_primary_zone`](#bind_primary_zone)
+    * [Examples](#examples-1)
+    * [Properties](#properties-2)
+  * [`bind_primary_zone_template`](#bind_primary_zone_template)
+    * [Examples](#examples-2)
+    * [Properties](#properties-3)
+  * [`bind_secondary_zone`](#bind_secondary_zone)
+    * [Examples](#examples-3)
+    * [Properties](#properties-4)
+  * [`bind_forwarder`](#bind_forwarder)
+    * [Examples](#examples-4)
+    * [Properties](#properties-5)
+  * [`bind_acl`](#bind_acl)
+    * [Examples](#examples-5)
+    * [Properties](#properties-6)
+  * [`bind_key`](#bind_key)
+    * [Properties](#properties-7)
+  * [`bind_server`](#bind_server)
+    * [Examples](#examples-6)
+    * [Properties](#properties-8)
+* [License and Author](#license-and-author)
+
+<!-- vim-markdown-toc -->
 
 ## Requirements
 
-Included ldap2zone recipe depends on Chef 0.10.10 features,
-such as `chef_gem`.
+This release migrates to using custom resources. Thus we require a more recent
+version of chef (12.16 or above). To continue using this cookbook on older
+versions please stick with the 1.x versions.
 
-The net-ldap v0.2.2 Ruby gem is required for the ldap2zone recipe.
+This cookbook now follows the library pattern. To use the cookbook effectively
+you'll need a wrapper cookbook that has the resources listed.
+
+A default recipe is provided. It only provides a basic recursive name server.
+
+Supported Operating Systems:
+
+- CentOS/RHEL 6.9
+- CentOS/RHEL 7.3
+- Debian 8.9
+- Debian 9.2
+- Ubuntu 14.04
+- Ubuntu 16.04
 
 ## Attributes
 
-### Attributes which probably require tuning
-
-* `bind['masters']`
-  - Array of authoritative servers which you transfer zones from.
-  - Default empty
-
-* `bind['ipv6_listen']`
-  - Boolean, whether BIND should listen on ipv6
-  - Default is false
-
-* `bind['acl-role']`
-  - Search key for pulling split-domain ACLs out of `data_bags`
-  - Defaults to internal-acl, and has no effect if you do not need ACLs.
-
-* `bind['acl']`
-  - An array node attribute which `data_bag` ACLs are pushed on to,
-    and then passed to named.options template.
-  - Default is an empty array.
-
-* `bind['zones']['attribute']`
-  - An array attribute where zone names may be set from role
-    attributes.  The dynamic source attributes `bind['zones']['ldap']`
-    and `bind['zones']['databag']` will be combined with zone names set
-    via role attributes before the named.conf template is rendered.
-
-* `bind['zones']['ldap']`
-  - An array attribute where zone names may be set from an
-    ldap source.
-
-* `bind['zones']['databag']`
-  - An array attribute where zone names may be set from a
-    databag source.
-
-* `bind['forwardzones']`
-  - An array of zones to forward requests for.
-
-* `bind['forwarders']`
-  - An array of forwarders to use with the forwardzones.
-
-* `bind['zonetype']`
-  - The zone type, master, or slave for configuring
-    the  named.conf template.
-  - Defaults to slave
-
-* `bind['zonesource']`
-  - The external zone data source, included examples are databag
-    or ldap
-  - Defaults to databag.  Should have no effect if no zone names
-    exist in the bind `data_bag`.
-
-* `bind['options']`
-  - Free form options for named.conf template
-  - Defaults to an empty array.
-
-* `bind['allow_solo_search']`
-  - Boolean true/false, enabling chef-solo search
-  - Defaults to false
-
-* `bind['enable_log']`
-  - Boolean, toggle bind query logging.  Note this applies only to a dedicated log, such as a query log.
-    i.e. bind may still log to the messages/kernel log if configured to do so with syslog.
-  - Default to false
-
-* `bind['log_file']`
-  - Absolute path to bind log file, assuming directory exists.  Again, this has no effect on syslog
-    configuration.
-  - Default to `/var/log/bind9/query.log`
-
-* `bind['statistics-channel']
-  - Boolean to enable a statistics-channel on a TCP port.
-  - Default, false
-
-* `bind['statistics-port']
-  - Integer for statistics-channel TCP port.
-  - Default, 8080
-
-* `bind['statistics-address']
-  - IP Address for listening port
-  - Default, 127.0.0.1.
-
-* `bind['server']
-  - Hash of server IPs, each with their own array of options for the "server" clause.
-  - Will not populate by default
-
-### Attributes which should not require tuning
-
-* `bind['packages']`
-  - packages to install
-  - Platform specific defaults
-
-* `bind['sysconfdir']`
-  - etc directory for named
-  - Platform specific defaults
-
-* `bind['conf_file']`
-  - Full path to named.conf
-  - Platform specific defaults
-
-* `bind['options_file']`
-  - Full path to named.options
-  - Platform specific defaults
-
-* `bind['vardir']`
-  - var directory for named to write state data, such as zone files.
-  - Platform specific defaults
-
-* `bind['included_files']`
-  - Files to be included in named.conf, relative to sysconf (/etc/named, /etc/bind) directory.
-    You could, for example, drop off other static files or templates in your sysconf directory.
-    Then include them in your named.conf by overriding this attribute.
-  - Defaults to named.rfc1912.zones, and named.options
-
-* `bind['var_cookbook_files']`
-  - static cookbook files to drop off in var directory
-  - defaults to named.empty, named.ca, named.loopback, and named.localhost
-
-* `bind['rndc_keygen']`
-  - command to generate rndc key
-  - default depends on hardware/hypervisor platform
-
-* `bind['log_options']`
-  - Array listing all specific bind logging options
-  - default is empty
-
-* `bind['rndc-key']`
-  - Location which rndc.key gets created by rndc-confgen
-
-### ldap2zone recipe specific attributes
-
-We store our zone names on Active Directory, and use Ruby to pull
-these into Chef and configure our Linux BIND servers.  If you already
-have Active Directory, chances are you have an authoritative data
-source for zone names in LDAP and can use this recipe to query
-this data, just by setting a few attributes in a role.
-
-* `bind['ldap']['binddn']`
-   - The binddn username for connecting to LDAP
-   - Default nil
-
-* `bind['ldap']['bindpw']`
-  - The binddn password for connecting to LDAP
-  - Default nil
-
-* `bind['ldap']['filter']`
-  - The LDAP object filter for zone names
-  - Defaults to dnsZone class, excluding Root DNS Servers
-
-* `bind['ldap'][server']`
-  - The authoritative directory server for your domain
-  - Defaults to nil
-
-* `bind['ldap']['domainzones']`
-  - The LDAP tree where your domain zones are located
-  - Defaults to the Active Directory zone tree for example.com.
+Most attributes have been removed in favour of custom resources.
+See the MIGRATION.md document.
 
 ## Usage
 
-### Notes on the zonesource recipes
+Using custom resources leads to a quite flexible configuration, but requires
+a little bit more work in a wrapper cookbook to use. The following examples 
+are presented here:
 
-The databag2zone and ldap2zone is optional code to fetch DNS zones
-from a data bag, or Active Directory integrated domain controllers.
-If you have a proper IP address management (IPAM) solution, you
-could drop in your own code to query an API on your IPAM server.
+- Internal recursive nameserver
+- Authoritative primary nameserver
+- Authoritative secondary nameserver
 
-Any query should use the `<<` operator to push results on to the
-`bind['zones']` array.  Drop your query code in a recipe
-named `query2zone.rb`, for example.  Then include the API query
-by overriding the attribute `bind['zonesource']` set to the
-string `query`.
-
-Alternatively, you can just use an `override['bind']['zones']` in
-a role or environment instead.  Or even a mix of both override
-attributes, and an API query to populate zones.
-
-### Example role for internal recursing DNS
-
-An example wrapper cookbook for an internal split-horizon BIND server for
-example.com, might look like so: 
+### Internal recursive nameserver
 
 ```ruby
-# Configure and install Bind to function as an internal DNS server."
-# attributes/default.rb
-include_attribute 'bind'
-default['bind']['acl-role'] = 'internal-acl'
-default['bind']['masters'] = %w(192.0.2.10 192.0.2.11 192.0.2.12)
-default['bind']['ipv6_listen'] = true
-default['bind']['zonetype'] = 'slave'
-default['bind']['zonesource'] = 'ldap'
-default['bind']['zones']['attribute'] = %w(example.com example.org)
-default['bind']['ldap'] = {
-  server: 'example.com',
-  binddn: 'cn=chef-ldap,ou=Service Accounts,dc=example,dc=com',
-  bindpw: 'ServiceAccountPassword',
-  domainzones: 'cn=MicrosoftDNS,dc=DomainDnsZones,dc=example,dc=com'
-}
-default['bind']['options'] = [
-  'check-names slave ignore;',
-  'multi-master yes;',
-  'provide-ixfr yes;',
-  'recursive-clients 10000;',
-  'request-ixfr yes;',
-  'allow-notify { acl-dns-masters; acl-dns-slaves; };',
-  'allow-query { example-lan; localhost; };',
-  'allow-query-cache { example-lan; localhost; };',
-  'allow-recursion { example-lan; localhost; };',
-  'allow-transfer { acl-dns-masters; acl-dns-slaves; };',
-  'allow-update-forwarding { any; };',
-]
+bind_service 'default' do
+  action [:create, :start]
+end
 
-# recipes/default.rb
-include_recipe 'bind'
+bind_config 'default' do
+  ipv6_listen true
+  options [
+    'check-names slave ignore',
+    'multi-master yes',
+    'provide-ixfr yes',
+    'recursive-clients 10000',
+    'request-ixfr yes',
+    'allow-notify { acl-dns-masters; acl-dns-slaves; }',
+    'allow-query { example-lan; localhost; }',
+    'allow-query-cache { example-lan; localhost; }',
+    'allow-recursion { example-lan; localhost; }',
+    'allow-transfer { acl-dns-masters; acl-dns-slaves; }',
+    'allow-update-forwarding { any; }',
+  ]
+end
+
+bind_acl 'acl-dns-masters' do
+  entries [
+    '! 10.1.1.1',
+    '10/8'
+  ]
+end
+
+bind_acl 'acl-dns-slaves' do
+  entries [
+    'acl-dns-masters'
+  ]
+end
+
+bind_acl 'example-lan' do
+  entries [
+    '10.2/16',
+    '10.3.2/24',
+    '10.4.3.2'
+  ]
+end
 ```
 
-### Example role for authoritative only external DNS
+### Authoritative primary nameserver
 
-An example wrapper cookbook for an external split-horizon authoritative only
-BIND server for example.com, might look like so:
+There are two ways to create primary zone files with this cookbook. The first
+is by providing a complete zone file that is placed in the correct directory
+(and is added to the nameserver configuration by using the
+`bind_primary_zone` resource). The second way is by using the
+`bind_primary_zone_template` resource. To use this you need to provide
+an array of hashes containing the records you want to be added to the zone file.
+
+The following example has both options shown. In a wrapper cookbook add the code below with appropriate modifications.
+
+You'll need to configure the ACL entries (and names) for the example-lan and
+acl-dns-masters ACLs for your local configuration.
+
+You will also need to arrange for the zone files to be placed in the configured
+location (which is OS dependent by default).
+
+Resource style:
 
 ```ruby
-# Configure and install Bind to function as an external DNS server."
-# attributes/default.rb
-include_attribute 'bind'
-default['bind']['acl-role'] = 'external-acl'
-default['bind']['masters'] = %w(192.0.2.5 192.0.2.6)
-default['bind']['ipv6_listen'] = true
-default['bind']['zonetype'] = 'master'
-default['bind']['zones']['attribute'] = %w(example.com example.org) 
-default['bind']['options'] = [
-  'recursion no;',
-  'allow-query { any; };',
-  'allow-transfer { external-private-interfaces; external-dns; };',
-  'allow-notify { external-private-interfaces; external-dns; localhost; };',
-  'listen-on-v6 { any; };'
-]
+bind_service 'default' do
+  action [:create, :start]
+end
 
-# recipes/default.rb
-include_recipe 'bind'
+bind_config 'default' do
+  ipv6_listen true
+  options [
+    'recursion no',
+    'allow-query { any; }',
+    'allow-transfer { external-private-interfaces; external-dns; }',
+    'allow-notify { external-private-interfaces; external-dns; localhost; }',
+    'listen-on-v6 { any; }'
+  ]
+end
+
+bind_acl 'external-private-interfaces' do
+  entries [
+  ]
+end
+
+bind_acl 'external-dns' do
+  entries [
+  ]
+end
+
+cookbook_file '/var/named/primary/db.example.com' do
+  owner 'named'
+  group 'named'
+  mode '0440'
+  action :create
+end
+
+bind_primary_zone 'example.com'
+
+bind_primary_zone_template 'example.org' do
+  soa serial: 100
+  default_ttl 200
+  records [
+    { type: 'NS', rdata: 'ns1.example.org.' },
+    { type: 'NS', rdata: 'ns2.example.org.' },
+    { type: 'MX', rdata: '10 mx1.example.org.' },
+    { type: 'MX', rdata: '20 mx1.example.org.' },
+    { owner: 'www', type: 'A', ttl: 20, rdata: '10.5.0.1' },
+    { owner: 'ns1', type: 'A', ttl: 20, rdata: '10.5.1.1' },
+    { owner: 'ns2', type: 'A', ttl: 20, rdata: '10.5.2.1' },
+    { owner: 'mx1', type: 'A', ttl: 20, rdata: '10.5.1.100' },
+    { owner: 'mx2', type: 'A', ttl: 20, rdata: '10.5.2.100' },
+  ]
+
 ```
 
-### Example BIND Access Controls from data bag
+### Authoritative secondary nameserver
 
-In order to include an external ACL for the private interfaces
-of your external nameservers, you can create a data bag like so.
+In a wrapper cookbook add the code below with appropriate modifications.
 
-  * data_bag name: bind
-    - id: ACL entry name
-    - role: search key for bind data_bag
-    - hosts: array of CIDR addresses, or IP addresses
+You'll need to configure the ACL entries (and names) for the example-lan and
+acl-dns-masters ACLs for your local configuration.
 
-```json
-{
-  "id": "external-private-interfaces",
-  "role": "external-acl",
-  "hosts": [ "192.0.2.15", "192.0.2.16", "192.0.2.17" ]
-}
-```
-
-In order to include an internal ACL for the query addresses of
-your LAN, you might create a data bag like so.
-
-  * data_bag name: bind
-    - id: ACL entry name
-    - role: search key for bind data_bag
-    - hosts: array of CIDR addresses, or IP addresses
-
-```json
-{
-  "id": "example-lan",
-  "role": "internal-acl",
-  "hosts": [ "192.0.2.18", "192.0.2.19", "192.0.2.20" ]
-}
-```
-
-### Example to load zone names from data bag
-
-If you have a few number of zones, you can split these
-up into individual data bag objects if you prefer.
-
-  * data_bag name: bind
-    - zone: string representation of individual zone name.
-
-```json
-{
-  "id": "example",
-  "zone": "example.com"
-}
-```
-
-If you wish to group a number of zones together, you can
-use the following format to include a number of zones at once.
-
-  * data_bag name: bind
-    - zones: array representation of several zone names.
-
-```json
-{
-  "id": "example",
-  "zones": [ "example.com", "example.org" ]
-}
-```
-
-### Example of using the 'server' clause
 ```ruby
-default['bind']['server'] = {
-  10.0.0.1: ['keys { my_tsig_key; };', 'bogus no;'],
-  10.0.0.2: ['bogus yes;']
-}
+bind_service 'default' do
+  action [:create, :start]
+end
+
+bind_config 'default' do
+  ipv6_listen true
+  options [
+    'recursion no',
+    'allow-query { any; }',
+    'allow-transfer { external-private-interfaces; external-dns; }',
+    'allow-notify { external-private-interfaces; external-dns; localhost; }',
+    'listen-on-v6 { any; }'
+  ]
+end
+
+bind_acl 'acl-dns-masters' do
+  entries [
+    '! 10.1.1.1',
+    '10/8'
+  ]
+end
+
+bind_acl 'acl-dns-slaves' do
+  entries [
+    'acl-dns-masters'
+  ]
+end
+
+bind_acl 'example-lan' do
+  entries [
+    '10.2/16',
+    '10.3.2/24',
+    '10.4.3.2'
+  ]
+end
+
+bind_secondary_zone 'example.com' do
+  primaries %w(192.0.2.10 192.0.2.11 192.0.2.12)
+end
+
+bind_secondary_zone 'example.org' do
+  primaries %w(192.0.2.10 192.0.2.11 192.0.2.12)
+end
 ```
+
+## Available Custom Resources
+
+### `bind_service`
+
+The `bind_service` resource installs the pre-requisites for the service to run.
+
+The `:create` action installs packages and creates appropriate configuration
+directories. It does not attempt to create a working configuration.
+
+The `:start` action ensures that the name server will be started at the end of
+the chef run and will be started automatically on boot.
+
+The `:restart` wil immediately restart the name server.
+
+#### Example
+
+```ruby
+bind_service 'default' do
+  action [:create, :start]
+end
+```
+
+#### Properties
+
+The following properties are supported:
+
+* `sysconfdir` - The system configuration directory where the named config will be located. The default is platform specific. Usually `/etc/named` or `/etc/bind`
+* `vardir` - The location for zone files and other data. The default is platform specific, usually `/var/named` or `/var/cache/bind`.
+* `package_name` - The package, or array of packages, needed to install the nameserver. Default is platform specific, usually includes bind and associated utility packages.
+* `run_user` - The user that the name server will run as. Defaults to `named`.
+* `run_group` - The groups that the name server will run as. Defaults to `named`.
+* `service_name` - The name of the service installed by the system packages. Defaults to a platform specific value.
+
+### `bind_config`
+
+The `bind_config` resource creates the configuration files for the name server.
+
+The only available action is `:create` which will create the default
+configuration files (including RFC1912 zones), configure an rndc key, and
+set any query logging parameters required.
+
+#### Examples
+
+```ruby
+bind_config 'default'
+
+bind_config 'default' do
+  ipv6_listen false
+
+  options [
+    'recursion no',
+    'allow-transfer { external-dns; }'
+  ]
+end
+
+bind_config 'default' do
+  statistics_channel address: 127.0.0.1, port: 8090
+
+  query_log '/var/log/named/query.log'
+  query_log_versions 5
+  query_log_max_size '10m'
+  query_log_options [
+    'print-time yes'
+  ]
+end
+```
+
+#### Properties
+
+* `conf_file` - The desired full path to the main configuration file. Platform specific default.
+* `options_file` - The desired full path to the configuration file containing options. Platform specific default.
+* `ipv6_listen` - Enables listening on IPv6 instances. Can be true or false. Defaults to true.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+* `query_log` - If provided will turn on general query logging. Should be the path to the desired log file. Default is empty and thus disabled. This will likely move to a separate resource in the future.
+* `query_log_max_size` - Maximum size of query log before rotation. Defaults to '1m'.
+* `query_log_versions` - Number of rotated query logs to keep on the system. Defaults to 2.
+* `query_log_options` - Array of additional query log options. Defaults to empty array.
+* `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
+
+### `bind_primary_zone`
+
+The `bind_primary_zone` resource will copy a zone file from your current
+cookbook into the correct directory and add the zone as a master zone to your
+BIND configuration. The file should be named for the zone you wish to configure.
+For example to configure `example.com` the file should be in
+`files/default/example.com`
+
+#### Examples
+
+```ruby
+bind_primary_zone 'example.com'
+
+bind_primary_zone 'example.org' do
+  options [
+    'allow-transfer { none; }'
+  ]
+end
+```
+
+#### Properties
+
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+
+### `bind_primary_zone_template`
+
+The `bind_primary_zone_template` resource will create a zone file from a
+template and list of desired resources.
+
+#### Examples
+
+```ruby
+bind_primary_zone_template 'example.com' do
+  soa serial: 100, minimum: 3600
+  records [
+    { type: 'NS', rdata: 'ns1.example.com.' },
+    { owner: 'ns1', type: 'A', rdata: '10.0.1.1' }
+  ]
+end
+```
+
+#### Properties
+
+* `soa` - Hash of SOA entries. Available keys are:
+  - `:serial` - The serial number of the zone. Defaults to '1'. If this zone 
+  has secondary servers configured then you will need to manually manage this
+  and update when the record set changes.
+  - `:mname` - Domain name of the primary name server serving this zone. Defaults to 'localhost.'
+  - `:rname` - The email address of the "Responsible Person" for this zone with the @-sign replaced by a `.`. Defaults to `hostmaster.localhost.`
+  - `:refresh` - The period that a secondary name server will wait between checking if the zone file has been updated on the master. Defaults to '1w'.
+  - `:retry` - The period that a secondary name server will attempt to retry checking a zone file if the initial attempt fails. Defaults to '15m'.
+  - `:expire` - The length of time that a zone will be considered invalid if the primary name server is unavailable. Defaults to '52w'.
+  - `:minimum` - The length of time that a name server will cache a negative (NXDOMAIN) result. Defaults to 30 seconds.
+* `default_ttl` - The default time to live for any records which do not have an explicitly configured TTL.
+* `records` - An array of hashes describing each desired record. Possible keys are:
+  - `:owner` - The name to be looked up.
+  - `:type` - The record type; examples include: 'NS', 'MX', 'A', 'AAAA'.
+  - `:ttl` - A non-default TTL. If not present will use the default TTL of the zone.
+  - `:rdata` - The value of the record. Freeform string that depends on the type for structure.
+* `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
+* `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
+
+### `bind_secondary_zone`
+
+The `bind_secondary_zone` resource will configure a zone to be pulled from a
+primary name server.
+
+#### Examples
+
+```ruby
+bind_secondary_zone 'example.com' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+end
+
+bind_secondary_zone 'example.org' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+
+  options [
+    'zone-statistics full'
+  ]
+end
+```
+
+#### Properties
+
+* `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+
+### `bind_forwarder`
+
+The `bind_forwarder` resource will configure a forwarding only zone.
+
+#### Examples
+
+```ruby
+bind_forwarder 'example.com' do
+  forwarders [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+end
+
+bind_forwarder 'example.org' do
+  forward 'first'
+  forwarders ['10.0.1.1', '10.2.1.1']
+end
+```
+
+#### Properties
+
+* `forwarders` - An array of IP addresses to which requests for this zone will
+  be forwarded to. Defaults to an empty list. (Which if set will disable
+  forwarding for this zone if globally configured).
+* `forward` - Set to 'first' if you wish to try a regular lookup if forwaridng fails. 'only' will cause the query to fail if forwarding fails. Default is 'only'.
+
+
+### `bind_acl`
+
+The `bind_acl` resource allows you to create a named ACL list within the
+BIND configuration.
+
+#### Examples
+
+```ruby
+bind_acl 'google-dns-servers' do
+  entries [
+    '8.8.8.8',
+    '8.8.4.4'
+  ]
+end
+
+bind_acl 'internal-dns' do
+  entries [
+    '! 10.1.1.1',
+    '10/8'
+  ]
+end
+
+bind_acl 'tsig_key' do
+  entries [
+    'key "internal-key"',
+  ]
+end
+```
+#### Properties
+
+* `entries` - An array of strings representing each acl entry.
+
+Each entry should be a valid BIND address match list. This means it can be:
+
+- an IP address
+- an IP prefix
+- a key id
+- the name of a different address march list from another acl statement
+- a nested address match list enclosed in braces
+
+Predefined ACLs (from BIND itself) which do not need additional configuration are: any, none, localhost, and localnets.
+
+### `bind_key`
+
+The `bind_key` resource adds a shared secret key (for either TSIG or
+the command channel) to the configuration.
+
+```ruby
+bind_key 'dns-update-key' do
+  algorithm 'hmac-sha256'
+  secret 'this_is_the_secret_key'
+end
+```
+
+#### Properties
+
+* `algorithm` - The algorithm that the secret key was generated from.
+* `secret` - The secret key
+
+### `bind_server`
+
+The `bind_server` resource allows specific options to be configured for a
+particular upstream name server.
+
+#### Examples
+
+```ruby
+bind_server '10.1.1.1' do
+  options [
+    'bogus yes'
+  ]
+end
+```
+
+#### Properties
+
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+
 
 ## License and Author
 
-Copyright: 2011 Eric G. Wolfe
+- Copyright: 2011 Eric G. Wolfe
+- Copyright: 2017 David Bruce
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

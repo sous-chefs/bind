@@ -1,12 +1,15 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'redhat', version: '6.8')
-                            .converge(described_recipe)
+      ChefSpec::SoloRunner.new(
+        platform: 'centos', version: '7.3.1611', step_into: %w(
+          bind_service bind_config bind_acl
+        )
+      ).converge(described_recipe)
     end
-    let(:checkconf) { chef_run.execute('named-checkconf') }
 
     %w(bind bind-utils bind-libs).each do |bind_package|
       it "installs package #{bind_package}" do
@@ -47,19 +50,15 @@ describe 'bind::default' do
       end
     end
 
-    it 'executes rndc-confgen -a' do
-      expect(chef_run).to run_execute('rndc-confgen -a')
-    end
-
-    %w(data slaves master).each do |subdir|
+    %w(data primary secondary).each do |subdir|
       it "creates subdirectory /var/named/#{subdir}" do
         expect(chef_run).to create_directory("/var/named/#{subdir}")
       end
     end
 
-    it 'named-checkconf notifies bind service' do
-      expect(checkconf).to notify('service[bind]').to(:start).immediately
-      expect(checkconf).to notify('service[bind]').to(:enable).immediately
+    it 'notifies bind service' do
+      config_template = chef_run.template('/etc/named/named.options')
+      expect(config_template).to notify('bind_service[default]').to(:restart)
     end
   end
 
@@ -69,19 +68,16 @@ describe 'bind::default' do
         node.automatic['virtualization']['role'] = 'guest'
       end.converge(described_recipe)
     end
-    let(:checkconf) { chef_run.execute('named-checkconf') }
-
-    it 'executes rndc-confgen -a -r /dev/urandom' do
-      expect(chef_run).to run_execute('rndc-confgen -a -r /dev/urandom')
-    end
   end
 
   context 'on Ubuntu 16.04' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '16.04').converge(described_recipe)
+      ChefSpec::SoloRunner.new(
+        platform: 'ubuntu', version: '16.04', step_into: %w(
+          bind_service bind_config bind_acl
+        )
+      ).converge(described_recipe)
     end
-    let(:checkconf) { chef_run.execute('named-checkconf') }
-
     %w(bind9 bind9utils).each do |bind_package|
       it "installs package #{bind_package}" do
         expect(chef_run).to install_package(bind_package)
@@ -121,15 +117,15 @@ describe 'bind::default' do
       end
     end
 
-    %w(data slaves master).each do |subdir|
+    %w(data primary secondary).each do |subdir|
       it "creates subdirectory /var/cache/bind/#{subdir}" do
         expect(chef_run).to create_directory("/var/cache/bind/#{subdir}")
       end
     end
 
-    it 'named-checkconf notifies service[bind]' do
-      expect(checkconf).to notify('service[bind]').to(:start).immediately
-      expect(checkconf).to notify('service[bind]').to(:enable).immediately
+    it 'notifies service[bind]' do
+      config_template = chef_run.template('/etc/bind/named.options')
+      expect(config_template).to notify('bind_service[default]').to(:restart)
     end
   end
 end
