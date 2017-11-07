@@ -3,7 +3,7 @@ bind changelog
 
 v2.0.0
 ------
-* Migrate to using custom resources
+* Migrate to using custom resources. See MIGRATION.md for details on migrating from v1.x.
 
 v1.3.0
 ------
