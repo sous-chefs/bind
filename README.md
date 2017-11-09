@@ -388,6 +388,7 @@ end
   - `:type` - The record type; examples include: 'NS', 'MX', 'A', 'AAAA'.
   - `:ttl` - A non-default TTL. If not present will use the default TTL of the zone.
   - `:rdata` - The value of the record. Freeform string that depends on the type for structure.
+* `manage_serial` - A boolean indicating if we should manage the serial number. Defaults to false. When true persists the current serial number and a digest of the current zone contents into the node object. If the records change the serial number will be incremented. The default serial number used is the value of soa[:serial].
 * `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
 * `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
 
