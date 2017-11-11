@@ -71,6 +71,10 @@ describe 'zones with managed serial numbers' do
     ) do |node|
       node.normal['bind']['zone']['custom.example.com']['serial'] = '100'
       node.normal['bind']['zone']['custom.example.com']['hash'] = '100'
+      node.normal['bind']['zone']['nochange.example.com'].tap do |zone|
+        zone['serial'] = '999'
+        zone['hash'] = 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
+      end
     end
   end
 
@@ -92,6 +96,21 @@ describe 'zones with managed serial numbers' do
       attribute = chef_run.node.normal
       hash_code = attribute['bind']['zone']['empty.example.com']['hash']
       expect(hash_code).to eq '54fb331da7106128dacb7162f72493684c46e5cbd12f9d830ec87d07cbbf3e83'
+    end
+  end
+
+  context 'a zone with no changes' do
+    it 'does not change the persisted serial number' do
+      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      attribute = chef_run.node.normal
+      expect(attribute['bind']['zone']['nochange.example.com']['serial']).to eq '999'
+    end
+
+    it 'does not change the persisted hash code' do
+      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      attribute = chef_run.node.normal
+      hash_code = attribute['bind']['zone']['nochange.example.com']['hash']
+      expect(hash_code).to eq 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
     end
   end
 

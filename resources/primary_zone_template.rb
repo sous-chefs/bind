@@ -53,10 +53,10 @@ action :create do
     persisted_values = node.normal['bind']['zone'][new_resource.name]
 
     # override soa with the value in persisted_values if it exists
-    soa[:serial] = persisted_values['serial'] unless persisted_values['serial'].empty?
+    soa[:serial] = persisted_values['serial'] if persisted_values.attribute?('serial')
 
     unless persisted_values['hash'] == new_hash
-      soa[:serial] = soa[:serial].succ unless persisted_values['serial'].empty?
+      soa[:serial] = soa[:serial].succ if persisted_values.attribute?('serial')
 
       node.normal['bind']['zone'][new_resource.name].tap do |zone|
         zone['serial'] = soa[:serial]
