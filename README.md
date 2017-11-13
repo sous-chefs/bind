@@ -374,8 +374,8 @@ end
 
 * `soa` - Hash of SOA entries. Available keys are:
   - `:serial` - The serial number of the zone. Defaults to '1'. If this zone 
-  has secondary servers configured then you will need to manually manage this
-  and update when the record set changes.
+  has secondary servers configured then you will need to either manually manage this
+  and update when the record set changes, or use the `manage_serial` property.
   - `:mname` - Domain name of the primary name server serving this zone. Defaults to 'localhost.'
   - `:rname` - The email address of the "Responsible Person" for this zone with the @-sign replaced by a `.`. Defaults to `hostmaster.localhost.`
   - `:refresh` - The period that a secondary name server will wait between checking if the zone file has been updated on the master. Defaults to '1w'.
