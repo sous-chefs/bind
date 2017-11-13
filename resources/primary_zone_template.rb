@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'digest'
+
 PrimaryZone = Struct.new(:name, :options)
 
 property :bind_config, String, default: 'default'
@@ -10,6 +12,8 @@ property :options, Array, default: []
 
 property :template_cookbook, String, default: 'bind'
 property :template_name, String, default: 'primary_zone.erb'
+
+property :manage_serial, [true, false], default: false
 
 action :create do
   bind_config = with_run_context :root do
@@ -26,6 +30,9 @@ action :create do
     r.key?(:owner) && !r[:owner].nil? && !r[:owner].empty?
   end
 
+  sorted_zone_records = zone_records.sort_by { |record| [record[:type], record[:rdata]] }
+  sorted_records = records.sort_by { |record| [record[:owner], record[:type], record[:rdata]] }
+
   soa = {
     serial: '1',
     mname: 'localhost.',
@@ -36,6 +43,28 @@ action :create do
     minimum: 30,
   }.merge(new_resource.soa)
 
+  if new_resource.manage_serial
+    new_hash = Digest::SHA256.hexdigest(
+      Marshal.dump(
+        [soa, new_resource.default_ttl, sorted_zone_records, sorted_records]
+      )
+    )
+
+    persisted_values = node.normal['bind']['zone'][new_resource.name]
+
+    # override soa with the value in persisted_values if it exists
+    soa[:serial] = persisted_values['serial'] if persisted_values.attribute?('serial')
+
+    unless persisted_values['hash'] == new_hash
+      soa[:serial] = soa[:serial].succ if persisted_values.attribute?('serial')
+
+      node.normal['bind']['zone'][new_resource.name].tap do |zone|
+        zone['serial'] = soa[:serial]
+        zone['hash'] = new_hash
+      end
+    end
+  end
+
   template new_resource.name do
     path "#{bind_service.vardir}/primary/db.#{new_resource.name}"
     owner bind_service.run_user
@@ -45,8 +74,8 @@ action :create do
     variables(
       default_ttl: new_resource.default_ttl,
       soa: soa,
-      zone_records: zone_records.sort_by { |record| [record[:type], record[:rdata]] },
-      records: records.sort_by { |record| [record[:owner], record[:type], record[:rdata]] }
+      zone_records: sorted_zone_records,
+      records: sorted_records
     )
     mode 0o440
     action :create
