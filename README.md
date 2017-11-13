@@ -27,6 +27,7 @@ A chef cookbook to manage BIND servers and zones.
   * [`bind_primary_zone_template`](#bind_primary_zone_template)
     * [Examples](#examples-2)
     * [Properties](#properties-3)
+    * [A note on serial numbers](#a-note-on-serial-numbers)
   * [`bind_secondary_zone`](#bind_secondary_zone)
     * [Examples](#examples-3)
     * [Properties](#properties-4)
@@ -391,6 +392,33 @@ end
 * `manage_serial` - A boolean indicating if we should manage the serial number. Defaults to false. When true persists the current serial number and a digest of the current zone contents into the node object. If the records change the serial number will be incremented. The default serial number used is the value of soa[:serial].
 * `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
 * `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
+
+#### A note on serial numbers
+
+Serial numbers are primarily used by the DNS to discover if a zone has changed
+and thus trigger a zone transfer by a secondary server. If you are managing all
+of the authoritative servers for a zone with chef then you do not need to change
+serial numbers when updating a zone. In this instance you can set a simple
+static serial number ('1' is used by default and is just fine).
+
+On the other hand, if you have non-chef managed secondary servers then you will
+need to increment the serial number whenever the record set changes. This can be
+done in two different ways: manually (where you control the serial number set
+and will increment it each time the record set changes), or using the
+`manage_serial` property.
+
+If you use the `manage_serial` property then each time the record set changes
+the serial number will be incremented. Providing a serial number in the `soa`
+property will be used as a default value for the serial number. When enabled
+this property will cause the cookbook to store the serial number and a hash of
+the record set in the host's node object. If you destroy the node object then
+this will result in the serial number being reset to the default value in the
+`soa` property. Finally, ensure that you only have a single server using the
+`manage_serial` property. Otherwise you may end up with different name servers
+with different serial numbers. In this case, set up a single node as the
+primary server and use the `bind_secondary_zone` on all the other authoritative
+servers to pull the zone from that designated primary server.
+
 
 ### `bind_secondary_zone`
 
