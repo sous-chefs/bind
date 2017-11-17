@@ -1,6 +1,10 @@
 bind changelog
 ==============
 
+v2.0.1
+------
+* Add `manage_serial` option to `bind_primary_zone_template` resource
+
 v2.0.0
 ------
 * Migrate to using custom resources. See MIGRATION.md for details on migrating from v1.x.
