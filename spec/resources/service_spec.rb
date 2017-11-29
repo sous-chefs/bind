@@ -46,12 +46,12 @@ describe 'chroot recipe on ubuntu 14.04' do
   let(:mknod_null)    { chef_run.execute('mknod_null') }
   let(:mknod_random)  { chef_run.execute('mknod_random') }
   let(:mknod_urandom) { chef_run.execute('mknod_urandom') }
-  let(:chgrp_null)    { chef_run.execute('chgrp_dev_null')}
-  let(:chgrp_random)  { chef_run.execute('chgrp_dev_random')}
-  let(:chgrp_urandom) { chef_run.execute('chgrp_dev_urandom')}
-  let(:chmod_null)    { chef_run.execute('chmod_dev_null')}
-  let(:chmod_random)  { chef_run.execute('chmod_dev_random')}
-  let(:chmod_urandom) { chef_run.execute('chmod_dev_urandom')}
+  let(:chgrp_null)    { chef_run.execute('chgrp_dev_null') }
+  let(:chgrp_random)  { chef_run.execute('chgrp_dev_random') }
+  let(:chgrp_urandom) { chef_run.execute('chgrp_dev_urandom') }
+  let(:chmod_null)    { chef_run.execute('chmod_dev_null') }
+  let(:chmod_random)  { chef_run.execute('chmod_dev_random') }
+  let(:chmod_urandom) { chef_run.execute('chmod_dev_urandom') }
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_service('default')
