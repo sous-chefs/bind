@@ -67,6 +67,7 @@ action :create do
       variables(
         chroot: new_resource.chroot_dir
       )
+      action :nothing
       delayed_action :create
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
@@ -79,14 +80,16 @@ action :create do
       group 'root'
       mode '0644'
       variables(
-        user: bind_service.run_user,
-        chroot: new_resource.chroot_dir
+        chroot: new_resource.chroot_dir,
+        ipv6: new_resource.ipv6_listen,
+        user: bind_service.run_user
       )
+      action :nothing
       delayed_action :create
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'default.bind9.erb'
-      only_if { node['platform_family'] == 'debian' && new_resource.chroot }
+      only_if { node['platform_family'] == 'debian' }
     end
 
     template new_resource.options_file do

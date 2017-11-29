@@ -2,4 +2,4 @@
 RESOLVCONF=no
 
 # startup options for the server
-OPTIONS="-u <%= @user %> -t <%= @chroot %>"
+OPTIONS="<% if !@ipv6 %>-4 <% end %>-u <%= @user %> <% if @chroot %>-t <%= @chroot %><% end %>"

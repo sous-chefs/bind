@@ -19,14 +19,14 @@ describe 'bind::default' do
 
     it 'creates /var/named with mode 750 and owner named' do
       expect(chef_run).to create_directory('/var/named').with(
-        mode: 00750,
+        mode: '0750',
         user: 'named'
       )
     end
 
     it 'creates /etc/named with mode 750 and owner named' do
       expect(chef_run).to create_directory('/etc/named').with(
-        mode: 00750,
+        mode: '0750',
         user: 'named'
       )
     end
@@ -86,14 +86,14 @@ describe 'bind::default' do
 
     it 'creates /var/cache/bind with mode 750 and owner bind' do
       expect(chef_run).to create_directory('/var/cache/bind').with(
-        mode: 00750,
+        mode: '0750',
         user: 'bind'
       )
     end
 
     it 'creates /etc/bind with mode 750 and owner bind' do
       expect(chef_run).to create_directory('/etc/bind').with(
-        mode: 00750,
+        mode: '0750',
         user: 'bind'
       )
     end
