@@ -46,6 +46,12 @@ describe 'chroot recipe on ubuntu 14.04' do
   let(:mknod_null)    { chef_run.execute('mknod_null') }
   let(:mknod_random)  { chef_run.execute('mknod_random') }
   let(:mknod_urandom) { chef_run.execute('mknod_urandom') }
+  let(:chgrp_null)    { chef_run.execute('chgrp_dev_null')}
+  let(:chgrp_random)  { chef_run.execute('chgrp_dev_random')}
+  let(:chgrp_urandom) { chef_run.execute('chgrp_dev_urandom')}
+  let(:chmod_null)    { chef_run.execute('chmod_dev_null')}
+  let(:chmod_random)  { chef_run.execute('chmod_dev_random')}
+  let(:chmod_urandom) { chef_run.execute('chmod_dev_urandom')}
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_service('default')
@@ -70,33 +76,34 @@ describe 'chroot recipe on ubuntu 14.04' do
     expect(chef_run).to create_directory('/var/bind9/chroot/var/cache/bind/dynamic')
   end
 
-  %w(null random urandom).each do |d|
-    it "executes mknod #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to run_execute("mknod_#{d}")
-    end
-
-    it "doesn't execute chmod on #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to_not run_execute("chmod_dev_#{d}")
-    end
-
-    it "doesn't execute chgrp on #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to_not run_execute("chgrp_dev_#{d}")
-    end
-  end
-
-  it 'mknod_null sends a notification to execute' do
+  it 'run mknod_null actions and notifications' do
+    expect(chef_run).to run_execute('mknod_null')
+    expect(chef_run).to_not run_execute('chmod_dev_null')
+    expect(chef_run).to_not run_execute('chgrp_dev_null')
     expect(mknod_null).to notify('execute[chmod_dev_null]').to(:run).immediately
     expect(mknod_null).to notify('execute[chgrp_dev_null]').to(:run).immediately
+    expect(chgrp_null).to do_nothing
+    expect(chmod_null).to do_nothing
   end
 
-  it 'mknod_random sends a notification to execute' do
+  it 'run mknod_random actions and notifications' do
+    expect(chef_run).to run_execute('mknod_random')
+    expect(chef_run).to_not run_execute('chmod_dev_random')
+    expect(chef_run).to_not run_execute('chgrp_dev_random')
     expect(mknod_random).to notify('execute[chmod_dev_random]').to(:run).immediately
     expect(mknod_random).to notify('execute[chgrp_dev_random]').to(:run).immediately
+    expect(chgrp_random).to do_nothing
+    expect(chmod_random).to do_nothing
   end
 
-  it 'mknod_urandom sends a notification to execute' do
+  it 'run mknod_urandom actions and notifications' do
+    expect(chef_run).to run_execute('mknod_urandom')
+    expect(chef_run).to_not run_execute('chmod_dev_urandom')
+    expect(chef_run).to_not run_execute('chgrp_dev_urandom')
     expect(mknod_urandom).to notify('execute[chmod_dev_urandom]').to(:run).immediately
     expect(mknod_urandom).to notify('execute[chgrp_dev_urandom]').to(:run).immediately
+    expect(chgrp_urandom).to do_nothing
+    expect(chmod_urandom).to do_nothing
   end
 
   it 'starts the service' do
@@ -111,9 +118,6 @@ describe 'chroot recipe on centos 7' do
       platform: 'centos', version: '7.3.1611', step_into: ['bind_service']
     ).converge('bind_test::spec_chroot')
   end
-  let(:mknod_null)    { chef_run.execute('mknod_null') }
-  let(:mknod_random)  { chef_run.execute('mknod_random') }
-  let(:mknod_urandom) { chef_run.execute('mknod_urandom') }
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_service('default')
@@ -138,30 +142,38 @@ describe 'chroot recipe on centos 7' do
     expect(chef_run).to create_directory('/var/named/chroot/var/named/dynamic')
   end
 
-  %w(null random urandom).each do |d|
-    it "executes mknod #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to_not run_execute("mknod_#{d}")
-    end
-
-    it "doesn't execute chmod on #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to_not run_execute("chmod_dev_#{d}")
-    end
-
-    it "doesn't execute chgrp on #{::File.join('/var/bind9/chroot/dev', d)}" do
-      expect(chef_run).to_not run_execute("chgrp_dev_#{d}")
-    end
+  it 'does not run mknod_null actions and notifications' do
+    expect(chef_run).to_not run_execute('mknod_null')
   end
 
-  %w(random urandom).each do |d|
-    it "sends a notification to execute[chmod_dev_#{d}]" do
-      expect(mknod_null).to_not notify("execute[chmod_dev_#{d}]").to(:run).immediately
-      expect(mknod_null).to_not notify("execute[chgrp_dev_#{d}]").to(:run).immediately
-    end
+  it 'does not run mknod_random actions and notifications' do
+    expect(chef_run).to_not run_execute('mknod_random')
+  end
+
+  it 'run mknod_urandom actions and notifications' do
+    expect(chef_run).to_not run_execute('mknod_urandom')
   end
 
   it 'starts the service' do
+    expect(chef_run).to_not start_service('named')
+    expect(chef_run).to_not enable_service('named')
     expect(chef_run).to start_service('named-chroot')
     expect(chef_run).to enable_service('named-chroot')
+  end
+end
+
+describe 'chroot recipe on centos 6' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'centos', version: '6.9', step_into: ['bind_service']
+    ).converge('bind_test::spec_chroot')
+  end
+
+  it 'starts the service' do
+    expect(chef_run).to start_service('named')
+    expect(chef_run).to enable_service('named')
+    expect(chef_run).to_not start_service('named-chroot')
+    expect(chef_run).to_not enable_service('named-chroot')
   end
 end
 
