@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 ServerOptions = Struct.new(:name, :options)
 
-property :options, Array, default: []
 property :bind_config, String, default: 'default'
+property :options, Array, default: []
 
 action :create do
   bind_config = with_run_context :root do

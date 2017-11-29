@@ -1,6 +1,18 @@
 bind changelog
 ==============
 
+v2.1.0
+------
+* Add support for chrooted install
+* Chroot Supported platforms: CentOS/RedHat 6.x+, Debian 8.x+, Ubuntu 14.04 LTS
+* Chroot Incompatible platforms: Ubuntu 16.04 LTS [ubuntu/+source/bind9/+bug/1630025](https://bugs.launchpad.net/ubuntu/+source/bind9/+bug/1630025)
+* Updated rndc call to be compliant with current auto-configuration standards
+* Updated file paths using `::File,join()` method
+* Delayed all template creation to avoid file busy conflicts
+* Added `.kitchen.dokken.yml` for faster testing with [kitchen-dokken](https://github.com/someara/kitchen-dokken)
+* Added support for env var `CHEF_VERSION` to affect kitchen-dokken chef-client version
+* Supports chef-client version 12.21.26 and 13.6.4
+
 v2.0.1
 ------
 * Add `manage_serial` option to `bind_primary_zone_template` resource

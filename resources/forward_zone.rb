@@ -2,8 +2,8 @@
 ForwardZone = Struct.new(:name, :forwarders, :forward)
 
 property :bind_config, String, default: 'default'
-property :forwarders, Array, default: []
 property :forward, String, default: 'only', equal_to: %w(only first)
+property :forwarders, Array, default: []
 
 action :create do
   bind_config = with_run_context :root do
