@@ -251,6 +251,27 @@ bind_secondary_zone 'example.org' do
 end
 ```
 
+### Nameserver in chroot mode
+
+The `bind_service` and `bind_config` resources can accept a boolean `true` or `false` for `chroot`, declaring whether or not to install the BIND server in a chroot manner.
+If one provider declares this value, the other must match or the converge will fail. Currently all supported platforms except Ubuntu 16.04 LTS are supported with chrooted configuration.
+By default, this is set to `false`
+
+```ruby
+bind_service 'default' do
+  chroot true
+  action :create
+end
+
+bind_config 'default' do
+  chroot true
+  options [
+    'recursion no',
+    'allow-transfer { internal-dns; }'
+  ]
+end
+```
+
 ## Available Custom Resources
 
 ### `bind_service`
@@ -279,6 +300,8 @@ The following properties are supported:
 
 * `sysconfdir` - The system configuration directory where the named config will be located. The default is platform specific. Usually `/etc/named` or `/etc/bind`
 * `vardir` - The location for zone files and other data. The default is platform specific, usually `/var/named` or `/var/cache/bind`.
+* `chroot` - Boolean decleration to setup a chrooted nameserver installation. Defaults to `false`
+* `chroot_dir` - Define the chrooted base directory. Affects `sysconfdir` and `vardir` and is platform specific.
 * `package_name` - The package, or array of packages, needed to install the nameserver. Default is platform specific, usually includes bind and associated utility packages.
 * `run_user` - The user that the name server will run as. Defaults to `named`.
 * `run_group` - The groups that the name server will run as. Defaults to `named`.
@@ -322,6 +345,8 @@ end
 
 * `conf_file` - The desired full path to the main configuration file. Platform specific default.
 * `options_file` - The desired full path to the configuration file containing options. Platform specific default.
+* `chroot` - Configuring a chrooted nameserver. Defaults to `false`
+* `chroot_dir` - Define the chrooted base directory. Platform specific default.
 * `ipv6_listen` - Enables listening on IPv6 instances. Can be true or false. Defaults to true.
 * `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 * `query_log` - If provided will turn on general query logging. Should be the path to the desired log file. Default is empty and thus disabled. This will likely move to a separate resource in the future.
