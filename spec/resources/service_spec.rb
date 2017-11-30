@@ -131,15 +131,15 @@ describe 'chroot recipe on centos 7' do
   end
 
   it 'creates configuration directories' do
-    expect(chef_run).to create_directory('/var/named/chroot/etc/named').with(
-      user: 'named',
+    expect(chef_run).to create_directory('/var/named/chroot').with(
+      user: 'root',
       group: 'named'
     )
-    expect(chef_run).to create_directory('/var/named/chroot/var/named')
-    expect(chef_run).to create_directory('/var/named/chroot/var/named/primary')
-    expect(chef_run).to create_directory('/var/named/chroot/var/named/secondary')
-    expect(chef_run).to create_directory('/var/named/chroot/var/named/data')
-    expect(chef_run).to create_directory('/var/named/chroot/var/named/dynamic')
+    expect(chef_run).to create_directory('/var/named')
+    expect(chef_run).to create_directory('/var/named/primary')
+    expect(chef_run).to create_directory('/var/named/secondary')
+    expect(chef_run).to create_directory('/var/named/data')
+    expect(chef_run).to create_directory('/var/named/dynamic')
   end
 
   it 'does not run mknod_null actions and notifications' do

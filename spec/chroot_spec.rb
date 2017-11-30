@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe 'bind_test::chroot' do
-  context 'on CentOS 6 chrooted' do
+  context 'on CentOS 6' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
         platform: 'centos', version: '6.9', step_into: %w(
@@ -33,8 +33,12 @@ describe 'bind_test::chroot' do
       end
     end
 
+    it 'renders file /var/named/primary/db.sub.example.com' do
+      expect(chef_run).to render_file('/var/named/primary/db.sub.example.com')
+    end
+
     it 'notifies service[named]' do
-      config_template = chef_run.template('/var/named/chroot/etc/named/named.options')
+      config_template = chef_run.template('/etc/named/named.options')
       expect(config_template).to notify('bind_service[default]').to(:restart)
     end
 
@@ -72,13 +76,13 @@ describe 'bind_test::chroot' do
           file "named.ca";
         };
       EOF
-      expect(chef_run).to render_file('/var/named/chroot/etc/named.conf').with_content { |content|
+      expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
         expect(content).to include stanza
       }
     end
   end
 
-  context 'on CentOS 7 chrooted' do
+  context 'on CentOS 7' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
         platform: 'centos', version: '7.3.1611', step_into: %w(
@@ -110,49 +114,26 @@ describe 'bind_test::chroot' do
       end
     end
 
-    it 'creates /var/named/chroot/var/named with mode 750 and owner named' do
-      expect(chef_run).to create_directory('/var/named/chroot/var/named').with(
-        mode: '0750',
-        user: 'named'
-      )
+    %w(named.options named.rfc1912.zones).each do |named_file|
+      it "renders file #{::File.join('/etc/named', named_file)}" do
+        expect(chef_run).to render_file(::File.join('/etc/named', named_file))
+      end
     end
 
-    it 'creates /var/named/chroot/var/named/dynamic with mode 750 and owner named' do
-      expect(chef_run).to create_directory('/var/named/chroot/var/named/dynamic').with(
-        mode: '0750',
-        user: 'named'
-      )
-    end
-
-    it 'creates /var/named/chroot/etc/named with mode 750 and owner named' do
-      expect(chef_run).to create_directory('/var/named/chroot/etc/named').with(
-        mode: '0750',
-        user: 'named'
-      )
-    end
-
-    it 'renders file /var/named/chroot/etc/named/named.options' do
-      expect(chef_run).to render_file('/var/named/chroot/etc/named/named.options')
-    end
-
-    it 'renders file /var/named/chroot/etc/named/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/var/named/chroot/etc/named/named.rfc1912.zones')
-    end
-
-    it 'renders file /var/named/chroot/etc/named.conf with included files' do
-      expect(chef_run).to render_file('/var/named/chroot/etc/named.conf').with_content(%r{include "/etc/named/named.options"})
-      expect(chef_run).to render_file('/var/named/chroot/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
+    it 'renders file /etc/named.conf with included files' do
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.options"})
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
     end
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
-      it "it creates cookbook file /var/named/chroot/var/named/#{var_file}" do
-        expect(chef_run).to create_cookbook_file("/var/named/chroot/var/named/#{var_file}")
+      it "it creates cookbook file #{::File.join('/var/named', var_file)}" do
+        expect(chef_run).to create_cookbook_file(::File.join('/var/named', var_file))
       end
     end
 
     %w(data primary secondary).each do |subdir|
-      it "creates subdirectory /var/named/chroot/var/named/#{subdir}" do
-        expect(chef_run).to create_directory("/var/named/chroot/var/named/#{subdir}")
+      it "creates subdirectory #{::File.join('/var/named', subdir)}" do
+        expect(chef_run).to create_directory(::File.join('/var/named', subdir))
       end
     end
 
@@ -161,12 +142,12 @@ describe 'bind_test::chroot' do
     end
 
     it 'notifies service[named-chroot]' do
-      config_template = chef_run.template('/var/named/chroot/etc/named/named.options')
+      config_template = chef_run.template('/etc/named/named.options')
       expect(config_template).to notify('bind_service[default]').to(:restart)
     end
   end
 
-  context 'on Ubuntu 14.04 chrooted' do
+  context 'on Ubuntu 14.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
         platform: 'ubuntu', version: '14.04', step_into: %w(

@@ -28,16 +28,16 @@ module BindCookbook
     def rhel_property_for(property_name, chroot)
       {
         chroot_dir:    chroot ? '/var/named/chroot' : nil,
-        sysconfdir:    chroot ? '/var/named/chroot/etc/named' : '/etc/named',
-        vardir:        chroot ? '/var/named/chroot/var/named' : '/var/named',
-        dynamicdir:    chroot ? '/var/named/chroot/var/named/dynamic' : '/var/named/dynamic',
+        sysconfdir:    '/etc/named',
+        vardir:        '/var/named',
+        dynamicdir:    '/var/named/dynamic',
         packages:      chroot ? ['bind-chroot', 'bind-utils', 'bind-libs'] : ['bind', 'bind-utils', 'bind-libs'],
         run_user:      'named',
         run_group:     'named',
-        options_file:  chroot ? '/var/named/chroot/etc/named/named.options' : '/etc/named/named.options',
-        conf_file:     chroot ? '/var/named/chroot/etc/named.conf' : '/etc/named.conf',
+        options_file:  '/etc/named/named.options',
+        conf_file:     '/etc/named.conf',
         service_name:  chroot && node['platform_version'].to_s >= '7.0' ? 'named-chroot' : 'named',
-        rndc_key_file: chroot ? '/var/named/chroot/etc/rndc.key' : '/etc/rndc.key',
+        rndc_key_file: '/etc/rndc.key',
       }[property_name]
     end
   end

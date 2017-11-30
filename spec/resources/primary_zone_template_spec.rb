@@ -120,5 +120,18 @@ describe 'zones with managed serial numbers' do
       attribute = chef_run.node.normal['bind']['zone']['custom.example.com']
       expect(attribute['serial']).to eq '101'
     end
+
+    it 'changes the serial number when managed' do
+      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      attribute = chef_run.node.normal['bind']['zone']['nochange.example.com']
+      expect(attribute['serial']).to eq '999'
+    end
+
+    it 'uses the custom resource' do
+      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      expect(chef_run).to render_file('/var/named/primary/db.nochange.example.com')
+      expect(chef_run).to create_bind_primary_zone_template('nochange.example.com')
+      expect(chef_run).to create_bind_primary_zone_template('custom.example.com')
+    end
   end
 end

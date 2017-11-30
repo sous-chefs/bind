@@ -11,6 +11,10 @@ describe 'bind::default' do
       ).converge(described_recipe)
     end
 
+    it 'uses bind_acl resource' do
+      expect(chef_run).to create_bind_acl('trusted-nets')
+    end
+
     %w(bind bind-utils bind-libs).each do |bind_package|
       it "installs package #{bind_package}" do
         expect(chef_run).to install_package(bind_package)
