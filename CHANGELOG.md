@@ -1,7 +1,7 @@
 bind changelog
 ==============
 
-v2.1.0
+v2.1.1
 ------
 * According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters. Setting first column width to 65 characters
 
