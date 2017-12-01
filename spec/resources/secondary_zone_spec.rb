@@ -10,6 +10,7 @@ describe 'adding secondary zones' do
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_secondary_zone('example.com')
+    expect(chef_run).to create_bind_secondary_zone('example.org')
   end
 
   it 'will render secondary with no options' do

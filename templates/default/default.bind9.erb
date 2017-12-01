@@ -1,0 +1,5 @@
+# run resolvconf?
+RESOLVCONF=no
+
+# startup options for the server
+OPTIONS="<% if !@ipv6 %>-4 <% end %>-u <%= @user %> <% if @chroot %>-t <%= @chroot %><% end %>"

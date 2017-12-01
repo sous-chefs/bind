@@ -10,6 +10,7 @@ describe 'adding forward only zones' do
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_forward_zone('example.com')
+    expect(chef_run).to create_bind_forward_zone('example.org')
   end
 
   it 'will render forwarder with no options' do
