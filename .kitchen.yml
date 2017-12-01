@@ -25,3 +25,8 @@ suites:
   run_list: ['recipe[bind::default]']
 - name: resources
   run_list: ['recipe[bind_test]']
+- name: chroot
+  excludes:
+    - ubuntu-16.04
+  run_list:
+    - recipe[bind_test::chroot]
