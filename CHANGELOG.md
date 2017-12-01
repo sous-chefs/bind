@@ -3,6 +3,10 @@ bind changelog
 
 v2.1.0
 ------
+* According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters. Setting first column width to 65 characters
+
+v2.1.0
+------
 * Add support for chrooted install
 * Chroot Supported platforms: CentOS/RedHat 6.x+, Debian 8.x+, Ubuntu 14.04 LTS
 * Chroot Incompatible platforms: Ubuntu 16.04 LTS [ubuntu/+source/bind9/+bug/1630025](https://bugs.launchpad.net/ubuntu/+source/bind9/+bug/1630025)

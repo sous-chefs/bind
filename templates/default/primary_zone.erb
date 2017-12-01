@@ -17,7 +17,7 @@ $TTL <%= @default_ttl %>
 <% end %>
 
 <% @zone_records.each do |record| %>
-<%= "%-20s %-5s %-2s %-10s %-s" % [
+<%= "%-64s %-5s %-2s %-10s %-s" % [
   '',
   record.fetch(:ttl, ''),
   record.fetch(:class, 'IN'),
@@ -28,7 +28,7 @@ $TTL <%= @default_ttl %>
 <% end %>
 
 <% @records.each do |record| %>
-<%= "%-20s %-5s %-2s %-10s %-s" % [
+<%= "%-64s %-5s %-2s %-10s %-s" % [
   record[:owner],
   record.fetch(:ttl, ''),
   record.fetch(:class, 'IN'),
