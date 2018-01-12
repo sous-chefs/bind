@@ -146,6 +146,12 @@ action :start do
   end
 end
 
+action :reload do
+  service new_resource.service_name do
+    action :reload
+  end
+end
+
 action :restart do
   service new_resource.service_name do
     action :restart

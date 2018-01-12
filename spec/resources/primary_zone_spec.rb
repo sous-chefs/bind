@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone)
+      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone bind_service)
     ).converge('bind_test::spec_primary_zone')
   end
 
@@ -21,7 +21,7 @@ describe 'adding primary zones' do
   end
 
   it 'will place the config in the named config' do
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/primary.zones').with_content { |content|
       expect(content).to include 'zone "example.com" IN {'
       expect(content).to include 'file "primary/db.example.com";'
     }
@@ -35,8 +35,15 @@ describe 'adding primary zones' do
         allow-transfer { none; };
       };
     EOF
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/primary.zones').with_content { |content|
       expect(content).to include stanza
     }
+  end
+
+  it 'notifies reload bind_service[default]' do
+    example_org = chef_run.cookbook_file('example.org')
+    example_com = chef_run.cookbook_file('example.com')
+    expect(example_org).to notify('bind_service[default]').to(:reload).delayed
+    expect(example_com).to notify('bind_service[default]').to(:reload).delayed
   end
 end

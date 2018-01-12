@@ -1,6 +1,13 @@
 bind changelog
 ==============
 
+v2.2.0
+------
+* Change restart/reload behavior
+* Reload on zone change
+* Restart on named service configuration change
+* Using include directive to include forward, master, secondary zone definitions
+
 v2.1.0
 ------
 * Add support for chrooted install

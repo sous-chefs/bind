@@ -21,7 +21,7 @@ describe 'adding secondary zones' do
         masters { 10.1.1.1; };
       };
     EOF
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/secondary.zones').with_content { |content|
       expect(content).to include stanza
     }
   end
@@ -35,7 +35,7 @@ describe 'adding secondary zones' do
         zone-statistics terse;
       };
     EOF
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/secondary.zones').with_content { |content|
       expect(content).to include stanza
     }
   end

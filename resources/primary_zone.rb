@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-PrimaryZone = Struct.new(:name, :options)
+PrimaryZone = Struct.new(:name, :options, :type)
 
 property :bind_config, String, default: 'default'
 property :options, Array, default: []
@@ -19,14 +19,14 @@ action :create do
     group bind_service.run_group
     mode 0o440
     action :create
-    notifies :restart, "bind_service[#{bind_service.name}]", :delayed
+    notifies :reload, "bind_service[#{bind_service.name}]", :delayed
   end
 
-  bind_config_template = with_run_context :root do
-    find_resource!(:template, bind_config.conf_file)
+  master_config_template = with_run_context :root do
+    find_resource!(:template, bind_config.primary_zones)
   end
 
-  bind_config_template.variables[:primary_zones] << PrimaryZone.new(
-    new_resource.name, new_resource.options
+  master_config_template.variables[:zones] << PrimaryZone.new(
+    new_resource.name, new_resource.options, 'master'
   )
 end

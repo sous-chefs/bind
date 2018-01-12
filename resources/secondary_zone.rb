@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-SecondaryZone = Struct.new(:name, :primaries, :options)
+SecondaryZone = Struct.new(:name, :primaries, :options, :type)
 
 property :bind_config, String, default: 'default'
 property :options, Array, default: []
@@ -10,11 +10,11 @@ action :create do
     find_resource!(:bind_config, new_resource.bind_config)
   end
 
-  bind_config_template = with_run_context :root do
-    find_resource!(:template, bind_config.conf_file)
+  slave_config_template = with_run_context :root do
+    find_resource!(:template, bind_config.secondary_zones)
   end
 
-  bind_config_template.variables[:secondary_zones] << SecondaryZone.new(
-    new_resource.name, new_resource.primaries, new_resource.options
+  slave_config_template.variables[:zones] << SecondaryZone.new(
+    new_resource.name, new_resource.primaries, new_resource.options, 'slave'
   )
 end
