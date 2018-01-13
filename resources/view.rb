@@ -1,5 +1,11 @@
 # frozen_string_literal: true
-View = Struct.new(:name, :options)
+View = Struct.new(
+  :name,
+  :options,
+  :match_clients,
+  :match_destinations,
+  :match_recursive_only
+)
 
 property :bind_config, String, default: 'default'
 property :options, Array, default: []
@@ -18,6 +24,10 @@ action :create do
   end
 
   bind_config_template.variables[:views] << View.new(
-    new_resource.name, new_resource.options
+    new_resource.name,
+    new_resource.options,
+    new_resource.match_clients,
+    new_resource.match_destinations,
+    new_resource.match_recursive_only
   )
 end
