@@ -28,14 +28,13 @@ describe 'adding a single view' do
     }
   end
 
-  it 'will add options to the zone' do
-    stanza = <<~EOF
-      zone "example.org" IN {
-        type master;
-        file "primary/db.example.org";
-        allow-transfer { none; };
-      };
-    EOF
+  it 'will add a zone with no view name to the default view' do
+    stanza = <<~CONFIG_FRAGMENT
+      view "default" {
+
+        zone "example.com" IN {
+          type master;
+    CONFIG_FRAGMENT
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
       expect(content).to include stanza
     }

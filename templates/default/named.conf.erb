@@ -29,7 +29,7 @@ view "<%= view.name %>" {
       secondary_zones: @secondary_zones,
       forward_zones: @forward_zones
     }
-  ).gsub(/^/, '    ')
+  ).gsub(/^(.+)$/, '  \1')
 %>
 };
 <% end %>
