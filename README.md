@@ -14,6 +14,8 @@ A chef cookbook to manage BIND servers and zones.
   * [Internal recursive nameserver](#internal-recursive-nameserver)
   * [Authoritative primary nameserver](#authoritative-primary-nameserver)
   * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+  * [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
+  * [Nameserver in chroot mode](#nameserver-in-chroot-mode)
 * [Available Custom Resources](#available-custom-resources)
   * [`bind_service`](#bind_service)
     * [Example](#example)
@@ -21,27 +23,30 @@ A chef cookbook to manage BIND servers and zones.
   * [`bind_config`](#bind_config)
     * [Examples](#examples)
     * [Properties](#properties-1)
-  * [`bind_primary_zone`](#bind_primary_zone)
+  * [`bind_view`](#bind_view)
     * [Examples](#examples-1)
     * [Properties](#properties-2)
-  * [`bind_primary_zone_template`](#bind_primary_zone_template)
+  * [`bind_primary_zone`](#bind_primary_zone)
     * [Examples](#examples-2)
     * [Properties](#properties-3)
-    * [A note on serial numbers](#a-note-on-serial-numbers)
-  * [`bind_secondary_zone`](#bind_secondary_zone)
+  * [`bind_primary_zone_template`](#bind_primary_zone_template)
     * [Examples](#examples-3)
     * [Properties](#properties-4)
-  * [`bind_forwarder`](#bind_forwarder)
+    * [A note on serial numbers](#a-note-on-serial-numbers)
+  * [`bind_secondary_zone`](#bind_secondary_zone)
     * [Examples](#examples-4)
     * [Properties](#properties-5)
-  * [`bind_acl`](#bind_acl)
+  * [`bind_forwarder`](#bind_forwarder)
     * [Examples](#examples-5)
     * [Properties](#properties-6)
-  * [`bind_key`](#bind_key)
-    * [Properties](#properties-7)
-  * [`bind_server`](#bind_server)
+  * [`bind_acl`](#bind_acl)
     * [Examples](#examples-6)
+    * [Properties](#properties-7)
+  * [`bind_key`](#bind_key)
     * [Properties](#properties-8)
+  * [`bind_server`](#bind_server)
+    * [Examples](#examples-7)
+    * [Properties](#properties-9)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
@@ -80,6 +85,7 @@ are presented here:
 - Internal recursive nameserver
 - Authoritative primary nameserver
 - Authoritative secondary nameserver
+- Using views for internal recursion and external authoritative name service
 
 ### Internal recursive nameserver
 
@@ -251,6 +257,47 @@ bind_secondary_zone 'example.org' do
 end
 ```
 
+### Using views for internal recursion and external authoritative name service
+
+Using the `bind_view` resource allows you to configure one or more views in the
+configuration. When using `bind_view` you will need to tell the zone resources
+which view they should be configured in. If this is omitted the zone will be
+configured in the `bind_config` property `default_view` (which defaults to
+`default`).
+
+
+```ruby
+bind_service 'default'
+
+bind_config 'default' do
+  default_view 'external'
+end
+
+bind_view 'internal' do
+  match_clients ['10.0.0.0/8']
+  options [
+    'recursion yes'
+  ]
+end
+
+bind_primary_zone 'internal-example.com' do
+  view 'internal'
+  zone_name 'example.com'
+end
+
+bind_primary_zone 'secret.example.com' do
+  view 'internal'
+end
+
+bind_view 'external' do
+  options [
+    'recursion no'
+  ]
+end
+
+bind_primary_zone 'example.com'
+```
+
 ### Nameserver in chroot mode
 
 The `bind_service` and `bind_config` resources can accept a boolean `true` or `false` for `chroot`, declaring whether or not to install the BIND server in a chroot manner.
@@ -354,6 +401,31 @@ end
 * `query_log_versions` - Number of rotated query logs to keep on the system. Defaults to 2.
 * `query_log_options` - Array of additional query log options. Defaults to empty array.
 * `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
+* `default_view` - The name of the default view to configure zones within when views are used. Defaults to 'default'.
+
+### `bind_view`
+
+The `bind_view` resource configures a BIND view. This allows you to serve different content to different clients.
+
+#### Examples
+
+```ruby
+bind_view 'internal' do
+  match_clients ['10.0.0.0/8']
+  options ['recursion yes']
+end
+
+bind_view 'external' do
+  options ['recursion no']
+end
+```
+
+#### Properties
+
+* `match_clients` - Serve the content of this view to any client matching an IP address in this list. Defaults to any.
+* `match_destinations` - Server the content of this view to any request arriving on this IP address. Defaults to any.
+* `match_recursive_only` - Match on any recursive requests. Defaults to false.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 
 ### `bind_primary_zone`
 
@@ -378,6 +450,9 @@ end
 #### Properties
 
 * `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+* `file_name` - Name of the file to store the zone in. Defaults to the name property. Used when you wish to have the same zone with different content in different views.
+* `zone_name` - The zone name of the zone. Used only if the name property does not match the zone name.
 
 ### `bind_primary_zone_template`
 
@@ -417,6 +492,9 @@ end
 * `manage_serial` - A boolean indicating if we should manage the serial number. Defaults to false. When true persists the current serial number and a digest of the current zone contents into the node object. If the records change the serial number will be incremented. The default serial number used is the value of soa[:serial].
 * `template_cookbook` - The cookbook to locate the primary zone template file. Defaults to 'bind'. You can override this to change the structure of the zone file.
 * `template_name` - The name of the primary zone template file within a cookbook. Defaults to 'primary\_zone.erb'
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+* `file_name` - Name of the file to store the zone in. Defaults to the name property. Used when you wish to have the same zone with different content in different views.
+* `zone_name` - The zone name of the zone. Used only if the name property does not match the zone name.
 
 #### A note on serial numbers
 
@@ -476,6 +554,9 @@ end
 
 * `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
 * `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+* `file_name` - Name of the file to store the zone in. Defaults to the name property. Used when you wish to have the same zone with different content in different views.
+* `zone_name` - The zone name of the zone. Used only if the name property does not match the zone name.
 
 ### `bind_forwarder`
 
@@ -503,7 +584,7 @@ end
   be forwarded to. Defaults to an empty list. (Which if set will disable
   forwarding for this zone if globally configured).
 * `forward` - Set to 'first' if you wish to try a regular lookup if forwaridng fails. 'only' will cause the query to fail if forwarding fails. Default is 'only'.
-
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
 
 ### `bind_acl`
 
