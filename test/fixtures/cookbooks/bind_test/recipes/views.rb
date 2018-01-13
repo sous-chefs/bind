@@ -27,17 +27,13 @@ bind_primary_zone_template 'internal-sub.example.com' do
   zone_name 'sub.example.com'
   records [
     { owner: 'www', type: 'A', ttl: 100, rdata: '10.2.1.1' },
-    { owner: 'www', type: 'A', ttl: 100, rdata: '10.1.1.1' },
-    { owner: 'www2', type: 'A', ttl: 100, rdata: '10.2.1.1' },
-    { owner: 'www2', type: 'A', ttl: 100, rdata: '10.1.1.1' },
-    { owner: 'www2', type: 'A', ttl: 100, rdata: '10.4.1.1' },
-    { owner: 'www', type: 'A', ttl: 100, rdata: '10.4.1.1' },
     { type: 'MX', rdata: '20 mx2.example.com.' },
     { type: 'MX', rdata: '10 mx1.example.com.' },
     { type: 'NS', rdata: 'ns1.example.com.' },
     { type: 'NS', rdata: 'ns0.example.com.' },
     { type: 'NS', rdata: 'ns3.example.com.' },
     { type: 'A', rdata: '10.0.0.1' },
+    { type: 'TXT', rdata: 'internal' }
   ]
 
   soa serial: '5'
@@ -58,6 +54,7 @@ bind_primary_zone_template 'external-sub.example.com' do
     { type: 'NS', rdata: 'ns0.example.com.' },
     { type: 'NS', rdata: 'ns3.example.com.' },
     { type: 'A', rdata: '192.168.1.2' },
+    { type: 'TXT', rdata: 'external' }
   ]
 
   soa serial: '10'
