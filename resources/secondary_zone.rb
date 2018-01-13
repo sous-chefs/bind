@@ -5,12 +5,14 @@ SecondaryZone = Struct.new(:name, :primaries, :options, :view)
 property :bind_config, String, default: 'default'
 property :options, Array, default: []
 property :primaries, Array, required: true
-property :view, String, default: 'default'
+property :view, String
 
 action :create do
   bind_config = with_run_context :root do
     find_resource!(:bind_config, new_resource.bind_config)
   end
+
+  new_resource.view = bind_config.default_view unless new_resource.view
 
   bind_config_template = with_run_context :root do
     find_resource!(:template, bind_config.conf_file)

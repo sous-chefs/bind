@@ -9,7 +9,7 @@ property :soa, Hash, default: {}
 property :records, Array, default: []
 property :default_ttl, [String, Integer], default: 86400
 property :options, Array, default: []
-property :view, String, default: 'default'
+property :view, String
 
 property :template_cookbook, String, default: 'bind'
 property :template_name, String, default: 'primary_zone.erb'
@@ -20,6 +20,8 @@ action :create do
   bind_config = with_run_context :root do
     find_resource!(:bind_config, new_resource.bind_config)
   end
+
+  new_resource.view = bind_config.default_view unless new_resource.view
 
   bind_service = with_run_context :root do
     find_resource!(:bind_service, bind_config.bind_service)
