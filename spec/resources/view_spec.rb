@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'adding a single view' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone)
+      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_view bind_primary_zone)
     ).converge('bind_test::spec_single_view')
   end
 
