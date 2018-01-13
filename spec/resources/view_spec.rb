@@ -72,3 +72,37 @@ describe 'adding a single view with options' do
     }
   end
 end
+
+describe 'adding multiple views' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'centos', version: '7.3.1611', step_into: %w(
+        bind_config bind_view bind_primary_zone
+      )
+    ).converge('bind_test::spec_multiple_views')
+  end
+
+  it 'will add two views to the resource collection' do
+    expect(chef_run).to create_bind_view('internal')
+    expect(chef_run).to create_bind_view('external')
+  end
+
+  it 'will configure internal zones in the internal view' do
+    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(content).to match(
+        /^view "internal"(?:.*?)^\s+zone "internal.example.com"(?:.*?)^};/m
+      )
+      expect(content).to match(
+        /^view "internal"(?:.*?)^\s+zone "example.com"(?:.*?)^};/m
+      )
+    }
+  end
+
+  it 'will configure external zones in the external view' do
+    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(content).to match(
+        /^view "external"(?:.*?)^\s+zone "example.com"(?:.*?)^};/m
+      )
+    }
+  end
+end
