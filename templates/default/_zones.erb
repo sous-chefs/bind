@@ -2,7 +2,7 @@
 
 zone "<%= zone.name %>" IN {
   type master;
-  file "primary/db.<%= zone.name %>";
+  file "primary/db.<%= zone.file_name %>";
   <% zone.options.each do |option| -%>
   <%= option %>;
   <% end -%>
@@ -12,7 +12,7 @@ zone "<%= zone.name %>" IN {
 
 zone "<%= zone.name %>" IN {
   type slave;
-  file "secondary/db.<%= zone.name %>";
+  file "secondary/db.<%= zone.file_name %>";
   masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
   <% zone.options.each do |option| -%>
   <%= option %>;

@@ -16,8 +16,10 @@ end
 
 bind_primary_zone 'internal.example.com'
 
-bind_primary_zone 'example.com' do
+bind_primary_zone_template 'internal-example.com' do
   view 'internal'
+  zone_name 'example.com'
+  records []
 end
 
 bind_view 'external' do
@@ -26,6 +28,7 @@ bind_view 'external' do
   ]
 end
 
-bind_primary_zone 'example.com' do
+bind_primary_zone 'external-example.com' do
   view 'external'
+  zone_name 'example.com'
 end

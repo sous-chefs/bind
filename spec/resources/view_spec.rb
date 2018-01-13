@@ -77,7 +77,7 @@ describe 'adding multiple views' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '7.3.1611', step_into: %w(
-        bind_config bind_view bind_primary_zone
+        bind_config bind_view bind_primary_zone bind_primary_zone_template
       )
     ).converge('bind_test::spec_multiple_views')
   end
@@ -85,6 +85,19 @@ describe 'adding multiple views' do
   it 'will add two views to the resource collection' do
     expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_view('external')
+  end
+
+  it 'render view based filenames' do
+    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(content).to include 'file "primary/db.internal-example.com";'
+      expect(content).to include 'file "primary/db.external-example.com";'
+    }
+  end
+
+  it 'will create the zone files' do
+    expect(chef_run).to render_file('/var/named/primary/db.internal.example.com')
+    expect(chef_run).to render_file('/var/named/primary/db.internal-example.com')
+    expect(chef_run).to render_file('/var/named/primary/db.external-example.com')
   end
 
   it 'will configure internal zones in the internal view' do
