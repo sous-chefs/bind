@@ -11,8 +11,7 @@ bind_view 'internal'
 
 bind_primary_zone 'example.com'
 
-bind_primary_zone 'example.org' do
-  options [
-    'allow-transfer { none; }',
-  ]
+bind_secondary_zone 'example.org' do
+  view 'internal'
+  primaries ['10.0.1.1']
 end

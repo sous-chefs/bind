@@ -50,8 +50,8 @@ view "<%= view.name %>" {
 <%=
   render(
     "_zones.erb", variables: {
-      primary_zones: @primary_zones.select { |zone| zone.view == view.name }, # TODO: Select by zone
-      secondary_zones: @secondary_zones,
+      primary_zones: @primary_zones.select { |zone| zone.view == view.name },
+      secondary_zones: @secondary_zones.select { |zone| zone.view == view.name },
       forward_zones: @forward_zones
     }
   ).gsub(/^(.+)$/, '  \1')

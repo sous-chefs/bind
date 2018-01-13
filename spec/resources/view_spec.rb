@@ -4,27 +4,27 @@ require 'spec_helper'
 describe 'adding a single view' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_view bind_primary_zone)
+      platform: 'centos', version: '7.3.1611', step_into: %w(
+        bind_config
+        bind_view
+        bind_primary_zone
+        bind_secondary_zone
+      )
     ).converge('bind_test::spec_single_view')
   end
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_primary_zone('example.com')
-    expect(chef_run).to create_bind_primary_zone('example.org')
-    expect(chef_run).to create_cookbook_file('example.org')
-  end
-
-  it 'will copy the zone file from the test cookbook' do
-    expect(chef_run).to render_file('/var/named/primary/db.example.com').with_content { |content|
-      expect(content).to include '$ORIGIN example.com.'
-    }
+    expect(chef_run).to create_bind_secondary_zone('example.org')
+    expect(chef_run).to create_cookbook_file('example.com')
   end
 
   it 'will place the config in the named config' do
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
       expect(content).to include 'zone "example.com" IN {'
       expect(content).to include 'file "primary/db.example.com";'
+      expect(content).to include 'file "secondary/db.example.org";'
     }
   end
 
