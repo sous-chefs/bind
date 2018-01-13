@@ -125,7 +125,8 @@ action :create do
         secondary_zones: [],
         forward_zones: [],
         servers: [],
-        keys: []
+        keys: [],
+        views: []
       )
       action :nothing
       delayed_action :create

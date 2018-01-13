@@ -19,35 +19,29 @@ key "<%= key.name %>" {
 };
 
 <% end %>
-<% @primary_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type master;
-  file "primary/db.<%= zone.name %>";
-  <% zone.options.each do |option| -%>
-  <%= option %>;
-  <% end -%>
+<% if @views.length > 0 %>
+<% @views.each do |view| %>
+view "<%= view.name %>" {
+<%=
+  render(
+    "_zones.erb", variables: {
+      primary_zones: @primary_zones, # TODO: Select by zone
+      secondary_zones: @secondary_zones,
+      forward_zones: @forward_zones
+    }
+  ).gsub(/^/, '    ')
+%>
 };
-
-<% end -%>
-<% @secondary_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type slave;
-  file "secondary/db.<%= zone.name %>";
-  masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
-  <% zone.options.each do |option| -%>
-  <%= option %>;
-  <% end -%>
-};
-
-<% end -%>
-<% @forward_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type forward;
-  forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
-  forward <%= zone.forward %>;
-};
-
-<% end -%>
+<% end %>
+<% else %>
+<%=
+  render "_zones.erb", variables: {
+    primary_zones: @primary_zones,
+    secondary_zones: @secondary_zones,
+    forward_zones: @forward_zones
+  }
+%>
+<% end %>
 zone "." IN {
   type hint;
   file "named.ca";
