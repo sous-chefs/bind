@@ -50,7 +50,7 @@ view "<%= view.name %>" {
 <%=
   render(
     "_zones.erb", variables: {
-      primary_zones: @primary_zones, # TODO: Select by zone
+      primary_zones: @primary_zones.select { |zone| zone.view == view.name }, # TODO: Select by zone
       secondary_zones: @secondary_zones,
       forward_zones: @forward_zones
     }

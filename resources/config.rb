@@ -6,6 +6,7 @@ property :conf_file, String, default: lazy { default_property_for(:conf_file, ch
 property :bind_service, String, default: 'default'
 property :ipv6_listen, [true, false], default: true
 property :options, Array, default: []
+property :default_view, String, default: 'default'
 
 property :query_log, [String, nil], default: nil
 property :query_log_versions, [String, Integer], default: 2

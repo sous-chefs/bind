@@ -9,7 +9,7 @@ describe 'adding a single view' do
   end
 
   it 'uses the custom resource' do
-    expect(chef_run).to create_bind_view('default')
+    expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_primary_zone('example.com')
     expect(chef_run).to create_bind_primary_zone('example.org')
     expect(chef_run).to create_cookbook_file('example.org')
@@ -30,7 +30,7 @@ describe 'adding a single view' do
 
   it 'will add a zone with no view name to the default view' do
     stanza = <<~CONFIG_FRAGMENT
-      view "default" {
+      view "internal" {
 
         zone "example.com" IN {
           type master;

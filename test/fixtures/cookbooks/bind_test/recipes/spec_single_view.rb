@@ -3,9 +3,11 @@ bind_service 'default' do
   action [:create, :start]
 end
 
-bind_config 'default'
+bind_config 'default' do
+  default_view 'internal'
+end
 
-bind_view 'default'
+bind_view 'internal'
 
 bind_primary_zone 'example.com'
 

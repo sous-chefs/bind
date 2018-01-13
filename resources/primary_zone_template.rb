@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'digest'
 
-PrimaryZone = Struct.new(:name, :options)
+PrimaryZone = Struct.new(:name, :options, :view)
 
 property :bind_config, String, default: 'default'
 
@@ -9,6 +9,7 @@ property :soa, Hash, default: {}
 property :records, Array, default: []
 property :default_ttl, [String, Integer], default: 86400
 property :options, Array, default: []
+property :view, String, default: 'default'
 
 property :template_cookbook, String, default: 'bind'
 property :template_name, String, default: 'primary_zone.erb'
@@ -87,6 +88,6 @@ action :create do
   end
 
   bind_config_template.variables[:primary_zones] << PrimaryZone.new(
-    new_resource.name, new_resource.options
+    new_resource.name, new_resource.options, new_resource.view
   )
 end
