@@ -52,7 +52,7 @@ view "<%= view.name %>" {
     "_zones.erb", variables: {
       primary_zones: @primary_zones.select { |zone| zone.view == view.name },
       secondary_zones: @secondary_zones.select { |zone| zone.view == view.name },
-      forward_zones: @forward_zones
+      forward_zones: @forward_zones.select { |zone| zone.view == view.name }
     }
   ).gsub(/^(.+)$/, '  \1')
 %>

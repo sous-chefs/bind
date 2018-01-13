@@ -9,6 +9,7 @@ describe 'adding a single view' do
         bind_view
         bind_primary_zone
         bind_secondary_zone
+        bind_forward_zone
       )
     ).converge('bind_test::spec_single_view')
   end
@@ -17,6 +18,7 @@ describe 'adding a single view' do
     expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_primary_zone('example.com')
     expect(chef_run).to create_bind_secondary_zone('example.org')
+    expect(chef_run).to create_bind_forward_zone('example.net')
     expect(chef_run).to create_cookbook_file('example.com')
   end
 
@@ -25,6 +27,7 @@ describe 'adding a single view' do
       expect(content).to include 'zone "example.com" IN {'
       expect(content).to include 'file "primary/db.example.com";'
       expect(content).to include 'file "secondary/db.example.org";'
+      expect(content).to include %(zone "example.net" IN {\n    type forward;)
     }
   end
 

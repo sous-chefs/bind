@@ -15,3 +15,7 @@ bind_secondary_zone 'example.org' do
   view 'internal'
   primaries ['10.0.1.1']
 end
+
+bind_forward_zone 'example.net' do
+  forwarders ['10.1.1.1']
+end
