@@ -22,6 +22,9 @@ key "<%= key.name %>" {
 <% if @views.length > 0 %>
 <% @views.each do |view| %>
 view "<%= view.name %>" {
+  <% @per_view_additional_config_files.each do |file| -%>
+  include "<%= "#{@sysconfdir}/#{file}" %>";
+  <% end -%>
 <% if view.match_clients.length > 0 -%>
 
   match-clients {
@@ -49,25 +52,33 @@ view "<%= view.name %>" {
 <% end %>
 <%=
   render(
-    "_zones.erb", variables: {
+    "_zones.erb", cookbook: 'bind', variables: {
       primary_zones: @primary_zones.select { |zone| zone.view == view.name },
       secondary_zones: @secondary_zones.select { |zone| zone.view == view.name },
       forward_zones: @forward_zones.select { |zone| zone.view == view.name }
     }
   ).gsub(/^(.+)$/, '  \1')
 %>
+  zone "." IN {
+    type hint;
+    file "named.ca";
+  };
 };
 <% end %>
 <% else %>
+<% @per_view_additional_config_files.each do |file| -%>
+include "<%= "#{@sysconfdir}/#{file}" %>";
+<% end -%>
 <%=
-  render "_zones.erb", variables: {
+  render "_zones.erb", cookbook: 'bind', variables: {
     primary_zones: @primary_zones,
     secondary_zones: @secondary_zones,
     forward_zones: @forward_zones
   }
 %>
-<% end %>
+
 zone "." IN {
   type hint;
   file "named.ca";
 };
+<% end %>

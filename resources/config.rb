@@ -22,7 +22,8 @@ action :create do
     find_resource!(:bind_service, new_resource.bind_service)
   end
 
-  additional_config_files = ['named.rfc1912.zones', 'named.options']
+  additional_config_files = ['named.options']
+  per_view_additional_config_files = ['named.rfc1912.zones']
 
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
@@ -127,7 +128,8 @@ action :create do
         forward_zones: [],
         servers: [],
         keys: [],
-        views: []
+        views: [],
+        per_view_additional_config_files: per_view_additional_config_files
       )
       action :nothing
       delayed_action :create
