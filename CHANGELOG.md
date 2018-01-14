@@ -10,7 +10,8 @@ v2.2.0
 
 v2.1.1
 ------
-* According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters. Setting first column width to 35 characters
+* According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters
+* Setting first column width to 35 characters
 
 v2.1.0
 ------
