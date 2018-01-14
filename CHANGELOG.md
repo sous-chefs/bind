@@ -8,6 +8,10 @@ v2.2.0
 * Restart on named service configuration change
 * Using include directive to include forward, master, secondary zone definitions
 
+v2.1.1
+------
+* According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters. Setting first column width to 35 characters
+
 v2.1.0
 ------
 * Add support for chrooted install
