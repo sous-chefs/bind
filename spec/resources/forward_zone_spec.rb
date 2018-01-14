@@ -21,7 +21,7 @@ describe 'adding forward only zones' do
         forward only;
       };
     EOF
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/forward.zones').with_content { |content|
       expect(content).to include stanza
     }
   end
@@ -34,7 +34,7 @@ describe 'adding forward only zones' do
         forward first;
       };
     EOF
-    expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+    expect(chef_run).to render_file('/etc/named/forward.zones').with_content { |content|
       expect(content).to include stanza
     }
   end

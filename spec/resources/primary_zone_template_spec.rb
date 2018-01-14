@@ -20,7 +20,7 @@ describe 'adding primary zones' do
     end
 
     it 'will place the config in the named config' do
-      expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(chef_run).to render_file('/etc/named/primary.zones').with_content { |content|
         expect(content).to include 'zone "empty.example.com" IN {'
         expect(content).to include 'file "primary/db.empty.example.com";'
       }
@@ -34,7 +34,7 @@ describe 'adding primary zones' do
           check-names warn;
         };
       EOF
-      expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(chef_run).to render_file('/etc/named/primary.zones').with_content { |content|
         expect(content).to include stanza
       }
     end
@@ -56,7 +56,7 @@ describe 'adding primary zones' do
     end
 
     it 'will place the config in the named config' do
-      expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
+      expect(chef_run).to render_file('/etc/named/primary.zones').with_content { |content|
         expect(content).to include 'zone "custom.example.com" IN {'
         expect(content).to include 'file "primary/db.custom.example.com";'
       }

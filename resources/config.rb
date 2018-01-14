@@ -3,6 +3,9 @@ property :chroot, [true, false], default: false
 property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
 property :options_file, String, default: lazy { default_property_for(:options_file, chroot) }
 property :conf_file, String, default: lazy { default_property_for(:conf_file, chroot) }
+property :forward_zones, String, default: lazy { default_property_for(:forward_zones, chroot) }
+property :primary_zones, String, default: lazy { default_property_for(:primary_zones, chroot) }
+property :secondary_zones, String, default: lazy { default_property_for(:secondary_zones, chroot) }
 property :bind_service, String, default: 'default'
 property :ipv6_listen, [true, false], default: true
 property :options, Array, default: []
@@ -21,12 +24,12 @@ action :create do
     find_resource!(:bind_service, new_resource.bind_service)
   end
 
-  additional_config_files = ['named.rfc1912.zones', 'named.options']
+  additional_config_files = %w(named.rfc1912.zones named.options primary.zones secondary.zones forward.zones)
 
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
     group bind_service.run_group
-    mode 0o0644
+    mode '0644'
     action :create
     cookbook 'bind'
   end
@@ -35,7 +38,7 @@ action :create do
     cookbook_file ::File.join(bind_service.vardir, var_file) do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o0644
+      mode '0644'
       action :create
       cookbook 'bind'
     end
@@ -117,21 +120,60 @@ action :create do
     template new_resource.conf_file do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o644
+      mode '0644'
       variables(
         additional_config_files: additional_config_files,
         sysconfdir: sysconfdir,
-        primary_zones: [],
-        secondary_zones: [],
-        forward_zones: [],
         servers: [],
         keys: []
       )
       action :nothing
       delayed_action :create
-      notifies :restart, 'bind_service[default]', :delayed
+      notifies :reload, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'named.conf.erb'
+    end
+
+    template new_resource.forward_zones do
+      owner bind_service.run_user
+      group bind_service.run_group
+      mode '0644'
+      variables(
+        zones: []
+      )
+      action :nothing
+      delayed_action :create
+      notifies :reload, 'bind_service[default]', :delayed
+      cookbook 'bind'
+      source 'named_zone.conf.erb'
+    end
+
+    template new_resource.primary_zones do
+      owner bind_service.run_user
+      group bind_service.run_group
+      mode '0644'
+      variables(
+        zones: []
+      )
+      action :nothing
+      delayed_action :create
+      notifies :reload, 'bind_service[default]', :delayed
+      cookbook 'bind'
+      source 'named_zone.conf.erb'
+    end
+
+    template new_resource.secondary_zones do
+      owner bind_service.run_user
+      group bind_service.run_group
+      mode '0644'
+      variables(
+        zones: []
+      )
+      action :nothing
+      delayed_action :create
+      notifies :reload, 'bind_service[default]', :delayed
+      cookbook 'bind'
+      source 'named_zone.conf.erb'
     end
   end
 end

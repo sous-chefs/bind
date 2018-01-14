@@ -35,17 +35,18 @@ describe 'bind::default' do
       )
     end
 
-    it 'renders file /etc/named/named.options' do
-      expect(chef_run).to render_file('/etc/named/named.options')
-    end
-
-    it 'renders file /etc/named/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/named/named.rfc1912.zones')
+    %w(named.options named.rfc1912.zones primary.zones secondary.zones forward.zones).each do |named_file|
+      it "renders file #{::File.join('/etc/named', named_file)}" do
+        expect(chef_run).to render_file(::File.join('/etc/named', named_file))
+      end
     end
 
     it 'renders file /etc/named.conf with included files' do
       expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.options"})
       expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/primary.zones"})
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/secondary.zones"})
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/forward.zones"})
     end
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
@@ -102,12 +103,10 @@ describe 'bind::default' do
       )
     end
 
-    it 'renders file /etc/bind/named.options' do
-      expect(chef_run).to render_file('/etc/bind/named.options')
-    end
-
-    it 'renders file /etc/bind/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/bind/named.rfc1912.zones')
+    %w(named.options named.rfc1912.zones primary.zones secondary.zones forward.zones).each do |named_file|
+      it "renders file #{::File.join('/etc/bind', named_file)}" do
+        expect(chef_run).to render_file(::File.join('/etc/bind', named_file))
+      end
     end
 
     it 'renders file /etc/bind/named.conf with included files' do
