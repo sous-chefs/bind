@@ -34,6 +34,7 @@ describe 'adding a single view' do
   it 'will add a zone with no view name to the default view' do
     stanza = <<~CONFIG_FRAGMENT
       view "internal" {
+        include "/etc/named/named.rfc1912.zones";
 
         zone "example.com" IN {
           type master;
@@ -54,6 +55,7 @@ describe 'adding a single view with options' do
   it 'will add a zone with no view name to the default view' do
     stanza = <<~CONFIG_FRAGMENT
       view "default" {
+        include "/etc/named/named.rfc1912.zones";
 
         match-clients {
           10.0.0.0/8;
