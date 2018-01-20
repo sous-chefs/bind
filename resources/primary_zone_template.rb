@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'digest'
 
-PrimaryZone = Struct.new(:name, :options)
+PrimaryZone = Struct.new(:name, :options, :view, :file_name)
 
 property :bind_config, String, default: 'default'
 
@@ -9,6 +9,9 @@ property :soa, Hash, default: {}
 property :records, Array, default: []
 property :default_ttl, [String, Integer], default: 86400
 property :options, Array, default: []
+property :view, String
+property :file_name, String, name_property: true
+property :zone_name, String
 
 property :template_cookbook, String, default: 'bind'
 property :template_name, String, default: 'primary_zone.erb'
@@ -19,6 +22,9 @@ action :create do
   bind_config = with_run_context :root do
     find_resource!(:bind_config, new_resource.bind_config)
   end
+
+  new_resource.view = bind_config.default_view unless new_resource.view
+  new_resource.zone_name = new_resource.file_name unless new_resource.zone_name
 
   bind_service = with_run_context :root do
     find_resource!(:bind_service, bind_config.bind_service)
@@ -50,7 +56,7 @@ action :create do
       )
     )
 
-    persisted_values = node.normal['bind']['zone'][new_resource.name]
+    persisted_values = node.normal['bind']['zone'][new_resource.file_name]
 
     # override soa with the value in persisted_values if it exists
     soa[:serial] = persisted_values['serial'] if persisted_values.attribute?('serial')
@@ -66,7 +72,7 @@ action :create do
   end
 
   template new_resource.name do
-    path "#{bind_service.vardir}/primary/db.#{new_resource.name}"
+    path "#{bind_service.vardir}/primary/db.#{new_resource.file_name}"
     owner bind_service.run_user
     group bind_service.run_group
     cookbook new_resource.template_cookbook
@@ -87,6 +93,9 @@ action :create do
   end
 
   bind_config_template.variables[:primary_zones] << PrimaryZone.new(
-    new_resource.name, new_resource.options
+    new_resource.zone_name,
+    new_resource.options,
+    new_resource.view,
+    new_resource.file_name
   )
 end

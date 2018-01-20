@@ -6,6 +6,7 @@ property :conf_file, String, default: lazy { default_property_for(:conf_file, ch
 property :bind_service, String, default: 'default'
 property :ipv6_listen, [true, false], default: true
 property :options, Array, default: []
+property :default_view, String, default: 'default'
 
 property :query_log, [String, nil], default: nil
 property :query_log_versions, [String, Integer], default: 2
@@ -21,7 +22,8 @@ action :create do
     find_resource!(:bind_service, new_resource.bind_service)
   end
 
-  additional_config_files = ['named.rfc1912.zones', 'named.options']
+  additional_config_files = ['named.options']
+  per_view_additional_config_files = ['named.rfc1912.zones']
 
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
@@ -125,7 +127,9 @@ action :create do
         secondary_zones: [],
         forward_zones: [],
         servers: [],
-        keys: []
+        keys: [],
+        views: [],
+        per_view_additional_config_files: per_view_additional_config_files
       )
       action :nothing
       delayed_action :create

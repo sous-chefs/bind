@@ -19,36 +19,66 @@ key "<%= key.name %>" {
 };
 
 <% end %>
-<% @primary_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type master;
-  file "primary/db.<%= zone.name %>";
-  <% zone.options.each do |option| -%>
+<% if @views.length > 0 %>
+<% @views.each do |view| %>
+view "<%= view.name %>" {
+  <% @per_view_additional_config_files.each do |file| -%>
+  include "<%= "#{@sysconfdir}/#{file}" %>";
+  <% end -%>
+<% if view.match_clients.length > 0 -%>
+
+  match-clients {
+<% view.match_clients.each do |client| -%>
+    <%= client -%>;
+<% end -%>
+  };
+<% end -%>
+<% if view.match_destinations.length > 0 -%>
+
+  match-destinations {
+<% view.match_destinations.each do |destination| -%>
+    <%= destination -%>;
+<% end -%>
+  };
+<% end -%>
+<% if view.match_recursive_only %>
+
+  match-recursive-only yes;
+<% end %>
+<% if view.options.length > 0 -%>
+  <% view.options.each do |option| -%>
   <%= option %>;
   <% end -%>
+<% end %>
+<%=
+  render(
+    "_zones.erb", cookbook: 'bind', variables: {
+      primary_zones: @primary_zones.select { |zone| zone.view == view.name },
+      secondary_zones: @secondary_zones.select { |zone| zone.view == view.name },
+      forward_zones: @forward_zones.select { |zone| zone.view == view.name }
+    }
+  ).gsub(/^(.+)$/, '  \1')
+%>
+  zone "." IN {
+    type hint;
+    file "named.ca";
+  };
 };
-
+<% end %>
+<% else %>
+<% @per_view_additional_config_files.each do |file| -%>
+include "<%= "#{@sysconfdir}/#{file}" %>";
 <% end -%>
-<% @secondary_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type slave;
-  file "secondary/db.<%= zone.name %>";
-  masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
-  <% zone.options.each do |option| -%>
-  <%= option %>;
-  <% end -%>
-};
+<%=
+  render "_zones.erb", cookbook: 'bind', variables: {
+    primary_zones: @primary_zones,
+    secondary_zones: @secondary_zones,
+    forward_zones: @forward_zones
+  }
+-%>
 
-<% end -%>
-<% @forward_zones.each do |zone| -%>
-zone "<%= zone.name %>" IN {
-  type forward;
-  forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
-  forward <%= zone.forward %>;
-};
-
-<% end -%>
 zone "." IN {
   type hint;
   file "named.ca";
 };
+<% end %>

@@ -1,13 +1,21 @@
 # frozen_string_literal: true
-PrimaryZone = Struct.new(:name, :options)
+
+PrimaryZone = Struct.new(:name, :options, :view, :file_name)
 
 property :bind_config, String, default: 'default'
 property :options, Array, default: []
+property :view, String
+
+property :file_name, String, name_property: true
+property :zone_name, String
 
 action :create do
   bind_config = with_run_context :root do
     find_resource!(:bind_config, new_resource.bind_config)
   end
+
+  new_resource.view = bind_config.default_view unless new_resource.view
+  new_resource.zone_name = new_resource.file_name unless new_resource.zone_name
 
   bind_service = with_run_context :root do
     find_resource!(:bind_service, bind_config.bind_service)
@@ -27,6 +35,9 @@ action :create do
   end
 
   bind_config_template.variables[:primary_zones] << PrimaryZone.new(
-    new_resource.name, new_resource.options
+    new_resource.zone_name,
+    new_resource.options,
+    new_resource.view,
+    new_resource.file_name
   )
 end

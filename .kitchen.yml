@@ -30,3 +30,8 @@ suites:
     - ubuntu-16.04
   run_list:
     - recipe[bind_test::chroot]
+- name: views
+  includes:
+    - centos-6.9
+  run_list:
+    - recipe[bind_test::views]

@@ -1,0 +1,29 @@
+<% @primary_zones.each do |zone| -%>
+
+zone "<%= zone.name %>" IN {
+  type master;
+  file "primary/db.<%= zone.file_name %>";
+  <% zone.options.each do |option| -%>
+  <%= option %>;
+  <% end -%>
+};
+<% end -%>
+<% @secondary_zones.each do |zone| -%>
+
+zone "<%= zone.name %>" IN {
+  type slave;
+  file "secondary/db.<%= zone.file_name %>";
+  masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
+  <% zone.options.each do |option| -%>
+  <%= option %>;
+  <% end -%>
+};
+<% end -%>
+<% @forward_zones.each do |zone| -%>
+
+zone "<%= zone.name %>" IN {
+  type forward;
+  forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
+  forward <%= zone.forward %>;
+};
+<% end -%>
