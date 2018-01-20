@@ -10,7 +10,7 @@ end
 bind_view 'internal' do
   match_clients ['10.0.0.0/8']
   options [
-    'recursion yes'
+    'recursion yes',
   ]
 end
 
@@ -24,7 +24,7 @@ end
 
 bind_view 'external' do
   options [
-    'recursion no'
+    'recursion no',
   ]
 end
 

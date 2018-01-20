@@ -11,7 +11,7 @@ bind_view 'default' do
   match_destinations ['172.16.0.0/16']
   match_recursive_only true
   options [
-    'recursion no'
+    'recursion no',
   ]
 end
 

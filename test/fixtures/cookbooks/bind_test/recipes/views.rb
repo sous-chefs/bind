@@ -33,7 +33,7 @@ bind_primary_zone_template 'internal-sub.example.com' do
     { type: 'NS', rdata: 'ns0.example.com.' },
     { type: 'NS', rdata: 'ns3.example.com.' },
     { type: 'A', rdata: '10.0.0.1' },
-    { type: 'TXT', rdata: 'internal' }
+    { type: 'TXT', rdata: 'internal' },
   ]
 
   soa serial: '5'
@@ -54,7 +54,7 @@ bind_primary_zone_template 'external-sub.example.com' do
     { type: 'NS', rdata: 'ns0.example.com.' },
     { type: 'NS', rdata: 'ns3.example.com.' },
     { type: 'A', rdata: '192.168.1.2' },
-    { type: 'TXT', rdata: 'external' }
+    { type: 'TXT', rdata: 'external' },
   ]
 
   soa serial: '10'

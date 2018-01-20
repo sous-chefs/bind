@@ -14,7 +14,7 @@ describe bash(%q(dig +short sub.example.com txt @$(ip addr show dev eth0 | awk '
   its('stdout') { should include '"internal"' }
 end
 
-describe bash(%q(dig +short sub.example.com txt @127.0.0.1)) do
+describe bash('dig +short sub.example.com txt @127.0.0.1') do
   its('exit_status') { should eq 0 }
   its('stdout') { should include '"external"' }
 end
