@@ -47,6 +47,12 @@ A chef cookbook to manage BIND servers and zones.
   * [`bind_server`](#bind_server)
     * [Examples](#examples-7)
     * [Properties](#properties-9)
+  * [`bind_logging_channel`](#bind_logging_channel)
+    * [Examples](#examples-8)
+    * [Properties](#properties-10)
+  * [`bind_logging_category`](#bind_logging_category)
+    * [Examples](#examples-9)
+    * [Properties](#properties-11)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
@@ -664,11 +670,69 @@ end
 
 * `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
 
+### `bind_logging_channel`
+
+The `bind_logging_channel` resource will configure a destination for logs to be sent to. To actually send logs you need to also configure a `bind_logging_category`.
+
+#### Examples
+
+```ruby
+bind_logging_channel 'querylog' do
+  destination 'file'
+  severity 'info'
+  path '/tmp/query.log'
+  versions 5
+  size '10m'
+  print_category true
+  print_severity true
+  print_time true
+end
+
+bind_logging_channel 'syslog' do
+  destination 'syslog'
+  facility 'daemon'
+  severity 'info'
+end
+```
+
+#### Properties
+
+* `destination` - String containing the destination name. Must be one of: stderr, syslog, file, or null.
+* `facility` - String containing the syslog facility to use for the syslog destination. Must be a valid syslog facility: kern user mail daemon auth syslog lpr news uucp cron authpriv ftp local0 - local7.
+* `severity` - String containing the minimum severity of BIND logs to send to this channel. Can be critical, error, warning, notice, info, dynamic, or debug (this must be followed by a number representing the debug verbosity).
+* `path` - File name used for the file destination.
+* `versions` - Number of versions of the log file used for the file destination.
+* `size` - Maximum size of the log file used for the file destination.
+* `print_category` - Boolean representing if we should print the category in the output message.
+* `print_severity` - Boolean representing if we should print the severity of the log message to the output channel.
+* `print_time` - Boolean representing if we should print the time in the log message sent to the output channel.
+
+### `bind_logging_category`
+
+The `bind_logging_category` resource maps BIND logging categories to logging channels.
+
+#### Examples
+
+```ruby
+bind_logging_category 'queries' do
+  channels ['syslog', 'querylog']
+end
+
+bind_logging_category 'xfer-in' do
+  channels 'querylog'
+end
+```
+
+#### Properties
+
+* `category` - Name of the BIND logging category to send to the specified channels. Defaults to the name of the resource.
+* `channels` - Array of names (or single name) of channels to send the category of logs to.
+
 
 ## License and Author
 
 - Copyright: 2011 Eric G. Wolfe
-- Copyright: 2017 David Bruce
+- Copyright: 2017, 2018 David Bruce
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
