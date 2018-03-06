@@ -107,7 +107,9 @@ action :create do
         query_log_versions: new_resource.query_log_versions,
         query_log_max_size: new_resource.query_log_max_size,
         query_log_options: new_resource.query_log_options,
-        statistics_channel: new_resource.statistics_channel
+        statistics_channel: new_resource.statistics_channel,
+        logging_channels: [],
+        logging_categories: []
       )
       action :nothing
       delayed_action :create

@@ -34,6 +34,25 @@ logging {
 };
 
 <% end %>
+<% if @logging_channels.count > 0 || @logging_categories.count > 0 %>
+logging {
+  <% @logging_channels.each do |channel| -%>
+
+  channel <%= channel.name %> {
+    <%= channel.destination %>;
+    severity <%= channel.severity %>;
+    print-category <%= channel.print_category ? 'yes' : 'no' %>;
+    print-severity <%= channel.print_severity ? 'yes' : 'no' %>;
+    print-time <%= channel.print_time ? 'yes' : 'no' %>;
+  };
+  <% end -%>
+
+  <% @logging_categories.each do |category| -%>
+  category <%= category.name %> { <%= category.channels.map { |channel| channel + ';' }.join(' ') %> };
+  <% end -%>
+};
+
+<% end %>
 <% if @statistics_channel %>
 statistics-channels {
   inet <%= @statistics_channel[:address] %> port <%= @statistics_channel[:port] -%>;

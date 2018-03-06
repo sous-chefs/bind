@@ -35,3 +35,8 @@ suites:
     - centos-6.9
   run_list:
     - recipe[bind_test::views]
+- name: logging
+  includes:
+    - centos-6.9
+  run_list:
+    - recipe[bind_test::logging]
