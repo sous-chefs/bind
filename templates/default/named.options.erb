@@ -20,20 +20,6 @@ options {
   <% end -%>
 };
 
-<% if @query_log %>
-logging {
-  channel b_query {
-    file "<%= @query_log %>" versions <%= @query_log_versions %> size <%= @query_log_max_size %>;
-    print-time yes;
-    severity info;
-    <% @query_log_options.each do |option_line| -%>
-    <%= option_line %>;
-    <% end -%>
-  };
-  category queries { b_query; };
-};
-
-<% end %>
 <% if @logging_channels.count > 0 || @logging_categories.count > 0 %>
 logging {
   <% @logging_channels.each do |channel| -%>
@@ -41,9 +27,18 @@ logging {
   channel <%= channel.name %> {
     <%= channel.destination %>;
     severity <%= channel.severity %>;
+    <% if channel.print_category -%>
     print-category <%= channel.print_category ? 'yes' : 'no' %>;
+    <% end %>
+    <% if channel.print_severity -%>
     print-severity <%= channel.print_severity ? 'yes' : 'no' %>;
+    <% end %>
+    <% if channel.print_time -%>
     print-time <%= channel.print_time ? 'yes' : 'no' %>;
+    <% end %>
+    <% channel.options.each do |option_line| -%>
+    <%= option_line %>;
+    <% end -%>
   };
   <% end -%>
 

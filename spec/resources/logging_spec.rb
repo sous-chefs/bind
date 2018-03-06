@@ -30,9 +30,6 @@ describe 'adding a new channel' do
     stanza = '  channel stderr {
     stderr;
     severity dynamic;
-    print-category no;
-    print-severity no;
-    print-time no;
   };'
     expect(chef_run).to render_file('/etc/named/named.options').with_content { |content|
       expect(content).to include stanza

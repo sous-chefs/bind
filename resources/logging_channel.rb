@@ -34,9 +34,12 @@ def file_destination(path, versions, size)
   result.join(' ')
 end
 
+# The options parameter is used to allow the deprecated bind_config
+# property `query_log_options` to work. It is not used here, and should be
+# removed when the deprecated property is removed.
 LoggingChannel = Struct.new(
   :name, :destination, :severity, :print_category,
-  :print_severity, :print_time
+  :print_severity, :print_time, :options
 )
 
 action :create do
@@ -64,7 +67,7 @@ action :create do
   bind_options_template.variables[:logging_channels] << LoggingChannel.new(
     new_resource.name, destination_config_line,
     new_resource.severity, new_resource.print_category,
-    new_resource.print_severity, new_resource.print_time
+    new_resource.print_severity, new_resource.print_time, []
   )
 end
 
