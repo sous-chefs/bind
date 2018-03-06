@@ -41,7 +41,7 @@ describe 'adding a new channel' do
 
   it 'adds a file channel with custom rotation and size options' do
     stanza = '  channel example-file {
-    file test.log versions 10 size unlimited;'
+    file "test.log" versions 10 size unlimited;'
 
     expect(chef_run).to render_file('/etc/named/named.options').with_content { |content|
       expect(content).to include stanza
@@ -50,7 +50,7 @@ describe 'adding a new channel' do
 
   it 'adds a file channel with out custom options' do
     stanza = '  channel basic-file {
-    file basic.log;'
+    file "basic.log";'
 
     expect(chef_run).to render_file('/etc/named/named.options').with_content { |content|
       expect(content).to include stanza
