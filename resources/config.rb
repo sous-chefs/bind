@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 property :chroot, [true, false], default: false
 property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
 property :options_file, String, default: lazy { default_property_for(:options_file, chroot) }
@@ -32,8 +34,8 @@ action :create do
   end
 
   Chef::Log.deprecation(
-    "Use of the `query_log` property is deprecated in favour of "\
-    "using `bind_logging_channel` and `bind_logging_category`"
+    'Use of the `query_log` property is deprecated in favour of '\
+    'using `bind_logging_channel` and `bind_logging_category`'.dup
   ) if new_resource.query_log
 
   additional_config_files = ['named.options']
