@@ -368,6 +368,9 @@ The only available action is `:create` which will create the default
 configuration files (including RFC1912 zones), configure an rndc key, and
 set any query logging parameters required.
 
+The `query_log` properties are deprecated and will be removed in a future version.
+Migrate to using the `bind_logging_channel` and `bind_logging_category` resources.
+
 #### Examples
 
 ```ruby
@@ -402,10 +405,10 @@ end
 * `chroot_dir` - Define the chrooted base directory. Platform specific default.
 * `ipv6_listen` - Enables listening on IPv6 instances. Can be true or false. Defaults to true.
 * `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
-* `query_log` - If provided will turn on general query logging. Should be the path to the desired log file. Default is empty and thus disabled. This will likely move to a separate resource in the future.
-* `query_log_max_size` - Maximum size of query log before rotation. Defaults to '1m'.
-* `query_log_versions` - Number of rotated query logs to keep on the system. Defaults to 2.
-* `query_log_options` - Array of additional query log options. Defaults to empty array.
+* `query_log` - DEPRECATED. If provided will turn on general query logging. Should be the path to the desired log file. Default is empty and thus disabled.
+* `query_log_max_size` - DEPRECATED. Maximum size of query log before rotation. Defaults to '1m'.
+* `query_log_versions` - DEPRECATED. Number of rotated query logs to keep on the system. Defaults to 2.
+* `query_log_options` - DEPRECATED. Array of additional query log options. Defaults to empty array.
 * `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
 * `default_view` - The name of the default view to configure zones within when views are used. Defaults to 'default'.
 
@@ -719,7 +722,7 @@ bind_logging_category 'queries' do
 end
 
 bind_logging_category 'xfer-in' do
-  channels 'querylog'
+  channels 'syslog'
 end
 ```
 
