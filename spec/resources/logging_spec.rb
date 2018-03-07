@@ -61,4 +61,3 @@ describe 'adding a new channel' do
     }
   end
 end
-

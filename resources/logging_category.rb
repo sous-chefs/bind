@@ -5,7 +5,7 @@ LoggingCategory = Struct.new(:name, :channels)
 property :bind_config, String, default: 'default'
 
 property :channels, [Array, String], required: true,
-  coerce: proc { |m| m.is_a?(String) ? [m] : m }
+                                     coerce: proc { |m| m.is_a?(String) ? [m] : m }
 
 property :category, String, name_property: true, equal_to: %w(
   client cname config database default delegation-only dispatch

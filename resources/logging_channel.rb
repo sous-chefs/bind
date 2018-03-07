@@ -2,21 +2,21 @@
 
 property :bind_config, String, default: 'default'
 
-property :destination, String, equal_to: %w[
+property :destination, String, equal_to: %w(
   stderr syslog file null
-]
+)
 
-property :facility, String, equal_to: %w[
+property :facility, String, equal_to: %w(
   kern user mail daemon auth syslog lpr news uucp cron authpriv
   ftp local0 local1 local2 local3 local4 local5 local6 local7
-]
+)
 
 property :severity, String, default: 'dynamic', callbacks: {
   'should be a valid severity' => lambda { |severity|
-    %w[
+    %w(
       critical error warning notice info dynamic
-    ].include?(severity) || severity.match(/^debug\s+\d+$/)
-  }
+    ).include?(severity) || severity.match(/^debug\s+\d+$/)
+  },
 }
 
 property :path, String
@@ -70,4 +70,3 @@ action :create do
     new_resource.print_severity, new_resource.print_time, []
   )
 end
-

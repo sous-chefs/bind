@@ -32,7 +32,7 @@ bind_logging_channel 'basic-file' do
 end
 
 bind_logging_category 'default' do
-  channels [ 'syslog', 'stderr' ]
+  channels %w(syslog stderr)
 end
 
 bind_logging_category 'client' do
