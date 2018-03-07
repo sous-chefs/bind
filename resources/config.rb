@@ -113,7 +113,7 @@ action :create do
     logging_channels = []
     logging_categories = []
     if new_resource.query_log
-      destination = "file \"#{new_resource.query_log}\" versions #{new_resource.query_log_versions} size #{new_resource.query_log_max_size}"
+      destination = "file \"#{query_log}\" versions #{new_resource.query_log_versions} size #{new_resource.query_log_max_size}"
       logging_channels = [LoggingChannel.new(
         'b_query', destination, 'info', nil, nil, true,
         new_resource.query_log_options
