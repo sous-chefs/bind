@@ -15,13 +15,9 @@ property :category, String, name_property: true, equal_to: %w(
 )
 
 action :create do
-  bind_config = with_run_context :root do
-    find_resource!(:bind_config, new_resource.bind_config)
-  end
+  options_template.variables[:logging_categories] << LoggingCategory.new(new_resource.category, new_resource.channels)
+end
 
-  bind_options_template = with_run_context :root do
-    find_resource!(:template, bind_config.options_file)
-  end
-
-  bind_options_template.variables[:logging_categories] << LoggingCategory.new(new_resource.category, new_resource.channels)
+action_class do
+  include BindCookbook::ResourceHelpers
 end

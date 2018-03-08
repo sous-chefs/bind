@@ -10,34 +10,27 @@ property :file_name, String, name_property: true
 property :zone_name, String
 
 action :create do
-  bind_config = with_run_context :root do
-    find_resource!(:bind_config, new_resource.bind_config)
-  end
+  service_resource = find_service_resource
 
-  new_resource.view = bind_config.default_view unless new_resource.view
   new_resource.zone_name = new_resource.file_name unless new_resource.zone_name
 
-  bind_service = with_run_context :root do
-    find_resource!(:bind_service, bind_config.bind_service)
-  end
-
   cookbook_file new_resource.name do
-    path "#{bind_service.vardir}/primary/db.#{new_resource.name}"
-    owner bind_service.run_user
-    group bind_service.run_group
+    path "#{service_resource.vardir}/primary/db.#{new_resource.name}"
+    owner service_resource.run_user
+    group service_resource.run_group
     mode 0o440
     action :create
-    notifies :restart, "bind_service[#{bind_service.name}]", :delayed
+    notifies :restart, "bind_service[#{service_resource.name}]", :delayed
   end
 
-  bind_config_template = with_run_context :root do
-    find_resource!(:template, bind_config.conf_file)
-  end
-
-  bind_config_template.variables[:primary_zones] << PrimaryZone.new(
+  config_template.variables[:primary_zones] << PrimaryZone.new(
     new_resource.zone_name,
     new_resource.options,
-    new_resource.view,
+    choose_view,
     new_resource.file_name
   )
+end
+
+action_class do
+  include BindCookbook::ResourceHelpers
 end

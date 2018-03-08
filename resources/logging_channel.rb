@@ -27,13 +27,6 @@ property :print_category, [true, false], default: false
 property :print_severity, [true, false], default: false
 property :print_time, [true, false], default: false
 
-def file_destination(path, versions, size)
-  result = ["file \"#{path}\""]
-  result << "versions #{versions}" if versions
-  result << "size #{size}" if size
-  result.join(' ')
-end
-
 # The options parameter is used to allow the deprecated bind_config
 # property `query_log_options` to work. It is not used here, and should be
 # removed when the deprecated property is removed.
@@ -43,10 +36,6 @@ LoggingChannel = Struct.new(
 )
 
 action :create do
-  bind_config = with_run_context :root do
-    find_resource!(:bind_config, new_resource.bind_config)
-  end
-
   destination_config_line = case new_resource.destination
                             when 'file'
                               file_destination(
@@ -60,13 +49,20 @@ action :create do
                               new_resource.destination.to_s
                             end
 
-  bind_options_template = with_run_context :root do
-    find_resource!(:template, bind_config.options_file)
-  end
-
-  bind_options_template.variables[:logging_channels] << LoggingChannel.new(
+  options_template.variables[:logging_channels] << LoggingChannel.new(
     new_resource.name, destination_config_line,
     new_resource.severity, new_resource.print_category,
     new_resource.print_severity, new_resource.print_time, []
   )
+end
+
+action_class do
+  include BindCookbook::ResourceHelpers
+
+  def file_destination(path, versions, size)
+    result = ["file \"#{path}\""]
+    result << "versions #{versions}" if versions
+    result << "size #{size}" if size
+    result.join(' ')
+  end
 end
