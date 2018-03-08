@@ -6,6 +6,7 @@ v2.2.0
 
 * Add `bind_logging_channel` and `bind_logging_category` custom resources.
 * Add `bind_view` custom resource.
+* Add `:create_if_missing` action to `bind_primary_zone` resource.
 
 v2.1.1
 ------
