@@ -444,6 +444,13 @@ BIND configuration. The file should be named for the zone you wish to configure.
 For example to configure `example.com` the file should be in
 `files/default/example.com`
 
+This resource also supports setting the action to `:create_if_missing`. In this
+event the cookbook will only copy a zone file in place if it does not already
+exist. Once copied the cookbook will not touch the file again allowing it to be
+used for dynamic updates. However, please be aware that in the event of the
+server being rebuilt or the file being removed that the data has not been
+persisted anywhere.
+
 #### Examples
 
 ```ruby

@@ -39,4 +39,10 @@ describe 'adding primary zones' do
       expect(content).to include stanza
     }
   end
+
+  it 'will create a zone file with action :create_if_missing' do
+    expect(chef_run).to create_cookbook_file_if_missing('example.net').with(
+      path: '/var/named/primary/db.example.net'
+    )
+  end
 end
