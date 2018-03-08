@@ -1,6 +1,12 @@
 bind changelog
 ==============
 
+v2.2.0
+------
+
+* Add `bind_logging_channel` and `bind_logging_category` custom resources.
+* Add `bind_view` custom resource.
+
 v2.1.1
 ------
 * According to RFC1035, FQDN length max is 255 characters, and each label (dot delimited) is 63 characters. Setting first column width to 65 characters
