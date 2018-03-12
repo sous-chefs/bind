@@ -1,10 +1,6 @@
 #!/usr/bin/env rake
 # frozen_string_literal: true
 
-# chefspec task against spec/*_spec.rb
-require 'rspec/core/rake_task'
-RSpec::Core::RakeTask.new(:chefspec)
-
 # foodcritic rake task
 desc 'Foodcritic linter'
 task :foodcritic do
@@ -12,20 +8,29 @@ task :foodcritic do
 end
 
 # rubocop rake task
-desc 'Ruby style guide linter'
+desc 'Chef cookbook style linting'
 task :cookstyle do
   sh 'cookstyle'
 end
 
-# Deploy task
-desc 'Deploy to chef server and pin to environment'
-task :deploy do
-  sh 'berks upload bind'
-  sh 'berks apply production'
+desc 'Run ChefSpec unit tests'
+task :unit do
+  # chefspec task against spec/*_spec.rb
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:unit) do |t|
+    t.rspec_opts = '--color --format progress'
+  end
 end
 
-# default tasks are quick, commit tests
-task default: %w(foodcritic cookstyle chefspec)
+desc 'Run test kitchen integration tests'
+task :integration, [:os] do |_t, args|
+  require 'kitchen'
+  config = {
+    loader: Kitchen::Loader::YAML.new(project_config: '.kitchen.dokken.yml'),
+  }
+  instances = Kitchen::Config.new(config).instances
+  instances.get_all(/#{args.os}/).each(&:test)
+end
 
-# jenkins tasks format for metric tracking
-task jenkins: %w(foodcritic cookstyle chefspec)
+task lint: %w(foodcritic cookstyle)
+task default: %w(lint unit)

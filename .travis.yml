@@ -1,25 +1,28 @@
-# Use Travis's container based infrastructure
-sudo: false
-dist: trusty
+rvm: 2.2
+language: ruby
 
-addons:
-  apt:
-    sources:
-      - chef-stable-trusty
-    packages:
-      - chefdk
+sudo: required
+services:
+  - docker
+
+env:
+  matrix:
+    - TESTS="lint unit"
+    - TESTS="integration[centos-6]"
+    - TESTS="integration[centos-7]"
+    - TESTS="integration[debian-8]"
+    - TESTS="integration[debian-9]"
+    - TESTS="integration[ubuntu-14.04]"
+    - TESTS="integration[ubuntu-16.04]"
 
 install: echo "skip bundle install"
 
-branches:
-  only:
-    - master
-
 before_script:
+  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
 
 script:
   - /opt/chefdk/embedded/bin/chef --version
   - /opt/chefdk/embedded/bin/cookstyle --version
   - /opt/chefdk/embedded/bin/foodcritic --version
-  - /opt/chefdk/bin/chef exec rake
+  - /opt/chefdk/bin/chef exec rake ${TESTS}

@@ -1,7 +1,7 @@
 ---
 driver:
   name: dokken
-  privileged: true # because Docker and SystemD/Upstart
+  privileged: true
   chef_version: <%= ENV['CHEF_VERSION'] || '12.21.26' %>
   cap_add:
     - SYS_PTRACE
@@ -71,3 +71,13 @@ suites:
       - ubuntu-16.04
     run_list:
       - recipe[bind_test::chroot]
+  - name: views
+    includes:
+      - centos-6
+    run_list:
+      - recipe[bind_test::views]
+  - name: logging
+    includes:
+      - centos-6
+    run_list:
+      - recipe[bind_test::logging]
