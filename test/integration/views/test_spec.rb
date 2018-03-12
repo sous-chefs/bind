@@ -11,10 +11,10 @@ end
 
 describe bash(%q(dig +short sub.example.com txt @$(ip addr show dev eth0 | awk '/inet / { split($2, ip, "/"); print ip[1] }'))) do
   its('exit_status') { should eq 0 }
-  its('stdout') { should include '"internal"' }
+  its('stdout') { should include '"external"' }
 end
 
 describe bash('dig +short sub.example.com txt @127.0.0.1') do
   its('exit_status') { should eq 0 }
-  its('stdout') { should include '"external"' }
+  its('stdout') { should include '"internal"' }
 end

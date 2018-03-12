@@ -9,7 +9,7 @@ bind_config 'default' do
 end
 
 bind_view 'internal' do
-  match_clients ['10.0.0.0/8']
+  match_clients ['127.0.0.0/8']
   options ['recursion yes']
 end
 
