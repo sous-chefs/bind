@@ -36,7 +36,7 @@ A chef cookbook to manage BIND servers and zones.
   * [`bind_secondary_zone`](#bind_secondary_zone)
     * [Examples](#examples-4)
     * [Properties](#properties-5)
-  * [`bind_forwarder`](#bind_forwarder)
+  * [`bind_forward_zone`](#bind_forward_zone)
     * [Examples](#examples-5)
     * [Properties](#properties-6)
   * [`bind_acl`](#bind_acl)
@@ -574,21 +574,21 @@ end
 * `file_name` - Name of the file to store the zone in. Defaults to the name property. Used when you wish to have the same zone with different content in different views.
 * `zone_name` - The zone name of the zone. Used only if the name property does not match the zone name.
 
-### `bind_forwarder`
+### `bind_forward_zone`
 
-The `bind_forwarder` resource will configure a forwarding only zone.
+The `bind_forward_zone` resource will configure a forwarding only zone.
 
 #### Examples
 
 ```ruby
-bind_forwarder 'example.com' do
+bind_forward_zone 'example.com' do
   forwarders [
     '10.1.1.1',
     '10.2.2.2'
   ]
 end
 
-bind_forwarder 'example.org' do
+bind_forward_zone 'example.org' do
   forward 'first'
   forwarders ['10.0.1.1', '10.2.1.1']
 end
