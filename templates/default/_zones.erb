@@ -27,3 +27,9 @@ zone "<%= zone.name %>" IN {
   forward <%= zone.forward %>;
 };
 <% end -%>
+<% @linked_zones.each do |zone| -%>
+
+zone "<%= zone.name %>" IN {
+  in-view <%= zone.in_view %>;
+};
+<% end -%>
