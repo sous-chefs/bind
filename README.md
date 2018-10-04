@@ -11,48 +11,51 @@ A chef cookbook to manage BIND servers and zones.
 * [Requirements](#requirements)
 * [Attributes](#attributes)
 * [Usage](#usage)
-  * [Internal recursive nameserver](#internal-recursive-nameserver)
-  * [Authoritative primary nameserver](#authoritative-primary-nameserver)
-  * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
-  * [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
-  * [Nameserver in chroot mode](#nameserver-in-chroot-mode)
+	* [Internal recursive nameserver](#internal-recursive-nameserver)
+	* [Authoritative primary nameserver](#authoritative-primary-nameserver)
+	* [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+	* [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
+	* [Nameserver in chroot mode](#nameserver-in-chroot-mode)
 * [Available Custom Resources](#available-custom-resources)
-  * [`bind_service`](#bind_service)
-    * [Example](#example)
-    * [Properties](#properties)
-  * [`bind_config`](#bind_config)
-    * [Examples](#examples)
-    * [Properties](#properties-1)
-  * [`bind_view`](#bind_view)
-    * [Examples](#examples-1)
-    * [Properties](#properties-2)
-  * [`bind_primary_zone`](#bind_primary_zone)
-    * [Examples](#examples-2)
-    * [Properties](#properties-3)
-  * [`bind_primary_zone_template`](#bind_primary_zone_template)
-    * [Examples](#examples-3)
-    * [Properties](#properties-4)
-    * [A note on serial numbers](#a-note-on-serial-numbers)
-  * [`bind_secondary_zone`](#bind_secondary_zone)
-    * [Examples](#examples-4)
-    * [Properties](#properties-5)
-  * [`bind_forward_zone`](#bind_forward_zone)
-    * [Examples](#examples-5)
-    * [Properties](#properties-6)
-  * [`bind_acl`](#bind_acl)
-    * [Examples](#examples-6)
-    * [Properties](#properties-7)
-  * [`bind_key`](#bind_key)
-    * [Properties](#properties-8)
-  * [`bind_server`](#bind_server)
-    * [Examples](#examples-7)
-    * [Properties](#properties-9)
-  * [`bind_logging_channel`](#bind_logging_channel)
-    * [Examples](#examples-8)
-    * [Properties](#properties-10)
-  * [`bind_logging_category`](#bind_logging_category)
-    * [Examples](#examples-9)
-    * [Properties](#properties-11)
+	* [`bind_service`](#bind_service)
+		* [Example](#example)
+		* [Properties](#properties)
+	* [`bind_config`](#bind_config)
+		* [Examples](#examples)
+		* [Properties](#properties-1)
+	* [`bind_view`](#bind_view)
+		* [Examples](#examples-1)
+		* [Properties](#properties-2)
+	* [`bind_primary_zone`](#bind_primary_zone)
+		* [Examples](#examples-2)
+		* [Properties](#properties-3)
+	* [`bind_primary_zone_template`](#bind_primary_zone_template)
+		* [Examples](#examples-3)
+		* [Properties](#properties-4)
+		* [A note on serial numbers](#a-note-on-serial-numbers)
+	* [`bind_secondary_zone`](#bind_secondary_zone)
+		* [Examples](#examples-4)
+		* [Properties](#properties-5)
+	* [`bind_forward_zone`](#bind_forward_zone)
+		* [Examples](#examples-5)
+		* [Properties](#properties-6)
+	* [`bind_linked_zone`](#bind_linked_zone)
+		* [Examples](#examples-6)
+		* [Properties](#properties-7)
+	* [`bind_acl`](#bind_acl)
+		* [Examples](#examples-7)
+		* [Properties](#properties-8)
+	* [`bind_key`](#bind_key)
+		* [Properties](#properties-9)
+	* [`bind_server`](#bind_server)
+		* [Examples](#examples-8)
+		* [Properties](#properties-10)
+	* [`bind_logging_channel`](#bind_logging_channel)
+		* [Examples](#examples-9)
+		* [Properties](#properties-11)
+	* [`bind_logging_category`](#bind_logging_category)
+		* [Examples](#examples-10)
+		* [Properties](#properties-12)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
@@ -85,7 +88,7 @@ See the MIGRATION.md document.
 ## Usage
 
 Using custom resources leads to a quite flexible configuration, but requires
-a little bit more work in a wrapper cookbook to use. The following examples 
+a little bit more work in a wrapper cookbook to use. The following examples
 are presented here:
 
 - Internal recursive nameserver
@@ -490,7 +493,7 @@ end
 #### Properties
 
 * `soa` - Hash of SOA entries. Available keys are:
-  - `:serial` - The serial number of the zone. Defaults to '1'. If this zone 
+  - `:serial` - The serial number of the zone. Defaults to '1'. If this zone
   has secondary servers configured then you will need to either manually manage this
   and update when the record set changes, or use the `manage_serial` property.
   - `:mname` - Domain name of the primary name server serving this zone. Defaults to 'localhost.'
@@ -601,6 +604,31 @@ end
   forwarding for this zone if globally configured).
 * `forward` - Set to 'first' if you wish to try a regular lookup if forwaridng fails. 'only' will cause the query to fail if forwarding fails. Default is 'only'.
 * `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+
+### `bind_linked_zone`
+
+The `bind_linked_zone` resource will create a zone linked to a zone with the same name in a different view, using the bind in-view directive. The in-view directive requires bind 9.10 or higher. So this resource will only be compatible with Debian 9 and Ubuntu 16.04.
+
+#### Examples
+
+```ruby
+bind_primary_zone 'sub.example.com' do
+  view 'internal'
+end
+
+bind_linked_zone 'sub.example.com' do
+  in_view 'internal'
+  view 'external'
+end
+```
+
+#### Properties
+
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+* `in_view` - The view of the zone to reference
+* `zone_name` - The name of the zone. Used only if the name property does
+not match the zone name. Must be identical to the name of the zone that is
+being linked to.
 
 ### `bind_acl`
 
