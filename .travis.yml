@@ -18,7 +18,7 @@ env:
 install: echo "skip bundle install"
 
 before_script:
-  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk
+  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -v 2.6.1
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
 
 script:
