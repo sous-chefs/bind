@@ -1,5 +1,9 @@
 bind changelog
 ==============
+v2.2.1
+------
+
+* Add support for in-view directive using  `bind_linked_zone` resource.
 
 v2.2.0
 ------
@@ -40,7 +44,7 @@ v1.2.0
 ------
 * Add server clause.
   - See [documentation](http://www.zytrax.com/books/dns/ch7/server.html) for reference.
-* Add bind forwardzones attribute. 
+* Add bind forwardzones attribute.
 
 
 v1.1.4
@@ -131,7 +135,7 @@ do yourself the favor and start working with it now.
 v0.1.1
 ------
 
-* Pass zone array to template with `uniq` and `sort` 
+* Pass zone array to template with `uniq` and `sort`
 
 v0.1.0
 ------

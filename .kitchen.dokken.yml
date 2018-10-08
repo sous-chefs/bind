@@ -81,3 +81,9 @@ suites:
       - centos-6
     run_list:
       - recipe[bind_test::logging]
+  - name: linked-zones
+    includes:
+      - ubuntu-16.04
+      - debian-9
+    run_list:
+      - recipe[bind_test::linked_zones]

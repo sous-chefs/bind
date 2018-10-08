@@ -13,7 +13,11 @@ platforms:
   run_list:
   - recipe[apt]
 - name: debian-8.9
+  run_list:
+  - recipe[apt]
 - name: debian-9.2
+  run_list:
+  - recipe[apt]
 - name: centos-6.9
 - name: centos-7.4
 
@@ -40,3 +44,9 @@ suites:
     - centos-6.9
   run_list:
     - recipe[bind_test::logging]
+- name: linked-zones
+  includes:
+    - ubuntu-16.04
+    - debian-9.2
+  run_list:
+    - recipe[bind_test::linked_zones]

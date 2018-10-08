@@ -151,6 +151,7 @@ action :create do
         primary_zones: [],
         secondary_zones: [],
         forward_zones: [],
+        linked_zones: [],
         servers: [],
         keys: [],
         views: [],
