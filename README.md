@@ -210,7 +210,7 @@ bind_primary_zone_template 'example.org' do
     { owner: 'mx1', type: 'A', ttl: 20, rdata: '10.5.1.100' },
     { owner: 'mx2', type: 'A', ttl: 20, rdata: '10.5.2.100' },
   ]
-
+end
 ```
 
 ### Authoritative secondary nameserver
