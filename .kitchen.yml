@@ -4,22 +4,28 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.16
+  product_name: chef
+  product_version: <%= ENV['CHEF_VERSION'] || '12' %>
+  client_rb:
+    chef_license: accept
 platforms:
+- name: ubuntu-18.04
+  run_list:
+  - recipe[apt]
 - name: ubuntu-16.04
   run_list:
   - recipe[apt]
 - name: ubuntu-14.04
   run_list:
   - recipe[apt]
-- name: debian-8.9
+- name: debian-8.11
   run_list:
   - recipe[apt]
-- name: debian-9.2
+- name: debian-9.6
   run_list:
   - recipe[apt]
-- name: centos-6.9
-- name: centos-7.4
+- name: centos-6.10
+- name: centos-7.6
 
 verifier:
   name: inspec
@@ -32,21 +38,22 @@ suites:
 - name: chroot
   excludes:
     - ubuntu-16.04
+    - ubuntu-18.04
   run_list:
     - recipe[bind_test::chroot]
 - name: views
   includes:
-    - centos-6.9
+    - centos-6.10
   run_list:
     - recipe[bind_test::views]
 - name: logging
   includes:
-    - centos-6.9
+    - centos-6.10
   run_list:
     - recipe[bind_test::logging]
 - name: linked-zones
   includes:
     - ubuntu-16.04
-    - debian-9.2
+    - debian-9.6
   run_list:
     - recipe[bind_test::linked_zones]
