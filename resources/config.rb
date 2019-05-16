@@ -110,6 +110,26 @@ action :create do
       only_if { node['platform_family'] == 'debian' }
     end
 
+    template '/etc/apparmor.d/local/usr.sbin.named' do
+      owner 'root'
+      group 'root'
+      mode '0644'
+      cookbook 'bind'
+      source 'chroot_apparmor_profile.erb'
+      variables(
+        chroot_dir: new_resource.chroot_dir
+      )
+      only_if { new_resource.chroot && platform?('ubuntu') && node['platform_version'] >= '18.04' }
+      notifies :run, 'execute[reload_named_apparmor_profile]', :immediately
+    end
+
+    execute 'reload_named_apparmor_profile' do
+      command '/sbin/apparmor_parser -r -T -W /etc/apparmor.d/usr.sbin.named'
+      action :nothing
+      notifies :restart, 'bind_service[default]', :delayed
+      only_if { ::File.exist?('/sbin/apparmor_parser') }
+    end
+
     logging_channels = []
     logging_categories = []
     if new_resource.query_log
@@ -129,6 +149,8 @@ action :create do
         vardir: vardir,
         acls: [],
         ipv6_listen: new_resource.ipv6_listen,
+        pid_file: default_property_for(:pid_file, new_resource.chroot),
+        session_keyfile: default_property_for(:session_keyfile, new_resource.chroot),
         options: new_resource.options,
         statistics_channel: new_resource.statistics_channel,
         logging_channels: logging_channels,
