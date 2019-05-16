@@ -42,20 +42,23 @@ A chef cookbook to manage BIND servers and zones.
   * [`bind_linked_zone`](#bind_linked_zone)
     * [Examples](#examples-6)
     * [Properties](#properties-7)
-  * [`bind_acl`](#bind_acl)
+  * [`bind_stub_zone`](#bind_stub_zone)
     * [Examples](#examples-7)
     * [Properties](#properties-8)
-  * [`bind_key`](#bind_key)
-    * [Properties](#properties-9)
-  * [`bind_server`](#bind_server)
+  * [`bind_acl`](#bind_acl)
     * [Examples](#examples-8)
+    * [Properties](#properties-9)
+  * [`bind_key`](#bind_key)
     * [Properties](#properties-10)
-  * [`bind_logging_channel`](#bind_logging_channel)
+  * [`bind_server`](#bind_server)
     * [Examples](#examples-9)
     * [Properties](#properties-11)
-  * [`bind_logging_category`](#bind_logging_category)
+  * [`bind_logging_channel`](#bind_logging_channel)
     * [Examples](#examples-10)
     * [Properties](#properties-12)
+  * [`bind_logging_category`](#bind_logging_category)
+    * [Examples](#examples-11)
+    * [Properties](#properties-13)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
@@ -633,6 +636,41 @@ end
 * `zone_name` - The name of the zone. Used only if the name property does
 not match the zone name. Must be identical to the name of the zone that is
 being linked to.
+
+### `bind_stub_zone`
+
+The `bind_stub_zone` resource will configure bind to pull only the NS records
+for a zone from a primary name server.
+
+#### Examples
+
+```ruby
+bind_stub_zone 'example.com' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+end
+
+bind_stub_zone 'example.org' do
+  primaries [
+    '10.1.1.1',
+    '10.2.2.2'
+  ]
+
+  options [
+    'zone-statistics full'
+  ]
+end
+```
+
+#### Properties
+
+* `primaries` - An array of IP addresses used as the upstream master for this zone. Is mandatory and has no default.
+* `options` - Array of option strings. Each option should be a valid BIND option minus the trailing semicolon. Defaults to an empty array.
+* `view` - Name of the view to configure the zone in. Defaults to the value from the `bind_config` property.
+* `file_name` - Name of the file to store the zone in. Defaults to the name property. Used when you wish to have the same zone with different content in different views.
+* `zone_name` - The zone name of the zone. Used only if the name property does not match the zone name.
 
 ### `bind_acl`
 
