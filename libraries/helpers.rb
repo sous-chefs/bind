@@ -22,6 +22,8 @@ module BindCookbook
         conf_file:     chroot ? '/var/bind9/chroot/etc/bind/named.conf' : '/etc/bind/named.conf',
         service_name:  'bind9',
         rndc_key_file: chroot ? '/var/bind9/chroot/etc/bind/rndc.key' : '/etc/bind/rndc.key',
+        session_keyfile: chroot ? '/var/run/named/session.key' : nil,
+        pid_file: chroot ? '/var/run/named/named.pid' : nil
       }[property_name]
     end
 
