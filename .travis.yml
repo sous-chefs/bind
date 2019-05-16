@@ -1,3 +1,4 @@
+---
 rvm: 2.2
 language: ruby
 
@@ -12,13 +13,14 @@ env:
     - TESTS="integration[centos-7]"
     - TESTS="integration[debian-8]"
     - TESTS="integration[debian-9]"
-    - TESTS="integration[ubuntu-14.04]"
-    - TESTS="integration[ubuntu-16.04]"
+    - TESTS="integration[ubuntu-1404]"
+    - TESTS="integration[ubuntu-1604]"
+    - TESTS="integration[ubuntu-1804]"
 
 install: echo "skip bundle install"
 
 before_script:
-  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -v 2.6.1
+  - curl -L https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk
   - eval "$(/opt/chefdk/bin/chef shell-init bash)"
 
 script:

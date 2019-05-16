@@ -1,5 +1,11 @@
 bind changelog
 ==============
+
+v2.3.0
+------
+
+* Update supported OS and Chef clients
+
 v2.2.1
 ------
 

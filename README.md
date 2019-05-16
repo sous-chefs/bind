@@ -11,63 +11,62 @@ A chef cookbook to manage BIND servers and zones.
 * [Requirements](#requirements)
 * [Attributes](#attributes)
 * [Usage](#usage)
-	* [Internal recursive nameserver](#internal-recursive-nameserver)
-	* [Authoritative primary nameserver](#authoritative-primary-nameserver)
-	* [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
-	* [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
-	* [Nameserver in chroot mode](#nameserver-in-chroot-mode)
+  * [Internal recursive nameserver](#internal-recursive-nameserver)
+  * [Authoritative primary nameserver](#authoritative-primary-nameserver)
+  * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+  * [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
+  * [Nameserver in chroot mode](#nameserver-in-chroot-mode)
 * [Available Custom Resources](#available-custom-resources)
-	* [`bind_service`](#bind_service)
-		* [Example](#example)
-		* [Properties](#properties)
-	* [`bind_config`](#bind_config)
-		* [Examples](#examples)
-		* [Properties](#properties-1)
-	* [`bind_view`](#bind_view)
-		* [Examples](#examples-1)
-		* [Properties](#properties-2)
-	* [`bind_primary_zone`](#bind_primary_zone)
-		* [Examples](#examples-2)
-		* [Properties](#properties-3)
-	* [`bind_primary_zone_template`](#bind_primary_zone_template)
-		* [Examples](#examples-3)
-		* [Properties](#properties-4)
-		* [A note on serial numbers](#a-note-on-serial-numbers)
-	* [`bind_secondary_zone`](#bind_secondary_zone)
-		* [Examples](#examples-4)
-		* [Properties](#properties-5)
-	* [`bind_forward_zone`](#bind_forward_zone)
-		* [Examples](#examples-5)
-		* [Properties](#properties-6)
-	* [`bind_linked_zone`](#bind_linked_zone)
-		* [Examples](#examples-6)
-		* [Properties](#properties-7)
-	* [`bind_acl`](#bind_acl)
-		* [Examples](#examples-7)
-		* [Properties](#properties-8)
-	* [`bind_key`](#bind_key)
-		* [Properties](#properties-9)
-	* [`bind_server`](#bind_server)
-		* [Examples](#examples-8)
-		* [Properties](#properties-10)
-	* [`bind_logging_channel`](#bind_logging_channel)
-		* [Examples](#examples-9)
-		* [Properties](#properties-11)
-	* [`bind_logging_category`](#bind_logging_category)
-		* [Examples](#examples-10)
-		* [Properties](#properties-12)
+  * [`bind_service`](#bind_service)
+    * [Example](#example)
+    * [Properties](#properties)
+  * [`bind_config`](#bind_config)
+    * [Examples](#examples)
+    * [Properties](#properties-1)
+  * [`bind_view`](#bind_view)
+    * [Examples](#examples-1)
+    * [Properties](#properties-2)
+  * [`bind_primary_zone`](#bind_primary_zone)
+    * [Examples](#examples-2)
+    * [Properties](#properties-3)
+  * [`bind_primary_zone_template`](#bind_primary_zone_template)
+    * [Examples](#examples-3)
+    * [Properties](#properties-4)
+    * [A note on serial numbers](#a-note-on-serial-numbers)
+  * [`bind_secondary_zone`](#bind_secondary_zone)
+    * [Examples](#examples-4)
+    * [Properties](#properties-5)
+  * [`bind_forward_zone`](#bind_forward_zone)
+    * [Examples](#examples-5)
+    * [Properties](#properties-6)
+  * [`bind_linked_zone`](#bind_linked_zone)
+    * [Examples](#examples-6)
+    * [Properties](#properties-7)
+  * [`bind_acl`](#bind_acl)
+    * [Examples](#examples-7)
+    * [Properties](#properties-8)
+  * [`bind_key`](#bind_key)
+    * [Properties](#properties-9)
+  * [`bind_server`](#bind_server)
+    * [Examples](#examples-8)
+    * [Properties](#properties-10)
+  * [`bind_logging_channel`](#bind_logging_channel)
+    * [Examples](#examples-9)
+    * [Properties](#properties-11)
+  * [`bind_logging_category`](#bind_logging_category)
+    * [Examples](#examples-10)
+    * [Properties](#properties-12)
 * [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
 
 ## Requirements
 
-This release migrates to using custom resources. Thus we require a more recent
-version of chef (12.16 or above). To continue using this cookbook on older
-versions please stick with the 1.x versions.
+This cookbook requires chef 12 or later. To use the cookbook on an older version
+of chef then please use a 1.x version of the cookbook.
 
-This cookbook now follows the library pattern. To use the cookbook effectively
-you'll need a wrapper cookbook that has the resources listed.
+This cookbook follows the library pattern. To use the cookbook effectively
+you'll need a wrapper cookbook that uses the resources provided in this cookbook.
 
 A default recipe is provided. It only provides a basic recursive name server.
 
@@ -79,6 +78,11 @@ Supported Operating Systems:
 - Debian 9.2
 - Ubuntu 14.04
 - Ubuntu 16.04
+- Ubuntu 18.04
+
+Supported Chef Versions:
+
+- Chef 12, 13, 14, 15
 
 ## Attributes
 
@@ -770,7 +774,7 @@ end
 ## License and Author
 
 - Copyright: 2011 Eric G. Wolfe
-- Copyright: 2017, 2018 David Bruce
+- Copyright: 2017-2019 David Bruce
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
