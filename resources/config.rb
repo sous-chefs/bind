@@ -17,6 +17,9 @@ property :query_log_max_size, String, default: '1m'
 property :query_log_options, Array, default: []
 
 property :statistics_channel, Hash
+property :controls, Array, default: []
+property :additional_config_files, Array, default: []
+property :per_view_additional_config_files, Array, default: []
 
 include BindCookbook::Helpers
 
@@ -39,7 +42,16 @@ action :create do
   ) if new_resource.query_log
 
   additional_config_files = ['named.options']
+  unless new_resource.additional_config_files.empty?
+    additional_config_files =
+      additional_config_files.push(new_resource.additional_config_files)
+  end
+
   per_view_additional_config_files = ['named.rfc1912.zones']
+  unless new_resource.per_view_additional_config_files.empty?
+    per_view_additional_config_files =
+      per_view_additional_config_files.push(new_resource.per_view_additional_config_files)
+  end
 
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
@@ -154,7 +166,8 @@ action :create do
         options: new_resource.options,
         statistics_channel: new_resource.statistics_channel,
         logging_channels: logging_channels,
-        logging_categories: logging_categories
+        logging_categories: logging_categories,
+        controls: new_resource.controls
       )
       action :nothing
       delayed_action :create

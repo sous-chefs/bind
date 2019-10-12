@@ -29,6 +29,7 @@ module BindCookbook
 
     def rhel_property_for(property_name, chroot)
       {
+<<<<<<< Updated upstream
         chroot_dir:    chroot ? '/var/named/chroot' : nil,
         sysconfdir:    '/etc/named',
         vardir:        '/var/named',
@@ -39,6 +40,18 @@ module BindCookbook
         options_file:  '/etc/named/named.options',
         conf_file:     '/etc/named.conf',
         service_name:  chroot && node['platform_version'].to_s >= '7.0' ? 'named-chroot' : 'named',
+=======
+        chroot_dir: chroot ? '/var/named/chroot' : nil,
+        sysconfdir: '/etc/named',
+        vardir: '/var/named',
+        dynamicdir: '/var/named/dynamic',
+        packages: chroot ? %w(bind-chroot bind-utils bind-libs) : %w(bind bind-utils bind-libs),
+        run_user: 'named',
+        run_group: 'named',
+        options_file: '/etc/named/named.options',
+        conf_file: '/etc/named.conf',
+        service_name: chroot && (platform?('fedora') || node['platform_version'].to_s >= '7.0') ? 'named-chroot' : 'named',
+>>>>>>> Stashed changes
         rndc_key_file: '/etc/rndc.key',
       }[property_name]
     end

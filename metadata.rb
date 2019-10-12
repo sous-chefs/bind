@@ -12,6 +12,7 @@ license 'Apache-2.0'
 supports 'ubuntu'
 supports 'redhat'
 supports 'centos'
+supports 'fedora'
 supports 'debian'
 
 issues_url 'https://github.com/joyofhex/cookbook-bind/issues'

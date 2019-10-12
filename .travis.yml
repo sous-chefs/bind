@@ -7,10 +7,13 @@ services:
   - docker
 
 env:
+  global:
+    - CHEF_LICENSE=accept
   matrix:
     - TESTS="lint unit"
     - TESTS="integration[centos-6]"
     - TESTS="integration[centos-7]"
+    - TESTS="integration[fedora-30]"
     - TESTS="integration[debian-8]"
     - TESTS="integration[debian-9]"
     - TESTS="integration[ubuntu-1404]"

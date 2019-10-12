@@ -76,6 +76,7 @@ Supported Operating Systems:
 - CentOS/RHEL 7.3
 - Debian 8.9
 - Debian 9.2
+- Fedora >= 28
 - Ubuntu 14.04
 - Ubuntu 16.04
 - Ubuntu 18.04

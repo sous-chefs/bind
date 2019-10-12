@@ -26,15 +26,18 @@ platforms:
   - recipe[apt]
 - name: centos-6.10
 - name: centos-7.6
+- name: fedora-30
 
 verifier:
   name: inspec
 
 suites:
 - name: default
-  run_list: ['recipe[bind::default]']
+  run_list: 
+    - recipe[bind::default]
 - name: resources
-  run_list: ['recipe[bind_test]']
+  run_list: 
+    - recipe[bind_test]
 - name: chroot
   excludes:
     - ubuntu-16.04
