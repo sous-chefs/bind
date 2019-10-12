@@ -28,7 +28,7 @@ action_class do
       path "#{service_resource.vardir}/primary/db.#{new_resource.name}"
       owner service_resource.run_user
       group service_resource.run_group
-      mode 0o440
+      mode '0644'
       action file_action
       notifies :restart, "bind_service[#{service_resource.name}]", :delayed
     end

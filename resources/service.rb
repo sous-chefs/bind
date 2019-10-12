@@ -12,7 +12,7 @@ property :service_name, String, default: lazy { default_property_for(:service_na
 include BindCookbook::Helpers
 
 action :create do
-  if new_resource.chroot && node['platform'] == 'ubuntu' && node['platform_version'] == '16.04'
+  if new_resource.chroot && platform?('ubuntu') && node['platform_version'] == '16.04'
     Chef::Log.fatal('Ubuntu 16.04 LTS is incompatible with BIND9 in CHROOT setups')
     Chef::Log.fatal('https://bugs.launchpad.net/ubuntu/+source/bind9/+bug/1630025')
   end
@@ -43,7 +43,7 @@ action :create do
       end
     end
 
-    if node['platform_family'] == 'debian'
+    if platform_family?('debian')
       execute 'chmod_dev_null' do
         command "chmod 0660 #{::File.join(new_resource.chroot_dir, 'dev', 'null')}"
         not_if  { ::File.stat(::File.join(new_resource.chroot_dir, 'dev', 'null')).mode == '100660' }

@@ -56,7 +56,7 @@ action :create do
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
     group bind_service.run_group
-    mode 0o0644
+    mode '0644'
     action :create
     cookbook 'bind'
   end
@@ -65,7 +65,7 @@ action :create do
     cookbook_file ::File.join(bind_service.vardir, var_file) do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o0644
+      mode '0644'
       action :create
       cookbook 'bind'
     end
@@ -102,7 +102,7 @@ action :create do
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'init.bind9.erb'
-      only_if { node['platform_family'] == 'debian' && node['init_package'] == 'init' && new_resource.chroot }
+      only_if { platform_family?('debian') && node['init_package'] == 'init' && new_resource.chroot }
     end
 
     template '/etc/default/bind9' do
@@ -119,7 +119,7 @@ action :create do
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'default.bind9.erb'
-      only_if { node['platform_family'] == 'debian' }
+      only_if { platform_family?('debian') }
     end
 
     template '/etc/apparmor.d/local/usr.sbin.named' do
@@ -179,7 +179,7 @@ action :create do
     template new_resource.conf_file do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o644
+      mode '0644'
       variables(
         additional_config_files: additional_config_files,
         sysconfdir: sysconfdir,

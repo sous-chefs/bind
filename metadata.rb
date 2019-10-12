@@ -2,7 +2,6 @@
 name 'bind'
 
 description 'Installs/Configures ISC BIND'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '2.2.1'
 
 maintainer 'David Bruce'

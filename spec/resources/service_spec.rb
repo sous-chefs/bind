@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'basic recipe on centos 7' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: ['bind_service']
+      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
     ).converge('bind_test::spec_basic')
   end
 
@@ -115,7 +115,7 @@ end
 describe 'chroot recipe on centos 7' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: ['bind_service']
+      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
     ).converge('bind_test::spec_chroot')
   end
 
@@ -180,7 +180,7 @@ end
 describe 'overridden defaults on centos 7' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: ['bind_service']
+      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
     ).converge('bind_test::spec_overridden')
   end
 
