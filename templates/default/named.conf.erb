@@ -57,7 +57,9 @@ view "<%= view.name %>" {
       primary_zones: @primary_zones.select { |zone| zone.view == view.name },
       secondary_zones: @secondary_zones.select { |zone| zone.view == view.name },
       forward_zones: @forward_zones.select { |zone| zone.view == view.name },
-      linked_zones: @linked_zones.select { |zone| zone.view == view.name }
+      linked_zones: @linked_zones.select { |zone| zone.view == view.name },
+      stub_zones: @stub_zones.select { |zone| zone.view == view.name },
+
     }
   ).gsub(/^(.+)$/, '  \1')
 %>
@@ -76,7 +78,8 @@ include "<%= "#{@sysconfdir}/#{file}" %>";
     primary_zones: @primary_zones,
     secondary_zones: @secondary_zones,
     forward_zones: @forward_zones,
-    linked_zones: []
+    linked_zones: [],
+    stub_zones: @stub_zones,
   }
 -%>
 

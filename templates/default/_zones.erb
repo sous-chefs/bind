@@ -33,3 +33,14 @@ zone "<%= zone.name %>" IN {
   in-view <%= zone.in_view %>;
 };
 <% end -%>
+<% @stub_zones.each do |zone| -%>
+
+zone "<%= zone.name %>" IN {
+  type stub;
+  file "secondary/db.<%= zone.file_name %>";
+  masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
+  <% zone.options.each do |option| -%>
+  <%= option %>;
+  <% end -%>
+};
+<% end -%>

@@ -187,6 +187,7 @@ action :create do
         secondary_zones: [],
         forward_zones: [],
         linked_zones: [],
+        stub_zones: [],
         servers: [],
         keys: [],
         views: [],
