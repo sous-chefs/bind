@@ -422,6 +422,9 @@ end
 * `query_log_options` - DEPRECATED. Array of additional query log options. Defaults to empty array.
 * `statistics_channel` - Presence turns on the statistics channel. Should be a hash containing :address and :port to configure the location where the statistics channel will listen on. This will likely move to a separate resource in the future.
 * `default_view` - The name of the default view to configure zones within when views are used. Defaults to 'default'.
+* `controls` - Array of control statements.
+* `additional_config_files` - Array of additional config files to include in named.conf
+* `per_view_additional_config_file` - Array of additional per view config files to include in named.conf.
 
 ### `bind_view`
 

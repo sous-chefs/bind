@@ -4,7 +4,10 @@ bind changelog
 v2.3.0
 ------
 
-* Update supported OS and Chef clients
+* Update supported OS and Chef clients.
+* Support chroot on ubuntu 18.
+* Add `bind_stub_zone` resource.
+* Add `controls`, `per_view_additional_config`, and `additional_config_files` to `bind_config` resource.
 
 v2.2.1
 ------
