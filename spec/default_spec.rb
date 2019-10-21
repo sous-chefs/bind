@@ -5,7 +5,7 @@ describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        platform: 'centos', version: '7.3.1611', step_into: %w(
+        platform: 'centos', version: '7.7.1908', step_into: %w(
           bind_service bind_config bind_acl
         )
       ).converge(described_recipe)

@@ -5,6 +5,7 @@ bind_service 'default' do
 end
 
 bind_config 'default' do
+  controls ['inet 127.0.0.1 port 953 allow { 127.0.0.1; }']
   action :create
 end
 

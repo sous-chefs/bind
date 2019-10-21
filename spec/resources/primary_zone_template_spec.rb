@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone_template)
+      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_primary_zone_template)
     ).converge('bind_test::spec_primary_zone_template')
   end
 
@@ -67,11 +67,11 @@ end
 describe 'zones with managed serial numbers' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_primary_zone_template)
+      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_primary_zone_template)
     ) do |node|
-      node.normal['bind']['zone']['custom.example.com']['serial'] = '100'
-      node.normal['bind']['zone']['custom.example.com']['hash'] = '100'
-      node.normal['bind']['zone']['nochange.example.com'].tap do |zone|
+      node.default['bind']['zone']['custom.example.com']['serial'] = '100'
+      node.default['bind']['zone']['custom.example.com']['hash'] = '100'
+      node.default['bind']['zone']['nochange.example.com'].tap do |zone|
         zone['serial'] = '999'
         zone['hash'] = 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
       end
@@ -80,20 +80,20 @@ describe 'zones with managed serial numbers' do
 
   context 'a new empty zone' do
     it 'has no serial number persisted to the node' do
-      attribute = chef_run.node.normal['bind']['zone']['empty.example.com']
+      attribute = chef_run.node.default['bind']['zone']['empty.example.com']
       expect(attribute.key?('serial')).to be false
     end
 
     it 'persists a serial number to the node' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal
+      attribute = chef_run.node.default
       expect(attribute['bind']['zone']['empty.example.com'].empty?).to be false
       expect(attribute['bind']['zone']['empty.example.com']['serial']).to eq '1'
     end
 
     it 'persists a hash code to the node object' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal
+      attribute = chef_run.node.default
       hash_code = attribute['bind']['zone']['empty.example.com']['hash']
       expect(hash_code).to eq '54fb331da7106128dacb7162f72493684c46e5cbd12f9d830ec87d07cbbf3e83'
     end
@@ -102,13 +102,13 @@ describe 'zones with managed serial numbers' do
   context 'a zone with no changes' do
     it 'does not change the persisted serial number' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal
+      attribute = chef_run.node.default
       expect(attribute['bind']['zone']['nochange.example.com']['serial']).to eq '999'
     end
 
     it 'does not change the persisted hash code' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal
+      attribute = chef_run.node.default
       hash_code = attribute['bind']['zone']['nochange.example.com']['hash']
       expect(hash_code).to eq 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
     end
@@ -117,13 +117,13 @@ describe 'zones with managed serial numbers' do
   context 'a zone where the hash value has changed' do
     it 'changes the serial number persisted' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal['bind']['zone']['custom.example.com']
+      attribute = chef_run.node.default['bind']['zone']['custom.example.com']
       expect(attribute['serial']).to eq '101'
     end
 
     it 'changes the serial number when managed' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
-      attribute = chef_run.node.normal['bind']['zone']['nochange.example.com']
+      attribute = chef_run.node.default['bind']['zone']['nochange.example.com']
       expect(attribute['serial']).to eq '999'
     end
 

@@ -55,3 +55,11 @@ statistics-channels {
   inet <%= @statistics_channel[:address] %> port <%= @statistics_channel[:port] -%>;
 };
 <% end %>
+
+<% unless @controls.empty? -%>
+controls {
+  <% @controls.each do |control| -%>
+<%= control %>;
+<% end -%>
+};
+<% end -%>

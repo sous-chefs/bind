@@ -17,6 +17,9 @@ property :query_log_max_size, String, default: '1m'
 property :query_log_options, Array, default: []
 
 property :statistics_channel, Hash
+property :controls, Array, default: []
+property :additional_config_files, Array, default: []
+property :per_view_additional_config_files, Array, default: []
 
 include BindCookbook::Helpers
 
@@ -39,12 +42,21 @@ action :create do
   ) if new_resource.query_log
 
   additional_config_files = ['named.options']
+  unless new_resource.additional_config_files.empty?
+    additional_config_files =
+      additional_config_files.push(new_resource.additional_config_files)
+  end
+
   per_view_additional_config_files = ['named.rfc1912.zones']
+  unless new_resource.per_view_additional_config_files.empty?
+    per_view_additional_config_files =
+      per_view_additional_config_files.push(new_resource.per_view_additional_config_files)
+  end
 
   cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
     group bind_service.run_group
-    mode 0o0644
+    mode '0644'
     action :create
     cookbook 'bind'
   end
@@ -53,7 +65,7 @@ action :create do
     cookbook_file ::File.join(bind_service.vardir, var_file) do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o0644
+      mode '0644'
       action :create
       cookbook 'bind'
     end
@@ -90,7 +102,7 @@ action :create do
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'init.bind9.erb'
-      only_if { node['platform_family'] == 'debian' && node['init_package'] == 'init' && new_resource.chroot }
+      only_if { platform_family?('debian') && node['init_package'] == 'init' && new_resource.chroot }
     end
 
     template '/etc/default/bind9' do
@@ -107,7 +119,7 @@ action :create do
       notifies :restart, 'bind_service[default]', :delayed
       cookbook 'bind'
       source 'default.bind9.erb'
-      only_if { node['platform_family'] == 'debian' }
+      only_if { platform_family?('debian') }
     end
 
     template '/etc/apparmor.d/local/usr.sbin.named' do
@@ -154,7 +166,8 @@ action :create do
         options: new_resource.options,
         statistics_channel: new_resource.statistics_channel,
         logging_channels: logging_channels,
-        logging_categories: logging_categories
+        logging_categories: logging_categories,
+        controls: new_resource.controls
       )
       action :nothing
       delayed_action :create
@@ -166,7 +179,7 @@ action :create do
     template new_resource.conf_file do
       owner bind_service.run_user
       group bind_service.run_group
-      mode 0o644
+      mode '0644'
       variables(
         additional_config_files: additional_config_files,
         sysconfdir: sysconfdir,

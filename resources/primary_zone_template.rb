@@ -56,7 +56,7 @@ action :create do
       )
     )
 
-    persisted_values = node.normal['bind']['zone'][new_resource.file_name]
+    persisted_values = node.default['bind']['zone'][new_resource.file_name]
 
     # override soa with the value in persisted_values if it exists
     soa[:serial] = persisted_values['serial'] if persisted_values.attribute?('serial')
@@ -64,7 +64,7 @@ action :create do
     unless persisted_values['hash'] == new_hash
       soa[:serial] = soa[:serial].succ if persisted_values.attribute?('serial')
 
-      node.normal['bind']['zone'][new_resource.name].tap do |zone|
+      node.default['bind']['zone'][new_resource.name].tap do |zone|
         zone['serial'] = soa[:serial]
         zone['hash'] = new_hash
       end
@@ -83,7 +83,7 @@ action :create do
       zone_records: sorted_zone_records,
       records: sorted_records
     )
-    mode 0o440
+    mode '0440'
     action :create
     notifies :restart, "bind_service[#{bind_service.name}]", :delayed
   end

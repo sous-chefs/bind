@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 #
-# Cookbook Name:: bind
+# Cookbook:: bind
 # Recipe:: default
 #
-# Copyright 2011, Gerald L. Hevener, Jr, M.S.
-# Copyright 2011, Eric G. Wolfe
+# Copyright:: 2011, Gerald L. Hevener, Jr, M.S.
+# Copyright:: 2011, Eric G. Wolfe
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
