@@ -6,6 +6,7 @@ end
 
 bind_config 'default' do
   controls ['inet 127.0.0.1 port 953 allow { 127.0.0.1; }']
+  statistics_channel address: '127.0.0.1', port: 8080, allow: '127.0.0.1'
   action :create
 end
 

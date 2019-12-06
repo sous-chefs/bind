@@ -52,7 +52,9 @@ logging {
 <% end %>
 <% if @statistics_channel %>
 statistics-channels {
-  inet <%= @statistics_channel[:address] %> port <%= @statistics_channel[:port] -%>;
+  <% @statistics_channel.each do |channel| %>
+  inet <%= channel[:address] %> port <%= channel[:port] -%><% if channel[:allow] -%> allow { <%= channel[:allow] %>; }<% end -%>;
+  <% end %>
 };
 <% end %>
 

@@ -6,6 +6,7 @@ end
 
 bind_config 'default' do
   default_view 'internal'
+  statistics_channel [ { address: '127.0.0.1', port: 8080, allow: '127.0.0.1' }, { address: '127.0.0.1', port: 8081 } ]
 end
 
 bind_view 'internal' do

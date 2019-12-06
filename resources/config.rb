@@ -16,7 +16,7 @@ property :query_log_versions, [String, Integer], default: 2
 property :query_log_max_size, String, default: '1m'
 property :query_log_options, Array, default: []
 
-property :statistics_channel, Hash
+property :statistics_channel, [Hash, Array]
 property :controls, Array, default: []
 property :additional_config_files, Array, default: []
 property :per_view_additional_config_files, Array, default: []
@@ -153,6 +153,14 @@ action :create do
       logging_categories = [LoggingCategory.new('queries', ['b_query'])]
     end
 
+    if new_resource.statistics_channel
+      statistics_channel = if new_resource.statistics_channel.is_a?(Array)
+                             new_resource.statistics_channel
+                           else
+                             [].push(new_resource.statistics_channel)
+                           end
+    end
+
     template new_resource.options_file do
       owner bind_service.run_user
       group bind_service.run_group
@@ -164,7 +172,7 @@ action :create do
         pid_file: default_property_for(:pid_file, new_resource.chroot),
         session_keyfile: default_property_for(:session_keyfile, new_resource.chroot),
         options: new_resource.options,
-        statistics_channel: new_resource.statistics_channel,
+        statistics_channel: statistics_channel,
         logging_channels: logging_channels,
         logging_categories: logging_categories,
         controls: new_resource.controls
