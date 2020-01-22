@@ -189,7 +189,7 @@ action :create do
       group bind_service.run_group
       mode '0644'
       variables(
-        additional_config_files: additional_config_files,
+        additional_config_files: additional_config_files.flatten,
         sysconfdir: sysconfdir,
         primary_zones: [],
         secondary_zones: [],
@@ -199,7 +199,7 @@ action :create do
         servers: [],
         keys: [],
         views: [],
-        per_view_additional_config_files: per_view_additional_config_files
+        per_view_additional_config_files: per_view_additional_config_files.flatten
       )
       action :nothing
       delayed_action :create

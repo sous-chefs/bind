@@ -94,3 +94,18 @@ describe 'overridden defaults' do
     expect(chef_run).to render_file('/etc/bind/bind.conf')
   end
 end
+
+describe 'additional config files' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'centos', version: '7.7.1908', step_into: ['bind_config']
+    ).converge('bind_test::spec_additional_config_files')
+  end
+
+  it 'creates the main config file' do
+    expect(chef_run).to render_file('/etc/named.conf')
+      .with_content('include "/etc/named/additional.conf";')
+    expect(chef_run).to render_file('/etc/named.conf')
+      .with_content('include "/etc/named/additional-view.conf";')
+  end
+end
