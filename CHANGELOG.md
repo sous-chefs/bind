@@ -1,6 +1,12 @@
 bind changelog
 ==============
 
+v2.3.1
+------
+
+* #58: Multiple statistices channel support - bmhughes
+* #59: fix bug in additional config files directive - ramereth
+
 v2.3.0
 ------
 
