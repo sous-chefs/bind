@@ -131,7 +131,7 @@ action :create do
       variables(
         chroot_dir: new_resource.chroot_dir
       )
-      only_if { new_resource.chroot && platform?('ubuntu') && node['platform_version'] >= '18.04' }
+      only_if { new_resource.chroot && platform?('ubuntu') && node['platform_version'] >= '14.04' }
       notifies :run, 'execute[reload_named_apparmor_profile]', :immediately
     end
 
@@ -203,7 +203,7 @@ action :create do
       )
       action :nothing
       delayed_action :create
-      notifies :restart, 'bind_service[default]', :delayed
+      notifies :restart, 'bind_service[default]', :immediately
       cookbook 'bind'
       source 'named.conf.erb'
     end
