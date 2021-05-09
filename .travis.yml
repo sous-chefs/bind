@@ -13,10 +13,11 @@ env:
     - TESTS="lint unit"
     - TESTS="integration[centos-6]"
     - TESTS="integration[centos-7]"
-    - TESTS="integration[fedora-30]"
+    - TESTS="integration[centos-8]"
+    - TESTS="integration[centos-stream-8]"
+    - TESTS="integration[fedora-34]"
     - TESTS="integration[debian-8]"
     - TESTS="integration[debian-9]"
-    - TESTS="integration[ubuntu-1404]"
     - TESTS="integration[ubuntu-1604]"
     - TESTS="integration[ubuntu-1804]"
 

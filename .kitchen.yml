@@ -4,18 +4,18 @@ driver:
 
 provisioner:
   name: chef_zero
+  deprecations_as_errors: true
+  chef_license: accept
   product_name: chef
-  product_version: <%= ENV['CHEF_VERSION'] || '12' %>
-  client_rb:
-    chef_license: accept
+  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  install_strategy: always
+  log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
+
 platforms:
 - name: ubuntu-18.04
   run_list:
   - recipe[apt]
 - name: ubuntu-16.04
-  run_list:
-  - recipe[apt]
-- name: ubuntu-14.04
   run_list:
   - recipe[apt]
 - name: debian-8.11
@@ -26,17 +26,17 @@ platforms:
   - recipe[apt]
 - name: centos-6.10
 - name: centos-7.6
-- name: fedora-30
+- name: fedora-34
 
 verifier:
   name: inspec
 
 suites:
 - name: default
-  run_list: 
+  run_list:
     - recipe[bind::default]
 - name: resources
-  run_list: 
+  run_list:
     - recipe[bind_test]
 - name: chroot
   excludes:
@@ -45,12 +45,12 @@ suites:
     - recipe[bind_test::chroot]
 - name: views
   includes:
-    - centos-6.10
+    - centos-8
   run_list:
     - recipe[bind_test::views]
 - name: logging
   includes:
-    - centos-6.10
+    - centos-8
   run_list:
     - recipe[bind_test::logging]
 - name: linked-zones
@@ -59,3 +59,4 @@ suites:
     - debian-9.6
   run_list:
     - recipe[bind_test::linked_zones]
+...

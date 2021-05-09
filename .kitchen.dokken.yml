@@ -2,7 +2,7 @@
 driver:
   name: dokken
   privileged: true
-  chef_version: <%= ENV['CHEF_VERSION'] || '12' %>
+  chef_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   cap_add:
     - SYS_PTRACE
     - SYS_ADMIN
@@ -14,14 +14,6 @@ provisioner:
   name: dokken
 
 platforms:
-  - name: ubuntu-18.04
-    driver:
-      image: dokken/ubuntu-18.04
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /bin/systemd
-    run_list:
-      - recipe[apt::default]
   - name: ubuntu-16.04
     driver:
       image: dokken/ubuntu-16.04
@@ -30,12 +22,16 @@ platforms:
       pid_one_command: /bin/systemd
     run_list:
       - recipe[apt::default]
-  - name: ubuntu-14.04
+
+  - name: ubuntu-18.04
     driver:
-      image: dokken/ubuntu-14.04
-      pid_one_command: /sbin/init
+      image: dokken/ubuntu-18.04
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /bin/systemd
     run_list:
       - recipe[apt::default]
+
   - name: debian-8
     driver:
       image: dokken/debian-8
@@ -44,6 +40,7 @@ platforms:
       pid_one_command: /bin/systemd
     run_list:
       - recipe[apt::default]
+
   - name: debian-9
     driver:
       image: dokken/debian-9
@@ -52,51 +49,37 @@ platforms:
       pid_one_command: /bin/systemd
     run_list:
       - recipe[apt::default]
+
   - name: centos-6
     driver:
       image: dokken/centos-6
       pid_one_command: /sbin/init
+
   - name: centos-7
     driver:
       image: dokken/centos-7
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       pid_one_command: /usr/lib/systemd/systemd
-  - name: fedora-30
+
+  - name: centos-8
     driver:
-      image: dokken/fedora-30
+      image: dokken/centos-8
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       pid_one_command: /usr/lib/systemd/systemd
 
-verifier:
-  name: inspec
+  - name: centos-stream-8
+    driver:
+      image: dokken/centos-stream-8
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /usr/lib/systemd/systemd
 
-suites:
-  - name: default
-    run_list:
-      - recipe[bind::default]
-  - name: resources
-    run_list:
-      - recipe[bind_test]
-  - name: chroot
-    excludes:
-      - ubuntu-16.04
-    run_list:
-      - recipe[bind_test::chroot]
-  - name: views
-    includes:
-      - centos-6
-    run_list:
-      - recipe[bind_test::views]
-  - name: logging
-    includes:
-      - centos-6
-    run_list:
-      - recipe[bind_test::logging]
-  - name: linked-zones
-    includes:
-      - ubuntu-16.04
-      - debian-9
-    run_list:
-      - recipe[bind_test::linked_zones]
+  - name: fedora-34
+    driver:
+      image: dokken/fedora-34
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /usr/lib/systemd/systemd
+...
