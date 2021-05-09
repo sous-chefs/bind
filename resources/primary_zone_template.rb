@@ -1,4 +1,5 @@
-# frozen_string_literal: true
+unified_mode true
+
 require 'digest'
 
 PrimaryZone = Struct.new(:name, :options, :view, :file_name)

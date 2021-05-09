@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+unified_mode true
 
 property :chroot, [true, false], default: false
 property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
