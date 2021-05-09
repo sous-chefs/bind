@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'spec_helper'
 
-describe 'basic recipe on centos 7' do
+describe 'basic recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
+      platform: 'centos', version: '8', step_into: ['bind_service']
     ).converge('bind_test::spec_basic')
   end
 
@@ -37,10 +37,10 @@ describe 'basic recipe on centos 7' do
   end
 end
 
-describe 'chroot recipe on ubuntu 14.04' do
+describe 'chroot recipe on ubuntu 18.04' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'ubuntu', version: '14.04', step_into: ['bind_service']
+      platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
     ).converge('bind_test::spec_chroot')
   end
   let(:mknod_null)    { chef_run.execute('mknod_null') }
@@ -112,10 +112,10 @@ describe 'chroot recipe on ubuntu 14.04' do
   end
 end
 
-describe 'chroot recipe on centos 7' do
+describe 'chroot recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
+      platform: 'centos', version: '8', step_into: ['bind_service']
     ).converge('bind_test::spec_chroot')
   end
 
@@ -162,25 +162,10 @@ describe 'chroot recipe on centos 7' do
   end
 end
 
-describe 'chroot recipe on centos 6' do
+describe 'overridden defaults on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '6.9', step_into: ['bind_service']
-    ).converge('bind_test::spec_chroot')
-  end
-
-  it 'starts the service' do
-    expect(chef_run).to start_service('named')
-    expect(chef_run).to enable_service('named')
-    expect(chef_run).to_not start_service('named-chroot')
-    expect(chef_run).to_not enable_service('named-chroot')
-  end
-end
-
-describe 'overridden defaults on centos 7' do
-  let(:chef_run) do
-    ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_service']
+      platform: 'centos', version: '8', step_into: ['bind_service']
     ).converge('bind_test::spec_overridden')
   end
 
@@ -196,10 +181,10 @@ describe 'overridden defaults on centos 7' do
   end
 end
 
-describe 'basic recipe on ubuntu 16.04' do
+describe 'basic recipe on ubuntu 18.04' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'ubuntu', version: '16.04', step_into: ['bind_service']
+      platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
     ).converge('bind_test::spec_basic')
   end
 

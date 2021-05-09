@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'adding access control lists' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_acl)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_acl)
     ).converge('bind_test::spec_acl')
   end
 

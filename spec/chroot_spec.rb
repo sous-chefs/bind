@@ -2,10 +2,75 @@
 require 'spec_helper'
 
 describe 'bind_test::chroot' do
-  context 'on CentOS 6' do
+  context 'on CentOS 7' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        platform: 'centos', version: '6.9', step_into: %w(
+        platform: 'centos', version: '7', step_into: %w(
+          bind_service bind_config bind_acl
+        )
+      ).converge(described_recipe)
+    end
+
+    %w(bind-chroot bind-utils bind-libs).each do |bind_package|
+      it "installs package #{bind_package}" do
+        expect(chef_run).to install_package(bind_package)
+      end
+    end
+
+    it 'creates /var/named/chroot with mode 750 and owner bind' do
+      expect(chef_run).to create_directory('/var/named/chroot').with(
+        mode: '0750',
+        user: 'root',
+        group: 'named'
+      )
+    end
+
+    %w(dev etc var var/log var/run).each do |subdir|
+      it "creates #{::File.join('/var/named/chroot', subdir)} with mode 750 and owner named" do
+        expect(chef_run).to create_directory(::File.join('/var/named/chroot', subdir)).with(
+          mode: '0750',
+          user: 'named'
+        )
+      end
+    end
+
+    %w(named.options named.rfc1912.zones).each do |named_file|
+      it "renders file #{::File.join('/etc/named', named_file)}" do
+        expect(chef_run).to render_file(::File.join('/etc/named', named_file))
+      end
+    end
+
+    it 'renders file /etc/named.conf with included files' do
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.options"})
+      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
+    end
+
+    %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
+      it "it creates cookbook file #{::File.join('/var/named', var_file)}" do
+        expect(chef_run).to create_cookbook_file(::File.join('/var/named', var_file))
+      end
+    end
+
+    %w(data primary secondary).each do |subdir|
+      it "creates subdirectory #{::File.join('/var/named', subdir)}" do
+        expect(chef_run).to create_directory(::File.join('/var/named', subdir))
+      end
+    end
+
+    it 'executes generate_rndc_key' do
+      expect(chef_run).to run_execute('generate_rndc_key')
+    end
+
+    it 'notifies service[named-chroot]' do
+      config_template = chef_run.template('/etc/named/named.options')
+      expect(config_template).to notify('bind_service[default]').to(:restart)
+    end
+  end
+
+  context 'on CentOS 8' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new(
+        platform: 'centos', version: '8', step_into: %w(
           bind_service bind_config bind_acl bind_primary_zone bind_primary_zone_template bind_secondary_zone bind_forward_zone
         )
       ).converge(described_recipe)
@@ -84,75 +149,10 @@ describe 'bind_test::chroot' do
     end
   end
 
-  context 'on CentOS 7' do
+  context 'on Ubuntu 18.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        platform: 'centos', version: '7.7.1908', step_into: %w(
-          bind_service bind_config bind_acl
-        )
-      ).converge(described_recipe)
-    end
-
-    %w(bind-chroot bind-utils bind-libs).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
-    end
-
-    it 'creates /var/named/chroot with mode 750 and owner bind' do
-      expect(chef_run).to create_directory('/var/named/chroot').with(
-        mode: '0750',
-        user: 'root',
-        group: 'named'
-      )
-    end
-
-    %w(dev etc var var/log var/run).each do |subdir|
-      it "creates #{::File.join('/var/named/chroot', subdir)} with mode 750 and owner named" do
-        expect(chef_run).to create_directory(::File.join('/var/named/chroot', subdir)).with(
-          mode: '0750',
-          user: 'named'
-        )
-      end
-    end
-
-    %w(named.options named.rfc1912.zones).each do |named_file|
-      it "renders file #{::File.join('/etc/named', named_file)}" do
-        expect(chef_run).to render_file(::File.join('/etc/named', named_file))
-      end
-    end
-
-    it 'renders file /etc/named.conf with included files' do
-      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.options"})
-      expect(chef_run).to render_file('/etc/named.conf').with_content(%r{include "/etc/named/named.rfc1912.zones"})
-    end
-
-    %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
-      it "it creates cookbook file #{::File.join('/var/named', var_file)}" do
-        expect(chef_run).to create_cookbook_file(::File.join('/var/named', var_file))
-      end
-    end
-
-    %w(data primary secondary).each do |subdir|
-      it "creates subdirectory #{::File.join('/var/named', subdir)}" do
-        expect(chef_run).to create_directory(::File.join('/var/named', subdir))
-      end
-    end
-
-    it 'executes generate_rndc_key' do
-      expect(chef_run).to run_execute('generate_rndc_key')
-    end
-
-    it 'notifies service[named-chroot]' do
-      config_template = chef_run.template('/etc/named/named.options')
-      expect(config_template).to notify('bind_service[default]').to(:restart)
-    end
-  end
-
-  context 'on Ubuntu 14.04' do
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new(
-        platform: 'ubuntu', version: '14.04', step_into: %w(
+        platform: 'ubuntu', version: '18.04', step_into: %w(
           bind_service bind_config bind_acl
         )
       ).converge(described_recipe)
@@ -229,10 +229,6 @@ describe 'bind_test::chroot' do
 
     it 'renders file /etc/default/bind9' do
       expect(chef_run).to render_file('/etc/default/bind9')
-    end
-
-    it 'renders file /etc/init.d/bind9' do
-      expect(chef_run).to render_file('/etc/init.d/bind9')
     end
 
     %w(null random urandom).each do |d|

@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'adding a new channel' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(
+      platform: 'centos', version: '8', step_into: %w(
         bind_config
         bind_logging_channel
         bind_logging_category

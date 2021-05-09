@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'adding a single view' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(
+      platform: 'centos', version: '8', step_into: %w(
         bind_config
         bind_view
         bind_primary_zone
@@ -48,7 +48,7 @@ end
 describe 'adding a single view with options' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_view bind_primary_zone)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_view bind_primary_zone)
     ).converge('bind_test::spec_single_view_with_options')
   end
 
@@ -78,7 +78,7 @@ end
 describe 'adding multiple views' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(
+      platform: 'centos', version: '8', step_into: %w(
         bind_config bind_view bind_primary_zone bind_primary_zone_template
       )
     ).converge('bind_test::spec_multiple_views')
