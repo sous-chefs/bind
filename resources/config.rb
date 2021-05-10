@@ -71,7 +71,7 @@ action :create do
     end
   end
 
-  rndc_cmd = 'rndc-confgen -a -r /dev/urandom -u ' + bind_service.run_user
+  rndc_cmd = 'rndc-confgen -a -u ' + bind_service.run_user
   rndc_cmd.concat(" -t #{new_resource.chroot_dir}") if new_resource.chroot
 
   execute 'generate_rndc_key' do
