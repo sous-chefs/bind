@@ -1,4 +1,5 @@
 <% unless @primary_zones.empty? -%>
+
 <% @primary_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type master;
@@ -9,7 +10,6 @@ zone "<%= zone.name %>" IN {
   <% end -%>
   <% end -%>
 };
-
 <% end -%>
 <% end -%>
 <% unless @secondary_zones.empty? -%>

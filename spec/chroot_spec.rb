@@ -113,14 +113,12 @@ describe 'bind_test::chroot' do
         # Local modifications will be overwritten.
 
         include "/etc/named/named.options";
-
         include "/etc/named/named.rfc1912.zones";
 
         zone "example.com" IN {
           type master;
           file "primary/db.example.com";
         };
-
         zone "sub.example.com" IN {
           type master;
           file "primary/db.sub.example.com";
