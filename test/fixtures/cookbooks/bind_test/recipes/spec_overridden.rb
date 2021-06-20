@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 bind_service 'default' do
   sysconfdir '/test/etc'
   vardir '/test/var'
