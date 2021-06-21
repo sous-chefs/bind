@@ -1,5 +1,4 @@
 #!/usr/bin/env rake
-# frozen_string_literal: true
 
 # foodcritic rake task
 desc 'Foodcritic linter'

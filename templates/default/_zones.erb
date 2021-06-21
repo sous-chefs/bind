@@ -1,46 +1,61 @@
-<% @primary_zones.each do |zone| -%>
+<% unless @primary_zones.empty? -%>
 
+<% @primary_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type master;
   file "primary/db.<%= zone.file_name %>";
+  <% unless zone.options.empty? -%>
   <% zone.options.each do |option| -%>
   <%= option %>;
   <% end -%>
+  <% end -%>
 };
 <% end -%>
-<% @secondary_zones.each do |zone| -%>
+<% end -%>
+<% unless @secondary_zones.empty? -%>
 
+<% @secondary_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type slave;
   file "secondary/db.<%= zone.file_name %>";
   masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
+  <% unless zone.options.empty? -%>
   <% zone.options.each do |option| -%>
   <%= option %>;
   <% end -%>
+  <% end -%>
 };
 <% end -%>
-<% @forward_zones.each do |zone| -%>
+<% end -%>
+<% unless @forward_zones.empty? -%>
 
+<% @forward_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   type forward;
   forwarders { <%= zone.forwarders.map { |forwarder| "#{forwarder};" }.join(' ') %> };
   forward <%= zone.forward %>;
 };
 <% end -%>
-<% @linked_zones.each do |zone| -%>
+<% end -%>
+<% unless @linked_zones.empty? -%>
 
+<% @linked_zones.each do |zone| -%>
 zone "<%= zone.name %>" IN {
   in-view <%= zone.in_view %>;
 };
 <% end -%>
+<% end -%>
+<% unless @stub_zones.empty? -%>
 <% @stub_zones.each do |zone| -%>
-
 zone "<%= zone.name %>" IN {
   type stub;
   file "secondary/db.<%= zone.file_name %>";
   masters { <%= zone.primaries.map { |primary| "#{primary};" }.join(' ') %> };
+  <% unless zone.options.empty? -%>
   <% zone.options.each do |option| -%>
   <%= option %>;
   <% end -%>
+  <% end -%>
 };
+<% end -%>
 <% end -%>

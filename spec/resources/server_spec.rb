@@ -1,10 +1,9 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'set server options' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_service bind_config bind_server)
+      platform: 'centos', version: '8', step_into: %w(bind_service bind_config bind_server)
     ).converge('bind_test::spec_server')
   end
 

@@ -1,11 +1,10 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'bind::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        platform: 'centos', version: '7.7.1908', step_into: %w(
+        platform: 'centos', version: '7', step_into: %w(
           bind_service bind_config bind_acl
         )
       ).converge(described_recipe)
@@ -74,10 +73,10 @@ describe 'bind::default' do
     end
   end
 
-  context 'on Ubuntu 16.04' do
+  context 'on Ubuntu 18.04' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
-        platform: 'ubuntu', version: '16.04', step_into: %w(
+        platform: 'ubuntu', version: '18.04', step_into: %w(
           bind_service bind_config bind_acl
         )
       ).converge(described_recipe)

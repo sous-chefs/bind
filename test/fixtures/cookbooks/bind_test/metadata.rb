@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 name 'bind_test'
 version '1.0.0'
 maintainer 'David Bruce'

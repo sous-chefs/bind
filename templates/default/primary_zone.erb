@@ -1,7 +1,7 @@
 ; This zone file is managed by Chef
 $TTL <%= @default_ttl %>
-
 <% if @soa %>
+
 <%= "%-35s %-5s %-2s %-10s" % [
   '@',
   @soa.fetch(:ttl, ''),
@@ -15,6 +15,7 @@ $TTL <%= @default_ttl %>
                                          <%= @soa[:minimum] %> ; Minimum (NXDOMAIN Caching period)
                                 )
 <% end %>
+<% unless @zone_records.empty? %>
 
 <% @zone_records.each do |record| %>
 <%= "%-35s %-5s %-2s %-10s %-s" % [
@@ -26,6 +27,8 @@ $TTL <%= @default_ttl %>
 ]
 %>
 <% end %>
+<% end %>
+<% unless @records.empty? %>
 
 <% @records.each do |record| %>
 <%= "%-35s %-5s %-2s %-10s %-s" % [
@@ -37,4 +40,4 @@ $TTL <%= @default_ttl %>
 ]
 %>
 <% end %>
-
+<% end %>

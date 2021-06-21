@@ -1,10 +1,9 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'key stanza' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_key)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_key)
     ).converge('bind_test::spec_key')
   end
 

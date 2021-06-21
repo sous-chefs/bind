@@ -1,10 +1,9 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_primary_zone_template)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_primary_zone_template)
     ).converge('bind_test::spec_primary_zone_template')
   end
 
@@ -67,7 +66,7 @@ end
 describe 'zones with managed serial numbers' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: %w(bind_config bind_primary_zone_template)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_primary_zone_template)
     ) do |node|
       node.default['bind']['zone']['custom.example.com']['serial'] = '100'
       node.default['bind']['zone']['custom.example.com']['hash'] = '100'

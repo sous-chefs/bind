@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+unified_mode true
 
 property :chroot, [true, false], default: false
 property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
@@ -11,7 +11,7 @@ property :default_view, String, default: 'default'
 
 # The following is deprecated. Use `bind_logging_channel` and
 # `bind_logging_category` instead
-property :query_log, [String, nil], default: nil
+property :query_log, [String, nil]
 property :query_log_versions, [String, Integer], default: 2
 property :query_log_max_size, String, default: '1m'
 property :query_log_options, Array, default: []
@@ -71,7 +71,7 @@ action :create do
     end
   end
 
-  rndc_cmd = 'rndc-confgen -a -r /dev/urandom -u ' + bind_service.run_user
+  rndc_cmd = 'rndc-confgen -a -u ' + bind_service.run_user
   rndc_cmd.concat(" -t #{new_resource.chroot_dir}") if new_resource.chroot
 
   execute 'generate_rndc_key' do

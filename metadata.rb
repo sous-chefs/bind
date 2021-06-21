@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 name 'bind'
 
 description 'Installs/Configures ISC BIND'
@@ -16,4 +15,4 @@ supports 'debian'
 
 issues_url 'https://github.com/joyofhex/cookbook-bind/issues'
 source_url 'https://github.com/joyofhex/cookbook-bind'
-chef_version '>= 12.16'
+chef_version '>= 15.3'

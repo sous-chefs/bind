@@ -1,10 +1,9 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'adding stub zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.3.1611', step_into: %w(bind_config bind_stub_zone)
+      platform: 'centos', version: '8', step_into: %w(bind_config bind_stub_zone)
     ).converge('bind_test::spec_stub_zone')
   end
 

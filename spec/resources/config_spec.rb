@@ -1,10 +1,9 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'creating a basic configuration' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_config']
+      platform: 'centos', version: '8', step_into: ['bind_config']
     ).converge('bind_test::spec_basic')
   end
 
@@ -56,7 +55,7 @@ end
 describe 'overridden defaults' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_config']
+      platform: 'centos', version: '8', step_into: ['bind_config']
     ).converge('bind_test::spec_overridden')
   end
 
@@ -98,7 +97,7 @@ end
 describe 'additional config files' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
-      platform: 'centos', version: '7.7.1908', step_into: ['bind_config']
+      platform: 'centos', version: '8', step_into: ['bind_config']
     ).converge('bind_test::spec_additional_config_files')
   end
 
