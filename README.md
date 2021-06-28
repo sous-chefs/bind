@@ -8,58 +8,61 @@ A chef cookbook to manage BIND servers and zones.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Requirements](#requirements)
-* [Attributes](#attributes)
-* [Usage](#usage)
-  * [Internal recursive nameserver](#internal-recursive-nameserver)
-  * [Authoritative primary nameserver](#authoritative-primary-nameserver)
-  * [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
-  * [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
-  * [Nameserver in chroot mode](#nameserver-in-chroot-mode)
-* [Available Custom Resources](#available-custom-resources)
-  * [`bind_service`](#bind_service)
-    * [Example](#example)
-    * [Properties](#properties)
-  * [`bind_config`](#bind_config)
-    * [Examples](#examples)
-    * [Properties](#properties-1)
-  * [`bind_view`](#bind_view)
-    * [Examples](#examples-1)
-    * [Properties](#properties-2)
-  * [`bind_primary_zone`](#bind_primary_zone)
-    * [Examples](#examples-2)
-    * [Properties](#properties-3)
-  * [`bind_primary_zone_template`](#bind_primary_zone_template)
-    * [Examples](#examples-3)
-    * [Properties](#properties-4)
-    * [A note on serial numbers](#a-note-on-serial-numbers)
-  * [`bind_secondary_zone`](#bind_secondary_zone)
-    * [Examples](#examples-4)
-    * [Properties](#properties-5)
-  * [`bind_forward_zone`](#bind_forward_zone)
-    * [Examples](#examples-5)
-    * [Properties](#properties-6)
-  * [`bind_linked_zone`](#bind_linked_zone)
-    * [Examples](#examples-6)
-    * [Properties](#properties-7)
-  * [`bind_stub_zone`](#bind_stub_zone)
-    * [Examples](#examples-7)
-    * [Properties](#properties-8)
-  * [`bind_acl`](#bind_acl)
-    * [Examples](#examples-8)
-    * [Properties](#properties-9)
-  * [`bind_key`](#bind_key)
-    * [Properties](#properties-10)
-  * [`bind_server`](#bind_server)
-    * [Examples](#examples-9)
-    * [Properties](#properties-11)
-  * [`bind_logging_channel`](#bind_logging_channel)
-    * [Examples](#examples-10)
-    * [Properties](#properties-12)
-  * [`bind_logging_category`](#bind_logging_category)
-    * [Examples](#examples-11)
-    * [Properties](#properties-13)
-* [License and Author](#license-and-author)
+- [BIND ![Build Status](http://travis-ci.org/joyofhex/cookbook-bind)](#bind-)
+  - [Description](#description)
+  - [Contents](#contents)
+  - [Requirements](#requirements)
+  - [Attributes](#attributes)
+  - [Usage](#usage)
+    - [Internal recursive nameserver](#internal-recursive-nameserver)
+    - [Authoritative primary nameserver](#authoritative-primary-nameserver)
+    - [Authoritative secondary nameserver](#authoritative-secondary-nameserver)
+    - [Using views for internal recursion and external authoritative name service](#using-views-for-internal-recursion-and-external-authoritative-name-service)
+    - [Nameserver in chroot mode](#nameserver-in-chroot-mode)
+  - [Available Custom Resources](#available-custom-resources)
+    - [`bind_service`](#bind_service)
+      - [Example](#example)
+      - [Properties](#properties)
+    - [`bind_config`](#bind_config)
+      - [Examples](#examples)
+      - [Properties](#properties-1)
+    - [`bind_view`](#bind_view)
+      - [Examples](#examples-1)
+      - [Properties](#properties-2)
+    - [`bind_primary_zone`](#bind_primary_zone)
+      - [Examples](#examples-2)
+      - [Properties](#properties-3)
+    - [`bind_primary_zone_template`](#bind_primary_zone_template)
+      - [Examples](#examples-3)
+      - [Properties](#properties-4)
+      - [A note on serial numbers](#a-note-on-serial-numbers)
+    - [`bind_secondary_zone`](#bind_secondary_zone)
+      - [Examples](#examples-4)
+      - [Properties](#properties-5)
+    - [`bind_forward_zone`](#bind_forward_zone)
+      - [Examples](#examples-5)
+      - [Properties](#properties-6)
+    - [`bind_linked_zone`](#bind_linked_zone)
+      - [Examples](#examples-6)
+      - [Properties](#properties-7)
+    - [`bind_stub_zone`](#bind_stub_zone)
+      - [Examples](#examples-7)
+      - [Properties](#properties-8)
+    - [`bind_acl`](#bind_acl)
+      - [Examples](#examples-8)
+      - [Properties](#properties-9)
+    - [`bind_key`](#bind_key)
+      - [Properties](#properties-10)
+    - [`bind_server`](#bind_server)
+      - [Examples](#examples-9)
+      - [Properties](#properties-11)
+    - [`bind_logging_channel`](#bind_logging_channel)
+      - [Examples](#examples-10)
+      - [Properties](#properties-12)
+    - [`bind_logging_category`](#bind_logging_category)
+      - [Examples](#examples-11)
+      - [Properties](#properties-13)
+  - [License and Author](#license-and-author)
 
 <!-- vim-markdown-toc -->
 
@@ -102,7 +105,7 @@ are presented here:
 - Internal recursive nameserver
 - Authoritative primary nameserver
 - Authoritative secondary nameserver
-- Using views for internal recursion and external authoritative name service
+- \Using views for internal recursion and external authoritative name service
 
 ### Internal recursive nameserver
 
@@ -488,6 +491,13 @@ end
 
 The `bind_primary_zone_template` resource will create a zone file from a
 template and list of desired resources.
+
+This resource also supports setting the action to `:create_if_missing`. In this
+event the cookbook will only create a zone file in place if it does not already
+exist. Once copied the cookbook will not touch the file again allowing it to be
+used for dynamic updates. However, please be aware that in the event of the
+server being rebuilt or the file being removed that the data has not been
+persisted anywhere.
 
 #### Examples
 
