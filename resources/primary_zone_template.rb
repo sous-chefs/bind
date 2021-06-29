@@ -6,8 +6,8 @@ PrimaryZone = Struct.new(:name, :options, :view, :file_name)
 
 property :bind_config, String, default: 'default'
 
-property :soa, Hash, default: {}
-property :records, Array, default: []
+property :soa, Hash, default: {}, coerce: proc { |p| p.transform_keys(&:to_sym) }
+property :records, Array, default: [], coerce: proc { |p| p.map { |r| r.transform_keys(&:to_sym) } }
 property :default_ttl, [String, Integer], default: 86400
 property :options, Array, default: []
 property :view, String
