@@ -2,23 +2,23 @@
 $TTL <%= @default_ttl %>
 <% if @soa %>
 
-<%= "%-35s %-5s %-2s %-10s" % [
+<%= "%-24s %-5s %-2s %-5s" % [
   '@',
   @soa.fetch(:ttl, ''),
   'IN',
   'SOA'
 ] %> <%= @soa[:mname] %> <%= @soa[:rname] %> (
-                                         <%= @soa[:serial] %> ; Serial Number
-                                         <%= @soa[:refresh] %> ; Refresh
-                                         <%= @soa[:retry] %> ; Retry
-                                         <%= @soa[:expire] %> ; Expire
-                                         <%= @soa[:minimum] %> ; Minimum (NXDOMAIN Caching period)
-                                )
+                                         <%= "%-10s" % @soa[:serial] %> ; Serial Number
+                                         <%= "%-10s" % @soa[:refresh] %> ; Refresh
+                                         <%= "%-10s" % @soa[:retry] %> ; Retry
+                                         <%= "%-10s" % @soa[:expire] %> ; Expire
+                                         <%= "%-10s" % @soa[:minimum] %> ; Minimum (NXDOMAIN Caching period)
+                                        )
 <% end %>
 <% unless @zone_records.empty? %>
 
 <% @zone_records.each do |record| %>
-<%= "%-35s %-5s %-2s %-10s %-s" % [
+<%= "%-24s %-5s %-2s %-10s %-s" % [
   '',
   record.fetch(:ttl, ''),
   record.fetch(:class, 'IN'),
@@ -31,7 +31,7 @@ $TTL <%= @default_ttl %>
 <% unless @records.empty? %>
 
 <% @records.each do |record| %>
-<%= "%-35s %-5s %-2s %-10s %-s" % [
+<%= "%-24s %-5s %-2s %-10s %-s" % [
   record[:owner],
   record.fetch(:ttl, ''),
   record.fetch(:class, 'IN'),
