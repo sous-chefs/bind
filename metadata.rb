@@ -1,7 +1,7 @@
 name 'bind'
 
 description 'Installs/Configures ISC BIND'
-version '2.3.1'
+version '3.1.0'
 
 maintainer 'David Bruce'
 maintainer_email 'djb@ragnarok.net'
