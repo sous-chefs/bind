@@ -1,18 +1,15 @@
-name 'bind'
-
-description 'Installs/Configures ISC BIND'
-version '2.3.1'
-
-maintainer 'David Bruce'
-maintainer_email 'djb@ragnarok.net'
-license 'Apache-2.0'
+name              'bind'
+maintainer        'Sous Chefs'
+maintainer_email  'help@sous-chefs.org'
+license           'Apache-2.0'
+description       'Installs/Configures ISC BIND'
+version           '2.3.1'
+issues_url        'https://github.com/sous-chefs/bind/issues'
+source_url        'https://github.com/sous-chefs/bind'
+chef_version      '>= 15.3'
 
 supports 'ubuntu'
 supports 'redhat'
 supports 'centos'
 supports 'fedora'
 supports 'debian'
-
-issues_url 'https://github.com/joyofhex/cookbook-bind/issues'
-source_url 'https://github.com/joyofhex/cookbook-bind'
-chef_version '>= 15.3'
