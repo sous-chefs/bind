@@ -1,14 +1,32 @@
 unified_mode true
 
-property :chroot, [true, false], default: false
-property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
-property :dynamicdir, String, default: lazy { default_property_for(:dynamicdir, chroot) }
-property :sysconfdir, String, default: lazy { default_property_for(:sysconfdir, chroot) }
-property :vardir, String, default: lazy { default_property_for(:vardir, chroot) }
-property :package_name, [String, Array], default: lazy { default_property_for(:packages, chroot) }
-property :run_user, String, default: lazy { default_property_for(:run_user, chroot) }
-property :run_group, String, default: lazy { default_property_for(:run_group, chroot) }
-property :service_name, String, default: lazy { default_property_for(:service_name, chroot) }
+property :chroot_dir, [String, nil],
+          default: lazy { default_property_for(:chroot_dir, chroot) },
+          description: 'Define the chrooted base directory'
+property :chroot, [true, false],
+          default: false,
+          description: 'Boolean declaration to setup a chrooted nameserver installation'
+property :dynamicdir, String,
+          default: lazy { default_property_for(:dynamicdir, chroot) },
+          description: 'Directory location for storing zones used with dynamic updates'
+property :package_name, [String, Array],
+          default: lazy { default_property_for(:packages, chroot) },
+          description: 'The package, or array of packages, needed to install the nameserver'
+property :run_group, String,
+          default: lazy { default_property_for(:run_group, chroot) },
+          description: 'The groups that the name server will run as'
+property :run_user, String,
+          default: lazy { default_property_for(:run_user, chroot) },
+          description: 'The user that the name server will run as'
+property :service_name, String,
+          default: lazy { default_property_for(:service_name, chroot) },
+          description: 'The name of the service installed by the system packages'
+property :sysconfdir, String,
+          default: lazy { default_property_for(:sysconfdir, chroot) },
+          description: 'The system configuration directory where the named config will be located'
+property :vardir, String,
+          default: lazy { default_property_for(:vardir, chroot) },
+          description: 'The location for zone files and other data'
 
 include BindCookbook::Helpers
 

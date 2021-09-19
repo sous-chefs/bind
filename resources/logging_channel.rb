@@ -1,31 +1,40 @@
 unified_mode true
 
-property :bind_config, String, default: 'default'
-
-property :destination, String, equal_to: %w(
-  stderr syslog file null
-)
-
-property :facility, String, equal_to: %w(
-  kern user mail daemon auth syslog lpr news uucp cron authpriv
-  ftp local0 local1 local2 local3 local4 local5 local6 local7
-)
-
-property :severity, String, default: 'dynamic', callbacks: {
-  'should be a valid severity' => lambda { |severity|
-    %w(
-      critical error warning notice info dynamic
-    ).include?(severity) || severity.match(/^debug\s+\d+$/)
-  },
-}
-
-property :path, String
-property :versions, Integer
-property :size, String
-
-property :print_category, [true, false], default: false
-property :print_severity, [true, false], default: false
-property :print_time, [true, false], default: false
+property :bind_config, String,
+          default: 'default',
+          description: 'Name of the `bind_config` resource to notify actions on'
+property :destination, String,
+          equal_to: %w(stderr syslog file null),
+          description: 'String containing the destination name'
+property :facility, String,
+          equal_to: %w(
+            kern user mail daemon auth syslog lpr news uucp cron authpriv ftp local0 local1 local2 local3 local4 local5
+            local6 local7
+          ),
+          description: 'String containing the syslog facility to use for the syslog destination'
+property :path, String,
+          description: 'File name used for the file destination'
+property :print_category, [true, false],
+          default: false,
+          description: 'Boolean representing if we should print the category in the output message'
+property :print_severity, [true, false],
+          default: false,
+          description: 'Boolean representing if we should print the severity of the log message to the output channel'
+property :print_time, [true, false],
+          default: false,
+          description: 'Boolean representing if we should print the time in the log message sent to the output channel'
+property :severity, String,
+          default: 'dynamic',
+          callbacks: {
+            'should be a valid severity' => lambda { |severity|
+              %w(critical error warning notice info dynamic).include?(severity) || severity.match(/^debug\s+\d+$/)
+            },
+          },
+          description: 'String containing the minimum severity of BIND logs to send to this channel'
+property :size, String,
+          description: 'Maximum size of the log file used for the file destination'
+property :versions, Integer,
+          description: 'Number of versions of the log file used for the file destination'
 
 # The options parameter is used to allow the deprecated bind_config
 # property `query_log_options` to work. It is not used here, and should be
