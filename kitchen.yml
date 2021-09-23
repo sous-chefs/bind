@@ -1,0 +1,51 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_infra
+  deprecations_as_errors: true
+  chef_license: accept-no-persist
+  product_name: cinc
+  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
+
+platforms:
+  - name: ubuntu-18.04
+  - name: ubuntu-20.04
+  - name: debian-9
+  - name: debian-10
+  - name: debian-11
+  - name: centos-7
+  - name: centos-8
+  - name: fedora-latest
+
+verifier:
+  name: inspec
+
+suites:
+  - name: default
+    run_list:
+      - recipe[bind::default]
+  - name: resources
+    run_list:
+      - recipe[bind_test]
+  - name: chroot
+    run_list:
+      - recipe[bind_test::chroot]
+  - name: views
+    includes:
+      - centos-8
+    run_list:
+      - recipe[bind_test::views]
+  - name: logging
+    includes:
+      - centos-8
+    run_list:
+      - recipe[bind_test::logging]
+  - name: linked-zones
+    includes:
+      - ubuntu-16.04
+      - debian-9.6
+    run_list:
+      - recipe[bind_test::linked_zones]
