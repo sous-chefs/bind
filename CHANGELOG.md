@@ -11,6 +11,7 @@ This file is used to list changes made in each version of the bind cookbook.
 - Workaround upstream issue as described in <https://bugs.debian.org/983216>
 - Update named.ca to latest upstream version
 - Cookstyle fixes
+- Switch to using an InSpec profile for reusable testing
 
 ## 2.3.1 - *2020-01-23*
 

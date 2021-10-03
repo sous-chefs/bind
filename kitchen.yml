@@ -22,6 +22,8 @@ platforms:
 
 verifier:
   name: inspec
+  inspec_tests:
+    - path: test/integration/bind
 
 suites:
   - name: default
