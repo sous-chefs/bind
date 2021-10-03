@@ -8,6 +8,7 @@ This file is used to list changes made in each version of the bind cookbook.
 - Restart `bind_service` immediately when using `delayed_action :create`
 - Enable resource `unified_mode` for Chef 17 compatibility
 - Add `create_if_missing` to `primary_zone_template`
+- Workaround upstream issue as described in <https://bugs.debian.org/983216>
 
 ## 2.3.1 - *2020-01-23*
 
