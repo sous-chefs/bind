@@ -10,6 +10,7 @@ This file is used to list changes made in each version of the bind cookbook.
 - Add `create_if_missing` to `primary_zone_template`
 - Workaround upstream issue as described in <https://bugs.debian.org/983216>
 - Update named.ca to latest upstream version
+- Cookstyle fixes
 
 ## 2.3.1 - *2020-01-23*
 
