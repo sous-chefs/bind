@@ -1,2 +1,9 @@
 ---
 name: bind
+inputs:
+  - name: domain
+    type: String
+    value: www.google.com
+  - name: host_string
+    type: String
+    value: "www.google.com has address "

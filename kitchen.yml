@@ -32,6 +32,10 @@ suites:
   - name: resources
     run_list:
       - recipe[bind_test]
+    verifier:
+      inputs:
+        domain: ns1.example.org
+        host_string: "ns1.example.org has address 1.1.1.1"
   - name: chroot
     run_list:
       - recipe[bind_test::chroot]
