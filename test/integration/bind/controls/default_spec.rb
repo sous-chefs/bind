@@ -1,6 +1,8 @@
 domain = input('domain')
 host_string = input('host_string')
 chroot = input('chroot')
+views = input('views')
+ip_addr = interfaces.ipv4_address
 
 case os.family
 when 'debian'
@@ -37,5 +39,17 @@ control 'default' do
   describe command "host #{domain} 127.0.0.1" do
     its('exit_status') { should eq 0 }
     its('stdout') { should include host_string }
+  end
+
+  if views
+    describe command "dig +short sub.example.org txt @#{ip_addr}" do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should include '"external"' }
+    end
+
+    describe command 'dig +short sub.example.org txt @127.0.0.1' do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should include '"internal"' }
+    end
   end
 end

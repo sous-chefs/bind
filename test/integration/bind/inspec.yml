@@ -10,3 +10,6 @@ inputs:
   - name: chroot
     type: Boolean
     value: false
+  - name: views
+    type: Boolean
+    value: false

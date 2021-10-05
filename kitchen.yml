@@ -43,10 +43,11 @@ suites:
       inputs:
         chroot: true
   - name: views
-    includes:
-      - centos-8
     run_list:
       - recipe[bind_test::views]
+    verifier:
+      inputs:
+        views: true
   - name: logging
     includes:
       - centos-8
