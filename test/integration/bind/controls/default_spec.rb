@@ -42,6 +42,11 @@ control 'default' do
   end
 
   if views
+    describe command "dig google.com @#{ip_addr}" do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should match /WARNING: recursion requested but not available/ }
+    end
+
     describe command "dig +short sub.example.org txt @#{ip_addr}" do
       its('exit_status') { should eq 0 }
       its('stdout') { should include '"external"' }
