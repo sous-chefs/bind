@@ -13,3 +13,6 @@ inputs:
   - name: views
     type: Boolean
     value: false
+  - name: logging
+    type: Boolean
+    value: false

@@ -2,6 +2,7 @@ domain = input('domain')
 host_string = input('host_string')
 chroot = input('chroot')
 views = input('views')
+logging = input('logging')
 ip_addr = interfaces.ipv4_address
 
 case os.family
@@ -55,6 +56,16 @@ control 'default' do
     describe command 'dig +short sub.example.org txt @127.0.0.1' do
       its('exit_status') { should eq 0 }
       its('stdout') { should include '"internal"' }
+    end
+  end
+
+  if logging
+    describe file '/srv/query.log' do
+      its('content') { should match(/^client.*127.0.0.1#\d+.*query: www.google.com/) }
+    end
+
+    describe file '/srv/general.log' do
+      its('content') { should include 'zone example.org/IN: loaded serial 2002022401' }
     end
   end
 end

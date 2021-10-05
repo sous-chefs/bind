@@ -49,10 +49,11 @@ suites:
       inputs:
         views: true
   - name: logging
-    includes:
-      - centos-8
     run_list:
       - recipe[bind_test::logging]
+    verifier:
+      inputs:
+        logging: true
   - name: linked-zones
     includes:
       - ubuntu-16.04
