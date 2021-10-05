@@ -39,6 +39,9 @@ suites:
   - name: chroot
     run_list:
       - recipe[bind_test::chroot]
+    verifier:
+      inputs:
+        chroot: true
   - name: views
     includes:
       - centos-8

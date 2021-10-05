@@ -12,6 +12,7 @@ This file is used to list changes made in each version of the bind cookbook.
 - Update named.ca to latest upstream version
 - Cookstyle fixes
 - Switch to using an InSpec profile for reusable testing
+- Fix issues with chroot on Debian and Ubuntu systems
 
 ## 2.3.1 - *2020-01-23*
 

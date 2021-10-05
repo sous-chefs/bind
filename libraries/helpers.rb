@@ -41,5 +41,23 @@ module BindCookbook
         rndc_key_file: '/etc/rndc.key',
       }[property_name]
     end
+
+    def bind_env_file
+      if platform?('debian')
+        if node['platform_version'].to_i == 10
+          '/etc/default/bind9'
+        else
+          '/etc/default/named'
+        end
+      elsif platform?('ubuntu')
+        if node['platform_version'] <= 18.04
+          '/etc/default/bind9'
+        else
+          '/etc/default/named'
+        end
+      else
+        '/etc/default/named'
+      end
+    end
   end
 end

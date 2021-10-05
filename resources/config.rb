@@ -134,7 +134,7 @@ action :create do
       only_if { platform_family?('debian') && node['init_package'] == 'init' && new_resource.chroot }
     end
 
-    template '/etc/default/bind9' do
+    template bind_env_file do
       owner 'root'
       group 'root'
       mode '0644'
@@ -160,7 +160,7 @@ action :create do
       variables(
         chroot_dir: new_resource.chroot_dir
       )
-      only_if { new_resource.chroot && platform?('ubuntu') && node['platform_version'] >= '14.04' }
+      only_if { new_resource.chroot && platform?('ubuntu') }
       notifies :run, 'execute[reload_named_apparmor_profile]', :immediately
     end
 
