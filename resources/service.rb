@@ -36,12 +36,10 @@ action :create do
     Chef::Log.fatal('https://bugs.launchpad.net/ubuntu/+source/bind9/+bug/1630025')
   end
 
-  packages = new_resource.package_name.is_a?(String) ? [new_resource.package_name] : new_resource.package_name
+  bind_packages = new_resource.package_name.is_a?(String) ? [new_resource.package_name] : new_resource.package_name
 
-  packages.each do |pkg|
-    package pkg do
-      action :install
-    end
+  package bind_packages do
+    action :install
   end
 
   if new_resource.chroot_dir

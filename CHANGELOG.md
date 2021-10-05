@@ -13,6 +13,7 @@ This file is used to list changes made in each version of the bind cookbook.
 - Cookstyle fixes
 - Switch to using an InSpec profile for reusable testing
 - Fix issues with chroot on Debian and Ubuntu systems
+- Install dnsutils package on Debian-based systems to get dig binary
 
 ## 2.3.1 - *2020-01-23*
 

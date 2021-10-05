@@ -14,7 +14,7 @@ module BindCookbook
         sysconfdir: chroot ? '/var/bind9/chroot/etc/bind' : '/etc/bind',
         vardir: chroot ? '/var/bind9/chroot/var/cache/bind' : '/var/cache/bind',
         dynamicdir: chroot ? '/var/bind9/chroot/var/cache/bind/dynamic' : '/var/cache/bind/dynamic',
-        packages: %w(bind9 bind9-host bind9utils),
+        packages: %w(bind9 bind9-host bind9utils dnsutils),
         run_user: 'bind',
         run_group: 'bind',
         options_file: chroot ? '/var/bind9/chroot/etc/bind/named.options' : '/etc/bind/named.options',
