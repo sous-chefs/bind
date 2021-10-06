@@ -1,3 +1,5 @@
+include_recipe 'bind_test::disable_resolved'
+
 bind_service 'default' do
   chroot true
   action [:create, :start]

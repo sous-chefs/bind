@@ -28,6 +28,7 @@ verifier:
 suites:
   - name: default
     run_list:
+      - recipe[bind_test::disable_resolved]
       - recipe[bind::default]
   - name: resources
     run_list:

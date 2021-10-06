@@ -1,3 +1,5 @@
+include_recipe 'bind_test::disable_resolved'
+
 bind_service 'default' do
   action [:create, :start]
 end
