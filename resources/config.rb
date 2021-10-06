@@ -119,21 +119,6 @@ action :create do
       sysconfdir = bind_service.sysconfdir
     end
 
-    template '/etc/init.d/bind9' do
-      owner 'root'
-      group 'root'
-      mode '0755'
-      variables(
-        chroot: new_resource.chroot_dir
-      )
-      action :nothing
-      delayed_action :create
-      notifies :restart, 'bind_service[default]', :delayed
-      cookbook 'bind'
-      source 'init.bind9.erb'
-      only_if { platform_family?('debian') && node['init_package'] == 'init' && new_resource.chroot }
-    end
-
     template bind_env_file do
       owner 'root'
       group 'root'
