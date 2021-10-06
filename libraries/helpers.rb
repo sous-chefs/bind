@@ -44,7 +44,7 @@ module BindCookbook
 
     def bind_env_file
       if platform?('debian')
-        if node['platform_version'].to_i == 10
+        if node['platform_version'].to_i <= 10
           '/etc/default/bind9'
         else
           '/etc/default/named'
