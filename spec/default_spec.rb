@@ -14,10 +14,8 @@ describe 'bind::default' do
       expect(chef_run).to create_bind_acl('trusted-nets')
     end
 
-    %w(bind bind-utils bind-libs).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
+    it do
+      expect(chef_run).to install_package(%w(bind bind-utils bind-libs))
     end
 
     it 'creates /var/named with mode 750 and owner named' do
@@ -81,10 +79,9 @@ describe 'bind::default' do
         )
       ).converge(described_recipe)
     end
-    %w(bind9 bind9utils).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
+
+    it do
+      expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))
     end
 
     it 'creates /var/cache/bind with mode 750 and owner bind' do

@@ -13,9 +13,7 @@ describe 'basic recipe on centos 8' do
   end
 
   it 'installs bind' do
-    expect(chef_run).to install_package('bind')
-    expect(chef_run).to install_package('bind-utils')
-    expect(chef_run).to install_package('bind-libs')
+    expect(chef_run).to install_package(%w(bind bind-utils bind-libs))
   end
 
   it 'creates configuration directories' do
@@ -58,9 +56,7 @@ describe 'chroot recipe on ubuntu 18.04' do
   end
 
   it 'installs bind' do
-    expect(chef_run).to install_package('bind9')
-    expect(chef_run).to install_package('bind9-host')
-    expect(chef_run).to install_package('bind9utils')
+    expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))
   end
 
   it 'creates configuration directories' do
@@ -124,9 +120,7 @@ describe 'chroot recipe on centos 8' do
   end
 
   it 'installs bind' do
-    expect(chef_run).to install_package('bind-chroot')
-    expect(chef_run).to install_package('bind-utils')
-    expect(chef_run).to install_package('bind-libs')
+    expect(chef_run).to install_package(%w(bind-chroot bind-utils bind-libs))
   end
 
   it 'creates configuration directories' do
@@ -188,9 +182,7 @@ describe 'basic recipe on ubuntu 18.04' do
   end
 
   it 'installs bind' do
-    expect(chef_run).to install_package('bind9')
-    expect(chef_run).to install_package('bind9-host')
-    expect(chef_run).to install_package('bind9utils')
+    expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))
   end
 
   it 'creates configuration directories' do
