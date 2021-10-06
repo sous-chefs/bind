@@ -55,8 +55,10 @@ suites:
       inputs:
         logging: true
   - name: linked-zones
-    includes:
-      - ubuntu-16.04
-      - debian-9.6
     run_list:
       - recipe[bind_test::linked_zones]
+    verifier:
+      inputs:
+        domain: ns1.example.net
+        host_string: "ns1.example.net has address 1.1.1.1"
+        linked: true

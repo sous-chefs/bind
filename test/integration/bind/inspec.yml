@@ -16,3 +16,6 @@ inputs:
   - name: logging
     type: Boolean
     value: false
+  - name: linked
+    type: Boolean
+    value: false

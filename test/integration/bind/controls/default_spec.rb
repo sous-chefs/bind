@@ -3,6 +3,7 @@ host_string = input('host_string')
 chroot = input('chroot')
 views = input('views')
 logging = input('logging')
+linked = input('linked')
 ip_addr = interfaces.ipv4_address
 
 case os.family
@@ -66,6 +67,13 @@ control 'default' do
 
     describe file '/srv/general.log' do
       its('content') { should include 'zone example.org/IN: loaded serial 2002022401' }
+    end
+  end
+
+  if linked
+    describe command "host ns1.example.net #{ip_addr}" do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should include 'ns1.example.net has address 1.1.1.1' }
     end
   end
 end
