@@ -63,6 +63,7 @@ action :create do
     new_resource.severity, new_resource.print_category,
     new_resource.print_severity, new_resource.print_time, []
   )
+  apparmor_template.variables[:log_files] << new_resource.path if new_resource.destination == 'file' && platform?('ubuntu')
 end
 
 action_class do

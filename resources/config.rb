@@ -143,9 +143,13 @@ action :create do
       cookbook 'bind'
       source 'chroot_apparmor_profile.erb'
       variables(
-        chroot_dir: new_resource.chroot_dir
+        chroot: new_resource.chroot,
+        chroot_dir: new_resource.chroot_dir,
+        log_files: []
       )
-      only_if { new_resource.chroot && platform?('ubuntu') }
+      only_if { platform?('ubuntu') }
+      action :nothing
+      delayed_action :create
       notifies :run, 'execute[reload_named_apparmor_profile]', :immediately
     end
 
