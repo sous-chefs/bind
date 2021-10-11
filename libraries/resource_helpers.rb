@@ -25,6 +25,12 @@ module BindCookbook
       end
     end
 
+    def apparmor_template
+      with_run_context :root do
+        find_resource!(:template, '/etc/apparmor.d/local/usr.sbin.named')
+      end
+    end
+
     def choose_view
       new_resource.view || find_bind_config.default_view
     end

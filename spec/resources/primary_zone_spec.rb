@@ -8,21 +8,21 @@ describe 'adding primary zones' do
   end
 
   it 'uses the custom resource' do
-    expect(chef_run).to create_bind_primary_zone('example.com')
+    expect(chef_run).to create_bind_primary_zone('example.org')
     expect(chef_run).to create_bind_primary_zone('example.org')
     expect(chef_run).to create_cookbook_file('example.org')
   end
 
   it 'will copy the zone file from the test cookbook' do
-    expect(chef_run).to render_file('/var/named/primary/db.example.com').with_content { |content|
-      expect(content).to include '$ORIGIN example.com.'
+    expect(chef_run).to render_file('/var/named/primary/db.example.org').with_content { |content|
+      expect(content).to include '$ORIGIN example.org.'
     }
   end
 
   it 'will place the config in the named config' do
     expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
-      expect(content).to include 'zone "example.com" IN {'
-      expect(content).to include 'file "primary/db.example.com";'
+      expect(content).to include 'zone "example.org" IN {'
+      expect(content).to include 'file "primary/db.example.org";'
     }
   end
 

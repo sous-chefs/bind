@@ -10,10 +10,8 @@ describe 'bind_test::chroot' do
       ).converge(described_recipe)
     end
 
-    %w(bind-chroot bind-utils bind-libs).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
+    it do
+      expect(chef_run).to install_package(%w(bind-chroot bind-utils bind-libs))
     end
 
     it 'creates /var/named/chroot with mode 750 and owner bind' do
@@ -76,29 +74,27 @@ describe 'bind_test::chroot' do
     end
 
     it 'uses bind_primary_zone resource' do
-      expect(chef_run).to create_bind_primary_zone('example.com')
+      expect(chef_run).to create_bind_primary_zone('example.org')
     end
 
     it 'uses bind_primary_zone_template resource' do
-      expect(chef_run).to create_bind_primary_zone_template('sub.example.com')
+      expect(chef_run).to create_bind_primary_zone_template('sub.example.org')
     end
 
     it 'uses bind_secondary_zone resource' do
-      expect(chef_run).to create_bind_secondary_zone('secondary.example.com')
+      expect(chef_run).to create_bind_secondary_zone('secondary.example.org')
     end
 
     it 'uses bind_forward_zone resource' do
-      expect(chef_run).to create_bind_forward_zone('forward.example.com')
+      expect(chef_run).to create_bind_forward_zone('forward.example.org')
     end
 
-    %w(bind-chroot bind-utils bind-libs).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
+    it do
+      expect(chef_run).to install_package(%w(bind-chroot bind-utils bind-libs))
     end
 
-    it 'renders file /var/named/primary/db.sub.example.com' do
-      expect(chef_run).to render_file('/var/named/primary/db.sub.example.com')
+    it 'renders file /var/named/primary/db.sub.example.org' do
+      expect(chef_run).to render_file('/var/named/primary/db.sub.example.org')
     end
 
     it 'notifies service[named]' do
@@ -114,22 +110,22 @@ describe 'bind_test::chroot' do
         include "/etc/named/named.options";
         include "/etc/named/named.rfc1912.zones";
 
-        zone "example.com" IN {
+        zone "example.org" IN {
           type master;
-          file "primary/db.example.com";
+          file "primary/db.example.org";
         };
-        zone "sub.example.com" IN {
+        zone "sub.example.org" IN {
           type master;
-          file "primary/db.sub.example.com";
+          file "primary/db.sub.example.org";
         };
 
-        zone "secondary.example.com" IN {
+        zone "secondary.example.org" IN {
           type slave;
-          file "secondary/db.secondary.example.com";
+          file "secondary/db.secondary.example.org";
           masters { 1.1.1.1; 1.1.1.2; };
         };
 
-        zone "forward.example.com" IN {
+        zone "forward.example.org" IN {
           type forward;
           forwarders { 1.1.1.1; 1.1.1.2; };
           forward only;
@@ -155,10 +151,8 @@ describe 'bind_test::chroot' do
       ).converge(described_recipe)
     end
 
-    %w(bind9 bind9-host bind9utils).each do |bind_package|
-      it "installs package #{bind_package}" do
-        expect(chef_run).to install_package(bind_package)
-      end
+    it do
+      expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))
     end
 
     it 'creates /var/bind9/chroot with mode 750 and owner bind' do

@@ -3,11 +3,10 @@ unified_mode true
 SecondaryZone = Struct.new(:name, :primaries, :options, :view, :file_name)
 
 property :bind_config, String, default: 'default'
+property :file_name, String, name_property: true
 property :options, Array, default: []
 property :primaries, Array, required: true
 property :view, String
-
-property :file_name, String, name_property: true
 property :zone_name, String
 
 action :create do

@@ -1,25 +1,54 @@
 unified_mode true
 
-property :chroot, [true, false], default: false
-property :chroot_dir, [String, nil], default: lazy { default_property_for(:chroot_dir, chroot) }
-property :options_file, String, default: lazy { default_property_for(:options_file, chroot) }
-property :conf_file, String, default: lazy { default_property_for(:conf_file, chroot) }
-property :bind_service, String, default: 'default'
-property :ipv6_listen, [true, false], default: true
-property :options, Array, default: []
-property :default_view, String, default: 'default'
+property :additional_config_files, Array,
+          default: [],
+          description: 'Array of additional config files to include in named.conf'
+property :bind_service, String,
+          default: 'default',
+          description: 'Name of the bind_service resource to notify actions on'
+property :chroot_dir, [String, nil],
+          default: lazy { default_property_for(:chroot_dir, chroot) },
+          description: 'Define the chrooted base directory'
+property :chroot, [true, false],
+          default: false,
+          description: 'Configuring a chrooted nameserver'
+property :conf_file, String,
+          default: lazy { default_property_for(:conf_file, chroot) },
+          description: 'The desired full path to the main configuration file'
+property :controls, Array,
+          default: [],
+          description: 'Array of control statements'
+property :default_view, String,
+          default: 'default',
+          description: 'The name of the default view to configure zones within when views are used'
+property :ipv6_listen, [true, false],
+          default: true,
+          description: 'Enables listening on IPv6 instances'
+property :options, Array,
+          default: [],
+          description: 'Array of option strings. Each option should be a valid BIND option minus the trailing semicolon.'
+property :options_file, String,
+          default: lazy { default_property_for(:options_file, chroot) },
+          description: 'The desired full path to the configuration file containing options'
+property :per_view_additional_config_files, Array,
+          default: [],
+          description: 'Array of additional per view config files to include in named.conf'
+property :statistics_channel, [Hash, Array],
+          description: 'Presence turns on the statistics channel'
 
 # The following is deprecated. Use `bind_logging_channel` and
 # `bind_logging_category` instead
-property :query_log, [String, nil]
-property :query_log_versions, [String, Integer], default: 2
-property :query_log_max_size, String, default: '1m'
-property :query_log_options, Array, default: []
-
-property :statistics_channel, [Hash, Array]
-property :controls, Array, default: []
-property :additional_config_files, Array, default: []
-property :per_view_additional_config_files, Array, default: []
+property :query_log_max_size, String,
+          default: '1m',
+          deprecated: 'Maximum size of query log before rotation. This property will be removed in a future release!'
+property :query_log_options, Array,
+          default: [],
+          deprecated: 'Array of additional query log options. This property will be removed in a future release!'
+property :query_log, [String, nil],
+          deprecated: 'If provided will turn on general query logging. Should be the path to the desired log file. This property will be removed in a future release!'
+property :query_log_versions, [String, Integer],
+          default: 2,
+          deprecated: 'Number of rotated query logs to keep on the system. This property will be removed in a future release!'
 
 include BindCookbook::Helpers
 
@@ -90,22 +119,7 @@ action :create do
       sysconfdir = bind_service.sysconfdir
     end
 
-    template '/etc/init.d/bind9' do
-      owner 'root'
-      group 'root'
-      mode '0755'
-      variables(
-        chroot: new_resource.chroot_dir
-      )
-      action :nothing
-      delayed_action :create
-      notifies :restart, 'bind_service[default]', :delayed
-      cookbook 'bind'
-      source 'init.bind9.erb'
-      only_if { platform_family?('debian') && node['init_package'] == 'init' && new_resource.chroot }
-    end
-
-    template '/etc/default/bind9' do
+    template bind_env_file do
       owner 'root'
       group 'root'
       mode '0644'
@@ -129,9 +143,13 @@ action :create do
       cookbook 'bind'
       source 'chroot_apparmor_profile.erb'
       variables(
-        chroot_dir: new_resource.chroot_dir
+        chroot: new_resource.chroot,
+        chroot_dir: new_resource.chroot_dir,
+        log_files: []
       )
-      only_if { new_resource.chroot && platform?('ubuntu') && node['platform_version'] >= '14.04' }
+      only_if { platform?('ubuntu') }
+      action :nothing
+      delayed_action :create
       notifies :run, 'execute[reload_named_apparmor_profile]', :immediately
     end
 

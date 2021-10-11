@@ -49,7 +49,7 @@ describe 'adding primary zones' do
         expect(content).to match(/^@\s+IN\s+SOA\s+ns1\.example\.com\.\s+hostmaster\.example\.com\.\s+\(/)
         expect(content).to match(/^\s+IN\s+NS\s+ns1\.example\.com\.$/)
         expect(content).to include '$TTL 200'
-        expect(content).to include '100 ; Serial'
+        expect(content).to match(/100.+; Serial/)
         expect(content).to match(/^www\s+20\s+IN\s+A\s+10.5.0.1$/)
       }
     end
@@ -72,7 +72,7 @@ describe 'zones with managed serial numbers' do
       node.default['bind']['zone']['custom.example.com']['hash'] = '100'
       node.default['bind']['zone']['nochange.example.com'].tap do |zone|
         zone['serial'] = '999'
-        zone['hash'] = 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
+        zone['hash'] = '6a4740b2f4c1ba64e4b54ec4c3344e4c067d6015939af6c614a3e32babb4c52f'
       end
     end
   end
@@ -109,7 +109,7 @@ describe 'zones with managed serial numbers' do
       chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default
       hash_code = attribute['bind']['zone']['nochange.example.com']['hash']
-      expect(hash_code).to eq 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
+      expect(hash_code).to eq '6a4740b2f4c1ba64e4b54ec4c3344e4c067d6015939af6c614a3e32babb4c52f'
     end
   end
 

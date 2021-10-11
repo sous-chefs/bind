@@ -14,7 +14,7 @@ module BindCookbook
         sysconfdir: chroot ? '/var/bind9/chroot/etc/bind' : '/etc/bind',
         vardir: chroot ? '/var/bind9/chroot/var/cache/bind' : '/var/cache/bind',
         dynamicdir: chroot ? '/var/bind9/chroot/var/cache/bind/dynamic' : '/var/cache/bind/dynamic',
-        packages: %w(bind9 bind9-host bind9utils),
+        packages: %w(bind9 bind9-host bind9utils dnsutils),
         run_user: 'bind',
         run_group: 'bind',
         options_file: chroot ? '/var/bind9/chroot/etc/bind/named.options' : '/etc/bind/named.options',
@@ -37,9 +37,27 @@ module BindCookbook
         run_group: 'named',
         options_file: '/etc/named/named.options',
         conf_file: '/etc/named.conf',
-        service_name: chroot && (platform?('fedora') || node['platform_version'].to_s >= '7.0') ? 'named-chroot' : 'named',
+        service_name: chroot && (platform?('fedora') || node['platform_version'] >= '7.0') ? 'named-chroot' : 'named',
         rndc_key_file: '/etc/rndc.key',
       }[property_name]
+    end
+
+    def bind_env_file
+      if platform?('debian')
+        if node['platform_version'].to_i <= 10
+          '/etc/default/bind9'
+        else
+          '/etc/default/named'
+        end
+      elsif platform?('ubuntu')
+        if node['platform_version'] <= 18.04
+          '/etc/default/bind9'
+        else
+          '/etc/default/named'
+        end
+      else
+        '/etc/default/named'
+      end
     end
   end
 end

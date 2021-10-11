@@ -4,20 +4,39 @@ require 'digest'
 
 PrimaryZone = Struct.new(:name, :options, :view, :file_name)
 
-property :bind_config, String, default: 'default'
-
-property :soa, Hash, default: {}, coerce: proc { |p| p.transform_keys(&:to_sym) }
-property :records, Array, default: [], coerce: proc { |p| p.map { |r| r.transform_keys(&:to_sym) } }
-property :default_ttl, [String, Integer], default: 86400
-property :options, Array, default: []
-property :view, String
-property :file_name, String, name_property: true
-property :zone_name, String
-
-property :template_cookbook, String, default: 'bind'
-property :template_name, String, default: 'primary_zone.erb'
-
-property :manage_serial, [true, false], default: false
+property :bind_config, String,
+          default: 'default',
+          description: 'Name of the bind_config resource to notify actions on'
+property :default_ttl, [String, Integer],
+          default: 86400,
+          description: 'The default time to live for any records which do not have an explicitly configured TTL'
+property :file_name, String,
+          name_property: true,
+          description: 'Name of the file to store the zone in'
+property :manage_serial, [true, false],
+          default: false,
+          description: 'A boolean indicating if we should manage the serial number'
+property :options, Array,
+          default: [],
+          description: 'Array of option strings'
+property :records, Array,
+          default: [],
+          coerce: proc { |p| p.map { |r| r.transform_keys(&:to_sym) } },
+          description: 'An array of hashes describing each desired record'
+property :soa, Hash,
+          default: {},
+          coerce: proc { |p| p.transform_keys(&:to_sym) },
+          description: 'Hash of SOA entries'
+property :template_cookbook, String,
+          default: 'bind',
+          description: 'The cookbook to locate the primary zone template file'
+property :template_name, String,
+          default: 'primary_zone.erb',
+          description: 'The name of the primary zone template file within a cookbook'
+property :view, String,
+          description: 'Name of the view to configure the zone in'
+property :zone_name, String,
+          description: 'The zone name of the zone'
 
 action :create do
   do_create action
