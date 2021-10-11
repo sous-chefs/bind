@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
+## 3.0.0 - *2021-10-11*
 
 - Sous Chefs adoption
 - Restart `bind_service` immediately when using `delayed_action :create`
