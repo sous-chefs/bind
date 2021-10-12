@@ -5,6 +5,7 @@ This file is used to list changes made in each version of the bind cookbook.
 ## Unreleased
 
 - Include `BindCookbook::Helpers` via `action_class` in `bind_config`
+- Add `CHEF_PRODUCT_NAME` variable for setting `product_name`
 
 ## 3.0.0 - *2021-10-11*
 
