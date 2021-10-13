@@ -50,7 +50,7 @@ module BindCookbook
           '/etc/default/named'
         end
       elsif platform?('ubuntu')
-        if node['platform_version'] <= 18.04
+        if node['platform_version'].to_f <= 18.04
           '/etc/default/bind9'
         else
           '/etc/default/named'
