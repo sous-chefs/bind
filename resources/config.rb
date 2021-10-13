@@ -52,6 +52,10 @@ property :query_log_versions, [String, Integer],
 
 include BindCookbook::Helpers
 
+action_class do
+  include BindCookbook::Helpers
+end
+
 # Deprecation: support for adding the query log through the same interface
 # as the cusotm resources
 LoggingChannel = Struct.new(
