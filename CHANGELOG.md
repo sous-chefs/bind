@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
+## Unreleased
+
 ## 3.0.2 - *2021-10-13*
 
 - Convert `node['platform_version']` to a float for correct comparison
