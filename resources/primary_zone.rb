@@ -15,6 +15,8 @@ property :view, String,
           description: 'Name of the view to configure the zone in'
 property :zone_name, String,
           description: 'The zone name of the zone'
+property :source_file, String,
+          description: 'File name to source the zonefile from'
 
 action :create do
   do_create action
@@ -29,9 +31,10 @@ action_class do
 
   def do_create(file_action)
     service_resource = find_service_resource
-    new_resource.zone_name = new_resource.file_name unless new_resource.zone_name
+    new_resource.zone_name ||= new_resource.file_name
 
     cookbook_file new_resource.name do
+      source new_resource.source_file
       path "#{service_resource.vardir}/primary/db.#{new_resource.name}"
       owner service_resource.run_user
       group service_resource.run_group
