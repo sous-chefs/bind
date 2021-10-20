@@ -9,8 +9,12 @@ describe 'adding primary zones' do
 
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_primary_zone('example.org')
-    expect(chef_run).to create_bind_primary_zone('example.org')
     expect(chef_run).to create_cookbook_file('example.org')
+
+    expect(chef_run).to create_bind_primary_zone('example.com')
+    expect(chef_run).to create_cookbook_file('example.com').with(
+      source: 'custom-example.com'
+    )
   end
 
   it 'will copy the zone file from the test cookbook' do

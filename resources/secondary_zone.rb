@@ -10,7 +10,7 @@ property :view, String
 property :zone_name, String
 
 action :create do
-  new_resource.zone_name = new_resource.file_name unless new_resource.zone_name
+  new_resource.zone_name ||= new_resource.file_name
 
   config_template.variables[:secondary_zones] << SecondaryZone.new(
     new_resource.name,
