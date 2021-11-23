@@ -95,7 +95,7 @@ describe 'overridden defaults' do
             9.10.11.12;
           };
         EOF
-        )
+                                  )
       }
     end
   end
