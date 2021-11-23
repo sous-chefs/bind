@@ -4,6 +4,9 @@ This file is used to list changes made in each version of the bind cookbook.
 
 ## Unreleased
 
+- add `primaries` option to `bind_config`
+  - see (the upstream docs)[https://bind9.readthedocs.io/en/v9_16_23/reference.html?highlight=primaries#primaries-statement-definition-and-usage]
+
 ## 3.2.0 - *2021-11-23*
 
 - add `:create_config_only` action to `bind_primary_zone`

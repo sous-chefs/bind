@@ -8,6 +8,7 @@ end
 
 bind_config 'default' do
   ipv6_listen false
+  primaries({'test' => %w(1.2.3.4 5.6.7.8 9.10.11.12)})
   options_file '/etc/bind/bind.options'
   conf_file '/etc/bind/bind.conf'
   query_log 'query.log'

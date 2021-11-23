@@ -37,9 +37,7 @@ describe 'creating a basic configuration' do
   context 'the main named config file' do
     it 'has the root hints zone specified' do
       expect(chef_run).to render_file('/etc/named.conf').with_content { |content|
-        expect(content).to include('zone "." IN {
-  type hint;
-  file "named.ca"')
+        expect(content).to include(%(zone "." IN {\n  type hint;\n  file "named.ca"))
       }
     end
 
@@ -85,6 +83,19 @@ describe 'overridden defaults' do
       expect(chef_run).to render_file('/etc/bind/bind.options').with_content { |content|
         expect(content).to include('recursion yes;')
         expect(content).to include('notify no;')
+      }
+    end
+
+    it 'renders list of primaries' do
+      expect(chef_run).to render_file('/etc/bind/bind.conf').with_content { |content|
+        expect(content).to include(<<~EOF
+          primaries test {
+            1.2.3.4;
+            5.6.7.8;
+            9.10.11.12;
+          };
+        EOF
+        )
       }
     end
   end
