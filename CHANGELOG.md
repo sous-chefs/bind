@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
+## 3.2.0 - *2021-11-23*
 
 - add `:create_config_only` action to `bind_primary_zone`
 
