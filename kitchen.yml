@@ -4,6 +4,8 @@ driver:
 
 provisioner:
   name: chef_infra
+  multiple_converge: 2
+  enforce_idempotency: true
   deprecations_as_errors: true
   chef_license: accept-no-persist
   product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'chef' %>
@@ -18,6 +20,7 @@ platforms:
   - name: debian-11
   - name: centos-7
   - name: centos-8
+  - name: centos-stream-8
   - name: fedora-latest
 
 verifier:
@@ -63,3 +66,10 @@ suites:
         domain: ns1.example.net
         host_string: "ns1.example.net has address 1.1.1.1"
         linked: true
+  - name: zone-options
+    run_list:
+      - recipe[bind_test::zone_options]
+    verifier:
+      inputs:
+        domain: ns1.example.org
+        host_string: "ns1.example.org has address 1.1.1.1"

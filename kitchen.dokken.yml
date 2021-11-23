@@ -3,6 +3,7 @@ driver:
   name: dokken
   privileged: true
   chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  chef_license: accept
   cap_add:
     - SYS_PTRACE
     - SYS_ADMIN
@@ -76,4 +77,3 @@ platforms:
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       pid_one_command: /usr/lib/systemd/systemd
-...

@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the bind cookbook.
 
 ## Unreleased
 
+- add `:create_config_only` action to `bind_primary_zone`
+
 ## 3.1.0 - *2021-10-20*
 
 - Add source file parameter to `bind_primary_zone`
