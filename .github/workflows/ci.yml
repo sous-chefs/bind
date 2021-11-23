@@ -1,5 +1,5 @@
 ---
-name: 'Lint & Unit Test'
+name: ci
 
 'on':
   pull_request:

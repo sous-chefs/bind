@@ -17,3 +17,7 @@ end
 bind_primary_zone 'example.net' do
   action :create_if_missing
 end
+
+bind_primary_zone 'example.only' do
+  action :create_config_only
+end

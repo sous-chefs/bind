@@ -6,12 +6,15 @@ This resource will copy a zone file from your current cookbook into the correct 
 
 This resource also supports setting the action to `:create_if_missing`. In this event the cookbook will only copy a zone file in place if it does not already exist. Once copied the cookbook will not touch the file again allowing it to be used for dynamic updates. However, please be aware that in the event of the server being rebuilt or the file being removed that the data has not been persisted anywhere.
 
+If the zone file is managed completely externally, `:create_config_only` will not manage the file at all and only create the zone entry in the BIND config.
+
 ## Actions
 
-| Action               | Description                                       |
-| -------------------- | ------------------------------------------------- |
-| `:create`            | Creates a BIND primary zone                       |
-| `:create_if_missing` | Creates a BIND primary zone, only if it's missing |
+| Action                | Description                                                                   |
+| --------------------- | ----------------------------------------------------------------------------- |
+| `:create`             | Creates a BIND primary zone                                                   |
+| `:create_if_missing`  | Creates a BIND primary zone, only if it's missing                             |
+| `:create_config_only` | Creates the BIND config entry only and does not try to manage the file at all |
 
 ## Properties
 
@@ -27,12 +30,11 @@ This resource also supports setting the action to `:create_if_missing`. In this 
 ## Examples
 
 ```ruby
-bind_view 'internal' do
-  match_clients ['10.0.0.0/8']
-  options ['recursion yes']
-end
+# to load zone from files/db.example.org
+bind_primary_zone 'example.org'
 
-bind_view 'external' do
-  options ['recursion no']
+# or from custom file
+bind_primary_zone 'example.org' do
+  source_file 'other-example.org'
 end
 ```
