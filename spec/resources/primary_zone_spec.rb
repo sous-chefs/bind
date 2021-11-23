@@ -15,6 +15,12 @@ describe 'adding primary zones' do
     expect(chef_run).to create_cookbook_file('example.com').with(
       source: 'custom-example.com'
     )
+
+    expect(chef_run).to create_if_missing_bind_primary_zone('example.net')
+    expect(chef_run).to create_if_missing_cookbook_file('example.net')
+
+    expect(chef_run).to create_config_only_bind_primary_zone('example.only')
+    expect(chef_run).to_not create_cookbook_file('example.only')
   end
 
   it 'will copy the zone file from the test cookbook' do
