@@ -47,7 +47,7 @@ property :per_view_additional_config_files, Array,
 property :statistics_channel, [Hash, Array],
           description: 'Presence turns on the statistics channel'
 
-property :primaries, [Hash],
+property :primaries, Hash,
           default: {},
           description: 'List hash of name servers for which the server is secondary to. Can be used to abbreviate `primaries` or `also-notify` in zones.'
 
