@@ -7,6 +7,8 @@ describe 'adding access control lists' do
     ).converge('bind_test::spec_acl')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_acl('internal')
     expect(chef_run).to create_bind_acl('external')

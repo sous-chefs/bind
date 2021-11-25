@@ -7,6 +7,8 @@ describe 'adding primary zones' do
     ).converge('bind_test::spec_primary_zone_template')
   end
 
+  include_context 'version_stub'
+
   context 'simple mostly empty zone' do
     it 'uses the custom resource' do
       expect(chef_run).to create_bind_primary_zone_template('empty.example.com')
@@ -76,6 +78,8 @@ describe 'zones with managed serial numbers' do
       end
     end
   end
+
+  include_context 'version_stub'
 
   context 'a new empty zone' do
     it 'has no serial number persisted to the node' do

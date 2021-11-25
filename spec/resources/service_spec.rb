@@ -7,6 +7,8 @@ describe 'basic recipe on centos 8' do
     ).converge('bind_test::spec_basic')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_service('default')
     expect(chef_run).to start_bind_service('default')
@@ -40,6 +42,9 @@ describe 'chroot recipe on ubuntu 18.04' do
       platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
     ).converge('bind_test::spec_chroot')
   end
+
+  include_context 'version_stub'
+
   let(:mknod_null)    { chef_run.execute('mknod_null') }
   let(:mknod_random)  { chef_run.execute('mknod_random') }
   let(:mknod_urandom) { chef_run.execute('mknod_urandom') }
@@ -114,6 +119,8 @@ describe 'chroot recipe on centos 8' do
     ).converge('bind_test::spec_chroot')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_service('default')
     expect(chef_run).to start_bind_service('default')
@@ -180,6 +187,8 @@ describe 'basic recipe on ubuntu 18.04' do
       platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
     ).converge('bind_test::spec_basic')
   end
+
+  include_context 'version_stub'
 
   it 'installs bind' do
     expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))

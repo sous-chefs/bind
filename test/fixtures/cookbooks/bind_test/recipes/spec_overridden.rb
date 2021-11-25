@@ -11,7 +11,6 @@ bind_config 'default' do
   primaries({ 'test' => %w(1.2.3.4 5.6.7.8 9.10.11.12) })
   options_file '/etc/bind/bind.options'
   conf_file '/etc/bind/bind.conf'
-  query_log 'query.log'
   options [
     'notify no',
     'recursion yes',

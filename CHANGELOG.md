@@ -6,6 +6,7 @@ This file is used to list changes made in each version of the bind cookbook.
 
 - add `primaries` option to `bind_config`
   - see [the upstream docs](https://bind9.readthedocs.io/en/v9_16_23/reference.html?highlight=primaries#primaries-statement-definition-and-usage)
+  - this used the old terminology `master` on platforms that do not have a new enough `named` (9.16.12)
 
 ## 3.2.0 - *2021-11-23*
 

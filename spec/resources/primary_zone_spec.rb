@@ -7,6 +7,8 @@ describe 'adding primary zones' do
     ).converge('bind_test::spec_primary_zone')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_primary_zone('example.org')
     expect(chef_run).to create_cookbook_file('example.org')

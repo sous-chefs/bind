@@ -13,6 +13,8 @@ describe 'adding a single view' do
     ).converge('bind_test::spec_single_view')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_primary_zone('example.com')
@@ -51,6 +53,8 @@ describe 'adding a single view with options' do
     ).converge('bind_test::spec_single_view_with_options')
   end
 
+  include_context 'version_stub'
+
   it 'will add a zone with no view name to the default view' do
     stanza = <<~CONFIG_FRAGMENT
       view "default" {
@@ -82,6 +86,8 @@ describe 'adding multiple views' do
       )
     ).converge('bind_test::spec_multiple_views')
   end
+
+  include_context 'version_stub'
 
   it 'will add two views to the resource collection' do
     expect(chef_run).to create_bind_view('internal')

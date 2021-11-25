@@ -240,7 +240,8 @@ action :create do
         servers: [],
         keys: [],
         views: [],
-        per_view_additional_config_files: per_view_additional_config_files.flatten
+        per_view_additional_config_files: per_view_additional_config_files.flatten,
+        bind_version: bind_version
       )
       action :nothing
       delayed_action :create
