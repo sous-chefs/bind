@@ -12,6 +12,8 @@ describe 'adding a new channel' do
     ).converge('bind_test::spec_basic_logging_channel')
   end
 
+  include_context 'version_stub'
+
   it 'adds a syslog channel' do
     stanza = '  channel syslog {
     syslog mail;

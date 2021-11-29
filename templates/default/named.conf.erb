@@ -6,11 +6,26 @@
 include "<%= "#{@sysconfdir}/#{file}" %>";
 <% end -%>
 <% end -%>
+<% unless @primaries.nil? || @primaries.empty? -%>
+
+<% @primaries.each do |name, ips| -%>
+<% if Gem::Version.new(@bind_version) >= Gem::Version.new('9.16.12') -%>
+primaries <%= name %> {
+<% else -%>
+masters <%= name %> {
+<% end -%>
+<% ips.each do |i| -%>
+  <%= i %>;
+<% end -%>
+};
+
+<% end -%>
+<% end -%>
 <% unless @servers.nil? || @servers.empty? -%>
 
 <% @servers.each do |server| -%>
 server <%= server.name %> {
-  <% server.options.each do |option| -%>
+<% server.options.each do |option| -%>
   <%= option %>;
 <% end -%>
 };

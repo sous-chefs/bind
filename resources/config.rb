@@ -3,49 +3,67 @@ unified_mode true
 property :additional_config_files, Array,
           default: [],
           description: 'Array of additional config files to include in named.conf'
+
 property :bind_service, String,
           default: 'default',
           description: 'Name of the bind_service resource to notify actions on'
+
 property :chroot_dir, [String, nil],
           default: lazy { default_property_for(:chroot_dir, chroot) },
           description: 'Define the chrooted base directory'
+
 property :chroot, [true, false],
           default: false,
           description: 'Configuring a chrooted nameserver'
+
 property :conf_file, String,
           default: lazy { default_property_for(:conf_file, chroot) },
           description: 'The desired full path to the main configuration file'
+
 property :controls, Array,
           default: [],
           description: 'Array of control statements'
+
 property :default_view, String,
           default: 'default',
           description: 'The name of the default view to configure zones within when views are used'
+
 property :ipv6_listen, [true, false],
           default: true,
           description: 'Enables listening on IPv6 instances'
+
 property :options, Array,
           default: [],
           description: 'Array of option strings. Each option should be a valid BIND option minus the trailing semicolon.'
+
 property :options_file, String,
           default: lazy { default_property_for(:options_file, chroot) },
           description: 'The desired full path to the configuration file containing options'
+
 property :per_view_additional_config_files, Array,
           default: [],
           description: 'Array of additional per view config files to include in named.conf'
+
 property :statistics_channel, [Hash, Array],
           description: 'Presence turns on the statistics channel'
+
+property :primaries, Hash,
+          default: {},
+          description: 'List hash of name servers for which the server is secondary to. Can be used to abbreviate `primaries` or `also-notify` in zones.'
 
 # The following is deprecated. Use `bind_logging_channel` and
 # `bind_logging_category` instead
 property :query_log_max_size, String,
           default: '1m',
           deprecated: 'Maximum size of query log before rotation. This property will be removed in a future release!'
+
 property :query_log_options, Array,
           default: [],
           deprecated: 'Array of additional query log options. This property will be removed in a future release!'
+
 property :query_log, [String, nil],
           deprecated: 'If provided will turn on general query logging. Should be the path to the desired log file. This property will be removed in a future release!'
+
 property :query_log_versions, [String, Integer],
           default: 2,
           deprecated: 'Number of rotated query logs to keep on the system. This property will be removed in a future release!'
@@ -213,6 +231,7 @@ action :create do
       variables(
         additional_config_files: additional_config_files.flatten,
         sysconfdir: sysconfdir,
+        primaries: new_resource.primaries,
         primary_zones: [],
         secondary_zones: [],
         forward_zones: [],
@@ -221,7 +240,8 @@ action :create do
         servers: [],
         keys: [],
         views: [],
-        per_view_additional_config_files: per_view_additional_config_files.flatten
+        per_view_additional_config_files: per_view_additional_config_files.flatten,
+        bind_version: bind_version
       )
       action :nothing
       delayed_action :create

@@ -7,6 +7,8 @@ describe 'key stanza' do
     ).converge('bind_test::spec_key')
   end
 
+  include_context 'version_stub'
+
   context 'add a key to the configuration' do
     it 'uses the custom resource' do
       expect(chef_run).to create_bind_key('secret-key')

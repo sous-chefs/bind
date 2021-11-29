@@ -7,6 +7,8 @@ describe 'adding forward only zones' do
     ).converge('bind_test::spec_forward_zone')
   end
 
+  include_context 'version_stub'
+
   it 'uses the custom resource' do
     expect(chef_run).to create_bind_forward_zone('example.com')
     expect(chef_run).to create_bind_forward_zone('example.org')

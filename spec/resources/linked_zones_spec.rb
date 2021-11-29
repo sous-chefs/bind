@@ -9,6 +9,8 @@ describe 'adding linked zone' do
     ).converge('bind_test::spec_linked_zones')
   end
 
+  include_context 'version_stub'
+
   it 'will add two views to the resource collection' do
     expect(chef_run).to create_bind_view('internal')
     expect(chef_run).to create_bind_view('external')

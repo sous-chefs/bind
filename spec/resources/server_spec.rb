@@ -7,6 +7,8 @@ describe 'set server options' do
     ).converge('bind_test::spec_server')
   end
 
+  include_context 'version_stub'
+
   context 'a single server with multiple free-form options' do
     it 'uses the custom resource' do
       expect(chef_run).to create_bind_server('10.1.1.1')

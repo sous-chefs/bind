@@ -10,6 +10,8 @@ describe 'bind_test::chroot' do
       ).converge(described_recipe)
     end
 
+    include_context 'version_stub'
+
     it do
       expect(chef_run).to install_package(%w(bind-chroot bind-utils bind-libs))
     end
@@ -72,6 +74,8 @@ describe 'bind_test::chroot' do
         )
       ).converge(described_recipe)
     end
+
+    include_context 'version_stub'
 
     it 'uses bind_primary_zone resource' do
       expect(chef_run).to create_bind_primary_zone('example.org')
@@ -150,6 +154,8 @@ describe 'bind_test::chroot' do
         )
       ).converge(described_recipe)
     end
+
+    include_context 'version_stub'
 
     it do
       expect(chef_run).to install_package(%w(bind9 bind9-host bind9utils dnsutils))

@@ -59,5 +59,9 @@ module BindCookbook
         '/etc/default/named'
       end
     end
+
+    def bind_version
+      shell_out!('named -v').stdout.match(/BIND (\d+\.\d+\.\d+)/)[1]
+    end
   end
 end
