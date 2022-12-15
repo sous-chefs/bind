@@ -19,7 +19,7 @@ A default recipe is provided. It only provides a basic recursive name server.
 ### Platforms
 
 - CentOS/RHEL 7+
-- Debian 9+
+- Debian 10+
 - Ubuntu 18.04+
 
 ### Chef

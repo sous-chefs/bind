@@ -13,15 +13,16 @@ provisioner:
   log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
 
 platforms:
-  - name: ubuntu-18.04
-  - name: ubuntu-20.04
-  - name: debian-9
+  - name: almalinux-8
+  - name: centos-7
+  - name: centos-stream-8
   - name: debian-10
   - name: debian-11
-  - name: centos-7
-  - name: centos-8
-  - name: centos-stream-8
   - name: fedora-latest
+  - name: rockylinux-8
+  - name: ubuntu-18.04
+  - name: ubuntu-20.04
+  - name: ubuntu-22.04
 
 verifier:
   name: inspec
