@@ -15,26 +15,26 @@ provisioner:
   name: dokken
 
 platforms:
-  - name: ubuntu-18.04
+  - name: almalinux-8
     driver:
-      image: dokken/ubuntu-18.04
+      image: dokken/almalinux-8
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /bin/systemd
+      pid_one_command: /usr/lib/systemd/systemd
 
-  - name: ubuntu-20.04
+  - name: centos-7
     driver:
-      image: dokken/ubuntu-20.04
+      image: dokken/centos-7
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /bin/systemd
+      pid_one_command: /usr/lib/systemd/systemd
 
-  - name: debian-9
+  - name: centos-stream-8
     driver:
-      image: dokken/debian-9
+      image: dokken/centos-stream-8
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /bin/systemd
+      pid_one_command: /usr/lib/systemd/systemd
 
   - name: debian-10
     driver:
@@ -50,30 +50,37 @@ platforms:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       pid_one_command: /bin/systemd
 
-  - name: centos-7
-    driver:
-      image: dokken/centos-7
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: centos-8
-    driver:
-      image: dokken/centos-8
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /usr/lib/systemd/systemd
-
-  - name: centos-stream-8
-    driver:
-      image: dokken/centos-stream-8
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      pid_one_command: /usr/lib/systemd/systemd
-
   - name: fedora-latest
     driver:
       image: dokken/fedora-latest
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       pid_one_command: /usr/lib/systemd/systemd
+
+  - name: rockylinux-8
+    driver:
+      image: dokken/rockylinux-8
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: ubuntu-18.04
+    driver:
+      image: dokken/ubuntu-18.04
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /bin/systemd
+
+  - name: ubuntu-20.04
+    driver:
+      image: dokken/ubuntu-20.04
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /bin/systemd
+
+  - name: ubuntu-22.04
+    driver:
+      image: dokken/ubuntu-22.04
+      volumes:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      pid_one_command: /bin/systemd

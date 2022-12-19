@@ -4,11 +4,15 @@ This file is used to list changes made in each version of the bind cookbook.
 
 ## Unreleased
 
+- Fix CI workflow
+- Add testing for Alma Linux, Rocky Linux and Ubuntu 22.04
+- Formatting fixes
+
 ## 3.3.0 - *2021-11-29*
 
 - add `primaries` option to `bind_config`
-  - see [the upstream docs](https://bind9.readthedocs.io/en/v9_16_23/reference.html?highlight=primaries#primaries-statement-definition-and-usage)
-  - this used the old terminology `master` on platforms that do not have a new enough `named` (9.16.12)
+   - see [the upstream docs](https://bind9.readthedocs.io/en/v9_16_23/reference.html?highlight=primaries#primaries-statement-definition-and-usage)
+   - this used the old terminology `master` on platforms that do not have a new enough `named` (9.16.12)
 
 ## 3.2.0 - *2021-11-23*
 
@@ -95,7 +99,7 @@ This file is used to list changes made in each version of the bind cookbook.
 ## 1.2.0 - *2015-01-02*
 
 - Add server clause.
-  - See [documentation](http://www.zytrax.com/books/dns/ch7/server.html) for reference.
+   - See [documentation](http://www.zytrax.com/books/dns/ch7/server.html) for reference.
 - Add bind forwardzones attribute.
 
 ## 1.1.4 - *2014-11-19*
@@ -160,12 +164,12 @@ I identified two RHEL 5, and one Ubuntu, recipe bugs which nobody including myse
 
 - Add test-kitchen/Berkshelf skeleton files
 - Platform-specific fixes
-  - Correct location of `/etc/named.conf` on RHEL 5
-  - Added `conf_file` and `options_file` are attributes
-  - Refactor service actions, and config file rendering
-  - Enabled usage of search also on chef-solo via @fabn
-  - Various Ubuntu platform fixes via @fabn
-  - Added apt recipe to pass test-kitchen
+   - Correct location of `/etc/named.conf` on RHEL 5
+   - Added `conf_file` and `options_file` are attributes
+   - Refactor service actions, and config file rendering
+   - Enabled usage of search also on chef-solo via @fabn
+   - Various Ubuntu platform fixes via @fabn
+   - Added apt recipe to pass test-kitchen
 
 ## 0.1.1 - *2013-04-15*
 
