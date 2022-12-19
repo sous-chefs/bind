@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
+## 3.3.1 - *2022-12-19*
 
 - Fix CI workflow
 - Add testing for Alma Linux, Rocky Linux and Ubuntu 22.04
