@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
+## Unreleased
+
 ## 3.3.1 - *2022-12-19*
 
 - Fix CI workflow
