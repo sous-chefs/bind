@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
+## 3.3.2 - *2023-02-14*
 
 ## 3.3.1 - *2022-12-19*
 
