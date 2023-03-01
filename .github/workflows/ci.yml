@@ -18,9 +18,7 @@ jobs:
 
   integration:
     needs: lint-unit
-    # TODO: switch back to ubuntu-latest after kitchen-dokken 2.17.4 has been
-    # included in chef-workstation
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         os:
@@ -33,9 +31,6 @@ jobs:
           - rockylinux-8
           - ubuntu-1804
           - ubuntu-2004
-          # TODO: Re-enable after kitchen-dokken 2.17.4 has been included in
-          # chef-workstation
-          # - ubuntu-2204
         suite:
           - default
           - resources
