@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the bind cookbook.
 
 ## Unreleased
 
+Standardise files with files in sous-chefs/repo-management
+
 ## 3.3.3 - *2023-03-01*
 
 - Update workflows to 2.0.1
