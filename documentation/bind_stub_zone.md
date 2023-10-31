@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_stub_zone
+
+[Back to resource list](../README.md#resources)
 
 This resource will configure bind to pull only the NS records for a zone from a primary name server.
 

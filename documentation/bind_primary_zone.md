@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_primary_zone
+
+[Back to resource list](../README.md#resources)
 
 This resource will copy a zone file from your current cookbook into the correct directory and add the zone as a master zone to your BIND configuration. The file should be named for the zone you wish to configure. For example to configure `example.com` the file should be in `files/default/example.com`, or set manually with `source_file`.
 

@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_linked_zone
+
+[Back to resource list](../README.md#resources)
 
 This resource will create a zone linked to a zone with the same name in a different view, using the BIND in-view directive. The in-view directive requires BIND 9.10 or higher.
 

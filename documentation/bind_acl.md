@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_acl
+
+[Back to resource list](../README.md#resources)
 
 This resource allows you to create a named ACL list within the BIND configuration.
 

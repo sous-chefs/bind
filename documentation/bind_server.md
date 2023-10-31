@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_server
+
+[Back to resource list](../README.md#resources)
 
 This resource allows specific options to be configured for a particular upstream name server.
 

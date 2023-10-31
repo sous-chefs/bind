@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_service
+
+[Back to resource list](../README.md#resources)
 
 Installs the pre-requisites for the bind service to run.
 

@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the bind cookbook.
 
 ## Unreleased
 
+- Remove sup html formatting
+
 ## 3.3.8 - *2023-09-28*
 
 ## 3.3.7 - *2023-09-04*

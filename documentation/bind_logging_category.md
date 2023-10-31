@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_logging_category
+
+[Back to resource list](../README.md#resources)
 
 This resource maps BIND logging categories to logging channels.
 
@@ -15,10 +15,8 @@ This resource maps BIND logging categories to logging channels.
 | Name          | Type                        | Default       | Description                                                                 |
 | ------------- | --------------------------- | ------------- | --------------------------------------------------------------------------- |
 | `bind_config` | String                      | `default`     | Name of the `bind_config` resource to notify actions on                     |
-| `category`    | String <sup>[1](#ft1)</sup> | name property | Name of the BIND logging category to send to the specified channels         |
+| `category`    | String | name property | Name of the BIND logging category to send to the specified channels. Must be a valid BIND logging category         |
 | `channels`    | Array, String               | required      | Array of names (or single name) of channels to send the category of logs to |
-
-<sup><a name="ft1">1</a> Must be a valid BIND logging category`</sup>
 
 ## Examples
 

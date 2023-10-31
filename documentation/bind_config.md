@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_config
+
+[Back to resource list](../README.md#resources)
 
 Creates the configuration files for the name server.
 
