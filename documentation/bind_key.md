@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_key
+
+[Back to resource list](../README.md#resources)
 
 This resource adds a shared secret key (for either TSIG or the command channel) to the configuration.
 

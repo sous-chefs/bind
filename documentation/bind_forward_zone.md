@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_forward_zone
+
+[Back to resource list](../README.md#resources)
 
 This resource will configure a forwarding only zone.
 

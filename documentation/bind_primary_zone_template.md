@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_primary_zone_template
+
+[Back to resource list](../README.md#resources)
 
 This resource will create a zone file from a template and list of desired resources.
 
@@ -46,7 +46,7 @@ Possible keys for the records parameter:
 
 | Key       | Default                 | Description                                                                                                         |
 | --------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `serial`  | `1`                     | The serial number of the zone. <sup>[1](#ft1)</sup>                                                                 |
+| `serial`  | `1`                     | The serial number of the zone.                                                                 |
 | `mname`   | `localhost`             | Domain name of the primary name server serving this zone.                                                           |
 | `rname`   | `hostmaster.localhost.` | The email address of the "Responsible Person" for this zone with the @-sign replaced by a `.`.                      |
 | `refresh` | `1w`                    | The period that a secondary name server will wait between checking if the zone file has been updated on the master. |
@@ -54,7 +54,7 @@ Possible keys for the records parameter:
 | `expire`  | `52w`                   | The length of time that a zone will be considered invalid if the primary name server is unavailable.                |
 | `minimum` | `30`                    | The length of time that a name server will cache a negative (`NXDOMAIN`) result.                                    |
 
-<sup><a name="ft1">1</a>:  If this zone has secondary servers configured then you will need to either manually manage this and update when the record set changes, or use the `manage_serial` property.</sup>
+If this zone has secondary servers configured then you will need to either manually manage this and update when the record set changes, or use the `manage_serial` property.</sup>
 
 ## A note on serial numbers
 

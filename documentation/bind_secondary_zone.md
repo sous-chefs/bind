@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_secondary_zone
+
+[Back to resource list](../README.md#resources)
 
 This resource will configure a zone to be pulled from a primary name server.
 

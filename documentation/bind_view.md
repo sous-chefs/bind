@@ -1,6 +1,6 @@
-[Back to resource list](../README.md#resources)
-
 # bind_view
+
+[Back to resource list](../README.md#resources)
 
 Configures a BIND view and allows you to serve different content to different clients.
 
