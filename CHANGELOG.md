@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
+## 3.3.9 - *2023-10-31*
 
 - Remove sup html formatting
 
