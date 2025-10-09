@@ -88,7 +88,7 @@ action :create do
   end
 
   Chef::Log.deprecation(
-    'Use of the `query_log` property is deprecated in favour of '\
+    'Use of the `query_log` property is deprecated in favour of ' \
     'using `bind_logging_channel` and `bind_logging_category`'.dup
   ) if new_resource.query_log
 
