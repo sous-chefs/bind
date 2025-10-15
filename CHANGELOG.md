@@ -2,27 +2,9 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
-## Unreleased
-
-## 3.3.13 - *2025-09-04*
-
-## 3.3.12 - *2024-05-02*
-
-## 3.3.11 - *2024-05-02*
-
-## 3.3.10 - *2023-10-31*
-
 ## 3.3.9 - *2023-10-31*
 
 - Remove sup html formatting
-
-## 3.3.8 - *2023-09-28*
-
-## 3.3.7 - *2023-09-04*
-
-## 3.3.6 - *2023-09-04*
-
-## 3.3.5 - *2023-06-08*
 
 ## 3.3.4 - *2023-06-08*
 
@@ -32,8 +14,6 @@ Standardise files with files in sous-chefs/repo-management
 
 - Update workflows to 2.0.1
 - Remove mdl and replace with markdownlint-cli2
-
-## 3.3.2 - *2023-02-14*
 
 ## 3.3.1 - *2022-12-19*
 
