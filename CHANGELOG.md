@@ -2,6 +2,18 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
+## [3.4.0](https://github.com/sous-chefs/bind/compare/bind-v3.3.13...bind-v3.4.0) (2025-10-15)
+
+
+### Features
+
+* **ci:** migrate to reusable workflows v4.1.0 ([#96](https://github.com/sous-chefs/bind/issues/96)) ([6263bdf](https://github.com/sous-chefs/bind/commit/6263bdf0e89d3079ab6361546dc74b202c59a4d1))
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#97](https://github.com/sous-chefs/bind/issues/97)) ([ad3f764](https://github.com/sous-chefs/bind/commit/ad3f764ae89301f99fac94e51ed5fc26451c1881))
+
 ## 3.3.9 - *2023-10-31*
 
 - Remove sup html formatting
