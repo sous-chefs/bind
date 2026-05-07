@@ -40,29 +40,29 @@ resources. See the [migration guide](migration.md) for upgrade details.
 
 The following resources are provided:
 
-- [bind_acl](documentation/bind_acl.md)
-- [bind_config](documentation/bind_config.md)
-- [bind_forward_zone](documentation/bind_forward_zone.md)
-- [bind_key](documentation/bind_key.md)
-- [bind_linked_zone](documentation/bind_linked_zone.md)
-- [bind_logging_category](documentation/bind_logging_category.md)
-- [bind_logging_channel](documentation/bind_logging_channel.md)
-- [bind_primary_zone](documentation/bind_primary_zone.md)
-- [bind_primary_zone_template](documentation/bind_primary_zone_template.md)
-- [bind_secondary_zone](documentation/bind_secondary_zone.md)
-- [bind_server](documentation/bind_server.md)
-- [bind_service](documentation/bind_service.md)
-- [bind_stub_zone](documentation/bind_stub_zone.md)
-- [bind_view](documentation/bind_view.md)
+* [bind_acl](documentation/bind_acl.md)
+* [bind_config](documentation/bind_config.md)
+* [bind_forward_zone](documentation/bind_forward_zone.md)
+* [bind_key](documentation/bind_key.md)
+* [bind_linked_zone](documentation/bind_linked_zone.md)
+* [bind_logging_category](documentation/bind_logging_category.md)
+* [bind_logging_channel](documentation/bind_logging_channel.md)
+* [bind_primary_zone](documentation/bind_primary_zone.md)
+* [bind_primary_zone_template](documentation/bind_primary_zone_template.md)
+* [bind_secondary_zone](documentation/bind_secondary_zone.md)
+* [bind_server](documentation/bind_server.md)
+* [bind_service](documentation/bind_service.md)
+* [bind_stub_zone](documentation/bind_stub_zone.md)
+* [bind_view](documentation/bind_view.md)
 
 ## Usage
 
 Using custom resources leads to a quite flexible configuration, but requires a little bit more work in a wrapper cookbook to use. The following examples are presented here:
 
-- Internal recursive nameserver
-- Authoritative primary nameserver
-- Authoritative secondary nameserver
-- Using views for internal recursion and external authoritative name service
+* Internal recursive nameserver
+* Authoritative primary nameserver
+* Authoritative secondary nameserver
+* Using views for internal recursion and external authoritative name service
 
 ### Internal recursive nameserver
 
