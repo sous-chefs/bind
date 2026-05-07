@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: %w(bind_config bind_primary_zone_template)
-    ).converge('bind_test::spec_primary_zone_template')
+    ).converge('test::spec_primary_zone_template')
   end
 
   include_context 'version_stub'
@@ -74,7 +76,7 @@ describe 'zones with managed serial numbers' do
       node.default['bind']['zone']['custom.example.com']['hash'] = '100'
       node.default['bind']['zone']['nochange.example.com'].tap do |zone|
         zone['serial'] = '999'
-        zone['hash'] = '6a4740b2f4c1ba64e4b54ec4c3344e4c067d6015939af6c614a3e32babb4c52f'
+        zone['hash'] = 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
       end
     end
   end
@@ -88,14 +90,14 @@ describe 'zones with managed serial numbers' do
     end
 
     it 'persists a serial number to the node' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default
       expect(attribute['bind']['zone']['empty.example.com'].empty?).to be false
       expect(attribute['bind']['zone']['empty.example.com']['serial']).to eq '1'
     end
 
     it 'persists a hash code to the node object' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default
       hash_code = attribute['bind']['zone']['empty.example.com']['hash']
       expect(hash_code).to eq '54fb331da7106128dacb7162f72493684c46e5cbd12f9d830ec87d07cbbf3e83'
@@ -104,34 +106,34 @@ describe 'zones with managed serial numbers' do
 
   context 'a zone with no changes' do
     it 'does not change the persisted serial number' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default
       expect(attribute['bind']['zone']['nochange.example.com']['serial']).to eq '999'
     end
 
     it 'does not change the persisted hash code' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default
       hash_code = attribute['bind']['zone']['nochange.example.com']['hash']
-      expect(hash_code).to eq '6a4740b2f4c1ba64e4b54ec4c3344e4c067d6015939af6c614a3e32babb4c52f'
+      expect(hash_code).to eq 'ba764135482976fa2c1953075a8077f5d5a951052133456f83c1084c8bfcf173'
     end
   end
 
   context 'a zone where the hash value has changed' do
     it 'changes the serial number persisted' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default['bind']['zone']['custom.example.com']
       expect(attribute['serial']).to eq '101'
     end
 
     it 'changes the serial number when managed' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       attribute = chef_run.node.default['bind']['zone']['nochange.example.com']
       expect(attribute['serial']).to eq '999'
     end
 
     it 'uses the custom resource' do
-      chef_run.converge('bind_test::spec_primary_zone_template_manage_serial')
+      chef_run.converge('test::spec_primary_zone_template_manage_serial')
       expect(chef_run).to render_file('/var/named/primary/db.nochange.example.com')
       expect(chef_run).to create_bind_primary_zone_template('nochange.example.com')
       expect(chef_run).to create_bind_primary_zone_template('custom.example.com')

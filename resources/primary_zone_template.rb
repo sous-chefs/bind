@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_primary_zone_template
 unified_mode true
 
 require 'digest'

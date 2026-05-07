@@ -1,10 +1,9 @@
+# frozen_string_literal: true
+
 require 'chefspec'
 require 'chefspec/berkshelf'
 
 RSpec.configure(&:raise_errors_for_deprecations!)
-# RSpec.configure do |config|
-#   config.cookbook_path = 'test/fixtures/cookbooks'
-# end
 
 shared_context 'version_stub' do
   before do

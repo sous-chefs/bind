@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe 'bind_test::chroot' do
+describe 'test::chroot' do
   context 'on CentOS 7' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
@@ -46,7 +48,7 @@ describe 'bind_test::chroot' do
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file #{::File.join('/var/named', var_file)}" do
-        expect(chef_run).to create_cookbook_file(::File.join('/var/named', var_file))
+        expect(chef_run).to create_template(::File.join('/var/named', var_file))
       end
     end
 
@@ -204,7 +206,7 @@ describe 'bind_test::chroot' do
     end
 
     it 'renders file /var/bind9/chroot/etc/bind/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/var/bind9/chroot/etc/bind/named.rfc1912.zones')
+      expect(chef_run).to create_template('/var/bind9/chroot/etc/bind/named.rfc1912.zones')
     end
 
     it 'renders file /var/bind9/chroot/etc/bind/named.conf with included files' do
@@ -214,7 +216,7 @@ describe 'bind_test::chroot' do
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/bind9/chroot/var/cache/bind/#{var_file}" do
-        expect(chef_run).to create_cookbook_file("/var/bind9/chroot/var/cache/bind/#{var_file}")
+        expect(chef_run).to create_template("/var/bind9/chroot/var/cache/bind/#{var_file}")
       end
     end
 

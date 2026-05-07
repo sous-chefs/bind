@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe 'bind::default' do
+describe 'test::default' do
   context 'on unspecified platform (EL 5/6 as reference)' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new(
@@ -39,7 +41,7 @@ describe 'bind::default' do
     end
 
     it 'renders file /etc/named/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/named/named.rfc1912.zones')
+      expect(chef_run).to create_template('/etc/named/named.rfc1912.zones')
     end
 
     it 'renders file /etc/named.conf with included files' do
@@ -49,7 +51,7 @@ describe 'bind::default' do
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/named/#{var_file}" do
-        expect(chef_run).to create_cookbook_file("/var/named/#{var_file}")
+        expect(chef_run).to create_template("/var/named/#{var_file}")
       end
     end
 
@@ -107,7 +109,7 @@ describe 'bind::default' do
     end
 
     it 'renders file /etc/bind/named.rfc1912.zones' do
-      expect(chef_run).to create_cookbook_file('/etc/bind/named.rfc1912.zones')
+      expect(chef_run).to create_template('/etc/bind/named.rfc1912.zones')
     end
 
     it 'renders file /etc/bind/named.conf with included files' do
@@ -117,7 +119,7 @@ describe 'bind::default' do
 
     %w(named.empty named.loopback named.localhost named.ca).each do |var_file|
       it "it creates cookbook file /var/cache/bind/#{var_file}" do
-        expect(chef_run).to create_cookbook_file("/var/cache/bind/#{var_file}")
+        expect(chef_run).to create_template("/var/cache/bind/#{var_file}")
       end
     end
 

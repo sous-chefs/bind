@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'adding a single view' do
@@ -10,7 +12,7 @@ describe 'adding a single view' do
         bind_secondary_zone
         bind_forward_zone
       )
-    ).converge('bind_test::spec_single_view')
+    ).converge('test::spec_single_view')
   end
 
   include_context 'version_stub'
@@ -50,7 +52,7 @@ describe 'adding a single view with options' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: %w(bind_config bind_view bind_primary_zone)
-    ).converge('bind_test::spec_single_view_with_options')
+    ).converge('test::spec_single_view_with_options')
   end
 
   include_context 'version_stub'
@@ -84,7 +86,7 @@ describe 'adding multiple views' do
       platform: 'centos', version: '8', step_into: %w(
         bind_config bind_view bind_primary_zone bind_primary_zone_template
       )
-    ).converge('bind_test::spec_multiple_views')
+    ).converge('test::spec_multiple_views')
   end
 
   include_context 'version_stub'

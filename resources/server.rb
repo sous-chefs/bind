@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_server
 unified_mode true
 
 ServerOptions = Struct.new(:name, :options)

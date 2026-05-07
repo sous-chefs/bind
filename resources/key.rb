@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_key
 unified_mode true
 
 KeyOptions = Struct.new(:name, :algorithm, :secret)

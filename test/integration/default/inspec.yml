@@ -1,0 +1,26 @@
+---
+name: default
+title: Default BIND resource tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Verifies BIND service and DNS responses
+version: 1.0.0
+inputs:
+  - name: domain
+    type: String
+    value: ns1.example.org
+  - name: host_string
+    type: String
+    value: "ns1.example.org has address 1.1.1.1"
+  - name: chroot
+    type: Boolean
+    value: false
+  - name: views
+    type: Boolean
+    value: false
+  - name: logging
+    type: Boolean
+    value: false
+  - name: linked
+    type: Boolean
+    value: false

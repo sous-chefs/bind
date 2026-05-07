@@ -12,23 +12,29 @@ A chef cookbook to manage BIND servers and zones.
 
 ## Requirements
 
-This cookbook follows the library pattern. To use the cookbook effectively you'll need a wrapper cookbook that uses the resources provided in this cookbook.
-
-A default recipe is provided. It only provides a basic recursive name server.
+This cookbook provides custom resources only. Use a wrapper cookbook or policy
+cookbook to declare the `bind_*` resources directly.
 
 ### Platforms
 
-- CentOS/RHEL 7+
-- Debian 10+
-- Ubuntu 18.04+
+* AlmaLinux 8+
+* Amazon Linux 2023+
+* CentOS Stream 9+
+* Debian 12+
+* Fedora latest
+* Oracle Linux 8+
+* Red Hat Enterprise Linux 8+
+* Rocky Linux 8+
+* Ubuntu 22.04+
 
 ### Chef
 
-- Chef 15.3+
+* Chef 15.3+
 
-## Attributes
+## Migration
 
-Most attributes have been removed in favour of custom resources. See the [MIGRATION.md](MIGRATION.md) document.
+Legacy recipes and node attributes have been removed in favour of custom
+resources. See the [migration guide](migration.md) for upgrade details.
 
 ## Resources
 

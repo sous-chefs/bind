@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_acl
 unified_mode true
 
 ACL = Struct.new(:name, :entries)

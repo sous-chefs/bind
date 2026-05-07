@@ -4,5 +4,5 @@ metadata
 
 group :integration do
   cookbook 'apt'
-  cookbook 'bind_test', path: 'test/fixtures/cookbooks/bind_test'
+  cookbook 'test', path: 'test/cookbooks/test'
 end

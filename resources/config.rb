@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_config
 unified_mode true
 
 property :additional_config_files, Array,
@@ -104,21 +107,23 @@ action :create do
       per_view_additional_config_files.push(new_resource.per_view_additional_config_files)
   end
 
-  cookbook_file ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
+  template ::File.join(bind_service.sysconfdir, 'named.rfc1912.zones') do
     owner bind_service.run_user
     group bind_service.run_group
     mode '0644'
     action :create
     cookbook 'bind'
+    source 'named.rfc1912.zones'
   end
 
   %w(named.empty named.ca named.loopback named.localhost).each do |var_file|
-    cookbook_file ::File.join(bind_service.vardir, var_file) do
+    template ::File.join(bind_service.vardir, var_file) do
       owner bind_service.run_user
       group bind_service.run_group
       mode '0644'
       action :create
       cookbook 'bind'
+      source var_file
     end
   end
 
@@ -179,7 +184,7 @@ action :create do
       command '/sbin/apparmor_parser -r -T -W /etc/apparmor.d/usr.sbin.named'
       action :nothing
       notifies :restart, 'bind_service[default]', :delayed
-      only_if { ::File.exist?('/sbin/apparmor_parser') }
+      only_if { ::File.exist?('/sbin/apparmor_parser') && ::File.exist?('/sys/kernel/security/apparmor/profiles') }
     end
 
     logging_channels = []

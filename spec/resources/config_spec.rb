@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'creating a basic configuration' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_config']
-    ).converge('bind_test::spec_basic')
+    ).converge('test::spec_basic')
   end
 
   include_context 'version_stub'
@@ -14,11 +16,11 @@ describe 'creating a basic configuration' do
   end
 
   it 'puts default zone files in place' do
-    expect(chef_run).to create_cookbook_file('/etc/named/named.rfc1912.zones')
-    expect(chef_run).to create_cookbook_file('/var/named/named.empty')
-    expect(chef_run).to create_cookbook_file('/var/named/named.ca')
-    expect(chef_run).to create_cookbook_file('/var/named/named.loopback')
-    expect(chef_run).to create_cookbook_file('/var/named/named.localhost')
+    expect(chef_run).to create_template('/etc/named/named.rfc1912.zones')
+    expect(chef_run).to create_template('/var/named/named.empty')
+    expect(chef_run).to create_template('/var/named/named.ca')
+    expect(chef_run).to create_template('/var/named/named.loopback')
+    expect(chef_run).to create_template('/var/named/named.localhost')
   end
 
   context 'the basic options file' do
@@ -48,17 +50,17 @@ describe 'overridden defaults' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_config']
-    ).converge('bind_test::spec_overridden')
+    ).converge('test::spec_overridden')
   end
 
   include_context 'version_stub'
 
   it 'puts default zone files in place' do
-    expect(chef_run).to create_cookbook_file('/test/etc/named.rfc1912.zones')
-    expect(chef_run).to create_cookbook_file('/test/var/named.empty')
-    expect(chef_run).to create_cookbook_file('/test/var/named.ca')
-    expect(chef_run).to create_cookbook_file('/test/var/named.loopback')
-    expect(chef_run).to create_cookbook_file('/test/var/named.localhost')
+    expect(chef_run).to create_template('/test/etc/named.rfc1912.zones')
+    expect(chef_run).to create_template('/test/var/named.empty')
+    expect(chef_run).to create_template('/test/var/named.ca')
+    expect(chef_run).to create_template('/test/var/named.loopback')
+    expect(chef_run).to create_template('/test/var/named.localhost')
   end
 
   context 'the options file' do
@@ -113,7 +115,7 @@ describe 'additional config files' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_config']
-    ).converge('bind_test::spec_additional_config_files')
+    ).converge('test::spec_additional_config_files')
   end
 
   include_context 'version_stub'

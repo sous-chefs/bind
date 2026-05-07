@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_linked_zone
 unified_mode true
 
 LinkedZone = Struct.new(:name, :in_view, :view)

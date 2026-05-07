@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_primary_zone
 unified_mode true
 
 PrimaryZone = Struct.new(:name, :options, :view, :file_name)

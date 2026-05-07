@@ -2,6 +2,18 @@
 
 This file is used to list changes made in each version of the bind cookbook.
 
+## Unreleased
+
+### BREAKING CHANGES
+
+* Remove the public `bind::default` recipe. Use `bind_service`, `bind_config`,
+  `bind_acl`, and the other `bind_*` custom resources directly.
+
+### Features
+
+* Migrate the cookbook to a full custom-resource-only public API.
+* Move integration examples into `test/cookbooks/test`.
+
 ## [3.5.0](https://github.com/sous-chefs/bind/compare/bind-v3.4.0...bind-v3.5.0) (2026-04-20)
 
 

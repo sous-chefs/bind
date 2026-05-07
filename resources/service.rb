@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_service
 unified_mode true
 
 property :chroot_dir, [String, nil],
