@@ -114,6 +114,28 @@ describe 'chroot recipe on ubuntu 18.04' do
   end
 end
 
+describe 'chroot recipe on debian 12' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'debian', version: '12', step_into: ['bind_service']
+    ).converge('test::spec_chroot')
+  end
+
+  include_context 'version_stub'
+
+  it 'creates systemd drop-ins for the alias and canonical service names' do
+    expect(chef_run).to create_directory('/etc/systemd/system/bind9.service.d')
+    expect(chef_run).to create_directory('/etc/systemd/system/named.service.d')
+  end
+
+  it 'uses simple systemd service type for chrooted named' do
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(/^Type=simple$/)
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(%r{^ExecCondition=/usr/local/lib/named/clear-managed-keys\.sh$})
+  end
+end
+
 describe 'chroot recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
