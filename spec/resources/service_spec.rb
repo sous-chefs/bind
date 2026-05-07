@@ -158,6 +158,22 @@ describe 'chroot recipe on ubuntu 24.04' do
   end
 end
 
+describe 'chroot recipe on ubuntu 22.04' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'ubuntu', version: '22.04', step_into: ['bind_service']
+    ).converge('test::spec_chroot')
+  end
+
+  include_context 'version_stub'
+
+  it 'does not use simple systemd service type for chrooted named' do
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+    expect(chef_run).to_not render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(/^Type=simple$/)
+  end
+end
+
 describe 'chroot recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(

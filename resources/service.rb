@@ -178,7 +178,7 @@ action :create do
     '# Workaround upstream issue as described in https://bugs.debian.org/983216',
     '[Service]',
   ]
-  systemd_service_settings << 'Type=simple' if bind_env_file == '/etc/default/named' && new_resource.chroot
+  systemd_service_settings << 'Type=simple' if new_resource.chroot && (platform?('debian') || (platform?('ubuntu') && node['platform_version'].to_f >= 24.04))
   systemd_service_settings << 'ExecCondition=/usr/local/lib/named/clear-managed-keys.sh'
 
   systemd_service_names.uniq.each do |systemd_service_name|
