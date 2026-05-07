@@ -9,13 +9,9 @@ ip_addr = interfaces.ipv4_address
 case os.family
 when 'debian'
   chroot_cmd = '-t /var/bind9/chroot'
-  named_cmd = if os.name == 'debian' && os.release.to_i == 10
-                '/usr/sbin/named -u bind'
-              else
-                '/usr/sbin/named -f -u bind'
-              end
+  named_cmd = %r{/usr/sbin/named (?:-f )?-u bind}
 when 'redhat', 'fedora'
-  named_cmd = '/usr/sbin/named -u named -c /etc/named.conf'
+  named_cmd = %r{/usr/sbin/named -u named -c /etc/named\.conf}
   chroot_cmd = '-t /var/named/chroot'
 end
 
@@ -26,10 +22,12 @@ control 'default' do
   end
 
   describe processes 'named' do
+    subject { processes('named').commands.join("\n") }
+
     if chroot
-      its('commands') { should include "#{named_cmd} #{chroot_cmd}" }
+      it { should match(/#{named_cmd.source} #{Regexp.escape(chroot_cmd)}/) }
     else
-      its('commands') { should include named_cmd }
+      it { should match(named_cmd) }
     end
   end
 
@@ -61,8 +59,10 @@ control 'default' do
   end
 
   if logging
+    queried_domain = Regexp.escape(domain)
+
     describe file '/srv/query.log' do
-      its('content') { should match(/^client.*127.0.0.1#\d+.*query: www.google.com/) }
+      its('content') { should match(/^client.*127.0.0.1#\d+.*query: #{queried_domain}/) }
     end
 
     describe file '/srv/general.log' do

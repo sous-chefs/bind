@@ -117,6 +117,8 @@ action :create do
   end
 
   %w(named.empty named.ca named.loopback named.localhost).each do |var_file|
+    zone_file = ::File.join(bind_service.vardir, var_file)
+
     template ::File.join(bind_service.vardir, var_file) do
       owner bind_service.run_user
       group bind_service.run_group
@@ -124,6 +126,7 @@ action :create do
       action :create
       cookbook 'bind'
       source var_file
+      not_if { ::File.symlink?(zone_file) }
     end
   end
 
