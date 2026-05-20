@@ -14,6 +14,17 @@ This file is used to list changes made in each version of the bind cookbook.
 * Migrate the cookbook to a full custom-resource-only public API.
 * Move integration examples into `test/cookbooks/test`.
 
+## [4.0.0](https://github.com/sous-chefs/bind/compare/bind-v3.5.0...bind-v4.0.0) (2026-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove the public bind::default recipe and require wrapper cookbooks to declare bind custom resources directly.
+
+### Features
+
+* migrate bind to custom resources ([#110](https://github.com/sous-chefs/bind/issues/110)) ([8c0f47d](https://github.com/sous-chefs/bind/commit/8c0f47de59fad8fe09b2f6da1f55e9d135810e72))
+
 ## [3.5.0](https://github.com/sous-chefs/bind/compare/bind-v3.4.0...bind-v3.5.0) (2026-04-20)
 
 
