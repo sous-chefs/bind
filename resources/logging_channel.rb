@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_logging_channel
 unified_mode true
 
 property :bind_config, String,

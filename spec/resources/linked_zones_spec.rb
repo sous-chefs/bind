@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'adding linked zone' do
@@ -6,7 +8,7 @@ describe 'adding linked zone' do
       platform: 'ubuntu', version: '16.04', step_into: %w(
         bind_config bind_view bind_primary_zone bind_linked_zone
       )
-    ).converge('bind_test::spec_linked_zones')
+    ).converge('test::spec_linked_zones')
   end
 
   include_context 'version_stub'

@@ -8,13 +8,11 @@ name: ci
 
 jobs:
   lint-unit:
-    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@5.0.3
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@6.0.0
     permissions:
-      actions: write
       checks: write
       pull-requests: write
       statuses: write
-      issues: write
     secrets: inherit
 
   integration:
@@ -24,15 +22,17 @@ jobs:
       matrix:
         os:
           - almalinux-8
-          - centos-7
-          - centos-stream-8
-          - debian-10
-          - debian-11
+          - almalinux-9
+          - amazonlinux-2023
+          - centos-stream-9
+          - debian-12
           - fedora-latest
+          - oraclelinux-8
+          - oraclelinux-9
           - rockylinux-8
-          - ubuntu-1804
-          - ubuntu-2004
+          - rockylinux-9
           - ubuntu-2204
+          - ubuntu-2404
         suite:
           - default
           - resources
@@ -40,12 +40,13 @@ jobs:
           - views
           - logging
           - linked-zones
+          - zone-options
       fail-fast: false
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install Chef
-        uses: actionshub/chef-install@main
+        uses: sous-chefs/.github/.github/actions/install-workstation@6.0.0
       - name: Dokken
         uses: actionshub/test-kitchen@main
         env:

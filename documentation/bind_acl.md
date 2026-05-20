@@ -21,11 +21,11 @@ This resource allows you to create a named ACL list within the BIND configuratio
 
 Each entry should be a valid BIND address match list. This means it can be:
 
-- an IP address
-- an IP prefix
-- a key id
-- the name of a different address march list from another acl statement
-- a nested address match list enclosed in braces
+* an IP address
+* an IP prefix
+* a key id
+* the name of a different address march list from another acl statement
+* a nested address match list enclosed in braces
 
 Predefined ACLs (from BIND itself) which do not need additional configuration are: any, none, localhost, and localnets.
 

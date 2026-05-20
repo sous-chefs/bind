@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_stub_zone
 unified_mode true
 
 StubZone = Struct.new(:name, :primaries, :options, :view, :file_name)

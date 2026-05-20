@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'basic recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_service']
-    ).converge('bind_test::spec_basic')
+    ).converge('test::spec_basic')
   end
 
   include_context 'version_stub'
@@ -40,7 +42,7 @@ describe 'chroot recipe on ubuntu 18.04' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
-    ).converge('bind_test::spec_chroot')
+    ).converge('test::spec_chroot')
   end
 
   include_context 'version_stub'
@@ -112,11 +114,71 @@ describe 'chroot recipe on ubuntu 18.04' do
   end
 end
 
+describe 'chroot recipe on debian 12' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'debian', version: '12', step_into: ['bind_service']
+    ).converge('test::spec_chroot')
+  end
+
+  include_context 'version_stub'
+
+  it 'creates systemd drop-ins for the alias and canonical service names' do
+    expect(chef_run).to create_directory('/etc/systemd/system/bind9.service.d')
+    expect(chef_run).to create_directory('/etc/systemd/system/named.service.d')
+  end
+
+  it 'uses simple systemd service type for chrooted named' do
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(/^Type=simple$/)
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(%r{^ExecCondition=/usr/local/lib/named/clear-managed-keys\.sh$})
+  end
+end
+
+describe 'chroot recipe on ubuntu 24.04' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'ubuntu', version: '24.04', step_into: ['bind_service']
+    ).converge('test::spec_chroot')
+  end
+
+  include_context 'version_stub'
+
+  it 'creates systemd drop-ins for the alias and canonical service names' do
+    expect(chef_run).to create_directory('/etc/systemd/system/bind9.service.d')
+    expect(chef_run).to create_directory('/etc/systemd/system/named.service.d')
+  end
+
+  it 'uses simple systemd service type for chrooted named' do
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(/^Type=simple$/)
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(%r{^ExecCondition=/usr/local/lib/named/clear-managed-keys\.sh$})
+  end
+end
+
+describe 'chroot recipe on ubuntu 22.04' do
+  let(:chef_run) do
+    ChefSpec::SoloRunner.new(
+      platform: 'ubuntu', version: '22.04', step_into: ['bind_service']
+    ).converge('test::spec_chroot')
+  end
+
+  include_context 'version_stub'
+
+  it 'does not use simple systemd service type for chrooted named' do
+    expect(chef_run).to render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+    expect(chef_run).to_not render_file('/etc/systemd/system/named.service.d/managed-keys.conf')
+      .with_content(/^Type=simple$/)
+  end
+end
+
 describe 'chroot recipe on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_service']
-    ).converge('bind_test::spec_chroot')
+    ).converge('test::spec_chroot')
   end
 
   include_context 'version_stub'
@@ -166,7 +228,7 @@ describe 'overridden defaults on centos 8' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: ['bind_service']
-    ).converge('bind_test::spec_overridden')
+    ).converge('test::spec_overridden')
   end
 
   it 'creates configuration directories' do
@@ -185,7 +247,7 @@ describe 'basic recipe on ubuntu 18.04' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'ubuntu', version: '18.04', step_into: ['bind_service']
-    ).converge('bind_test::spec_basic')
+    ).converge('test::spec_basic')
   end
 
   include_context 'version_stub'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BindCookbook
   module Helpers
     def default_property_for(property_name, chroot)

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'adding primary zones' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new(
       platform: 'centos', version: '8', step_into: %w(bind_config bind_primary_zone)
-    ).converge('bind_test::spec_primary_zone')
+    ).converge('test::spec_primary_zone')
   end
 
   include_context 'version_stub'

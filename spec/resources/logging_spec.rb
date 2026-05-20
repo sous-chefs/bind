@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 require 'spec_helper'
 
@@ -9,7 +10,7 @@ describe 'adding a new channel' do
         bind_logging_channel
         bind_logging_category
       )
-    ).converge('bind_test::spec_basic_logging_channel')
+    ).converge('test::spec_basic_logging_channel')
   end
 
   include_context 'version_stub'

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_view
 unified_mode true
 
 View = Struct.new(

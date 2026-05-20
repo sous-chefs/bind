@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_forward_zone
 unified_mode true
 
 ForwardZone = Struct.new(:name, :forwarders, :forward, :view)

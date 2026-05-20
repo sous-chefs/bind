@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+provides :bind_logging_category
 unified_mode true
 
 LoggingCategory = Struct.new(:name, :channels)

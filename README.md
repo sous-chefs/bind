@@ -12,51 +12,57 @@ A chef cookbook to manage BIND servers and zones.
 
 ## Requirements
 
-This cookbook follows the library pattern. To use the cookbook effectively you'll need a wrapper cookbook that uses the resources provided in this cookbook.
-
-A default recipe is provided. It only provides a basic recursive name server.
+This cookbook provides custom resources only. Use a wrapper cookbook or policy
+cookbook to declare the `bind_*` resources directly.
 
 ### Platforms
 
-- CentOS/RHEL 7+
-- Debian 10+
-- Ubuntu 18.04+
+* AlmaLinux 8+
+* Amazon Linux 2023+
+* CentOS Stream 9+
+* Debian 12+
+* Fedora latest
+* Oracle Linux 8+
+* Red Hat Enterprise Linux 8+
+* Rocky Linux 8+
+* Ubuntu 22.04+
 
 ### Chef
 
-- Chef 15.3+
+* Chef 15.3+
 
-## Attributes
+## Migration
 
-Most attributes have been removed in favour of custom resources. See the [MIGRATION.md](MIGRATION.md) document.
+Legacy recipes and node attributes have been removed in favour of custom
+resources. See the [migration guide](migration.md) for upgrade details.
 
 ## Resources
 
 The following resources are provided:
 
-- [bind_acl](documentation/bind_acl.md)
-- [bind_config](documentation/bind_config.md)
-- [bind_forward_zone](documentation/bind_forward_zone.md)
-- [bind_key](documentation/bind_key.md)
-- [bind_linked_zone](documentation/bind_linked_zone.md)
-- [bind_logging_category](documentation/bind_logging_category.md)
-- [bind_logging_channel](documentation/bind_logging_channel.md)
-- [bind_primary_zone](documentation/bind_primary_zone.md)
-- [bind_primary_zone_template](documentation/bind_primary_zone_template.md)
-- [bind_secondary_zone](documentation/bind_secondary_zone.md)
-- [bind_server](documentation/bind_server.md)
-- [bind_service](documentation/bind_service.md)
-- [bind_stub_zone](documentation/bind_stub_zone.md)
-- [bind_view](documentation/bind_view.md)
+* [bind_acl](documentation/bind_acl.md)
+* [bind_config](documentation/bind_config.md)
+* [bind_forward_zone](documentation/bind_forward_zone.md)
+* [bind_key](documentation/bind_key.md)
+* [bind_linked_zone](documentation/bind_linked_zone.md)
+* [bind_logging_category](documentation/bind_logging_category.md)
+* [bind_logging_channel](documentation/bind_logging_channel.md)
+* [bind_primary_zone](documentation/bind_primary_zone.md)
+* [bind_primary_zone_template](documentation/bind_primary_zone_template.md)
+* [bind_secondary_zone](documentation/bind_secondary_zone.md)
+* [bind_server](documentation/bind_server.md)
+* [bind_service](documentation/bind_service.md)
+* [bind_stub_zone](documentation/bind_stub_zone.md)
+* [bind_view](documentation/bind_view.md)
 
 ## Usage
 
 Using custom resources leads to a quite flexible configuration, but requires a little bit more work in a wrapper cookbook to use. The following examples are presented here:
 
-- Internal recursive nameserver
-- Authoritative primary nameserver
-- Authoritative secondary nameserver
-- Using views for internal recursion and external authoritative name service
+* Internal recursive nameserver
+* Authoritative primary nameserver
+* Authoritative secondary nameserver
+* Using views for internal recursion and external authoritative name service
 
 ### Internal recursive nameserver
 
